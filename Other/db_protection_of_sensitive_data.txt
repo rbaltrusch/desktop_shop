@@ -1,0 +1,22 @@
+Full tablespace Encryption - each tablespace file or data file can be encrypted using unique key. 
+
+	If you want to make it more stronger , all the tablespace keys can be encrypted again using a mastser key and stored 
+	inside a hardware security module or a key manager
+
+Column Level Encryption : Each data stored, can be encrypted based on each column identifying which data tu want to hide against insider breaches.
+
+application levels encryption : Application writing into Database send the encrypted data to databases to store
+
+tokenization : there are way tokenization the sensitive data to preserve the format .
+
+
+there are many pro-cons of each approach .
+
+Transparent database encryption. It is a pain in the butt, but your best bet: have the database transparently encrypted 
+	at the application layer with the key being a passphrase that you have to enter on system startup. Advantage: Also works with Databases as a service.
+
+Data on rest encryption: Same procedure, but the actual data files themselves are encrypted. 
+	In this case, you have to enter a passphrase when the database server is started or stopped.
+
+Do not store sensitive data in your database. Let’s take credit card information, for example: 
+	Do you really need that? Or wouldn't it be prudent to use a clearing service instead?
