@@ -23,17 +23,22 @@ with DataBaseConnection('main.db') as cursor:
 #    for row in data:
 #        print(row)
 
-    data = cursor.execute('''SELECT * FROM sessions''')
-    for row in data:
-        print(row)
+#    data = cursor.execute('''SELECT * FROM sessions''')
+#    for row in data:
+#        print(row)
 
 #    data = cursor.execute('SELECT * FROM products ORDER BY price DESC')
 #    for row in data:
 #        print(row)
 
-    data = cursor.execute('SELECT * FROM users LIMIT 100')
+#    data = cursor.execute('SELECT * FROM users LIMIT 100')
+#    for row in data:
+#        print(row)
+
+    data = cursor.execute('SELECT * FROM transactions WHERE user_id IN (SELECT user_id FROM users WHERE email_address = ?)', ['FLLKX1924796796@emailook.com'])
     for row in data:
         print(row)
+
 #
 #    data = cursor.execute('SELECT date, cost, user_id FROM transactions ORDER BY cost ASC LIMIT 10')
 #    for row in data:
