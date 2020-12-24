@@ -32,3 +32,6 @@ def timeit(f):
 
 def generate_timestamp():
     return datetime.datetime.now().strftime('%Y%m%d_%H%M%S')
+
+def get_current_date():
+    return datetime.datetime.now().strftime('%Y-%m-%d')
