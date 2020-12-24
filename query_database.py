@@ -5,16 +5,7 @@ Created on Sat Nov 14 17:09:26 2020
 @author: Korean_Crimson
 """
 
-import time
-from util import DataBaseConnection
-
-def timeit(f):
-    def func(*args, **kwargs):
-        time0 = time.time()
-        result = f(*args, **kwargs)
-        print(time.time() - time0)
-        return result
-    return func
+from util import DataBaseConnection, timeit
 
 @timeit
 def user_test_1(cursor):
@@ -24,22 +15,38 @@ def user_test_1(cursor):
         print(row)
 
 with DataBaseConnection('main.db') as cursor:
+#    data = cursor.execute('''SELECT name FROM sqlite_master where type="table"''')
+#    for row in data:
+#        print(row)
+
+#    data = cursor.execute('''SELECT SUM(price) FROM products WHERE product_id in (SELECT d.product_id FROM detailed_transactions d INNER JOIN transactions t ON d.transaction_id = t.transaction_id WHERE t.transaction_id = 1754)''')
+#    for row in data:
+#        print(row)
+
+    data = cursor.execute('''SELECT * FROM sessions''')
+    for row in data:
+        print(row)
+
+#    data = cursor.execute('SELECT * FROM products ORDER BY price DESC')
+#    for row in data:
+#        print(row)
+
     data = cursor.execute('SELECT * FROM users LIMIT 100')
     for row in data:
         print(row)
-
-    data = cursor.execute('SELECT date, cost, user_id FROM transactions ORDER BY cost ASC LIMIT 10')
-    for row in data:
-        pass
-    
-    data = cursor.execute('SELECT user_id, COUNT(*), SUM(cost) FROM transactions GROUP BY user_id HAVING COUNT(*) > 20 ORDER BY SUM(cost) DESC')
-    for row in data:
-        print(row)
-
-    data = cursor.execute('SELECT user_id FROM users WHERE last_name LIKE "P%s" ORDER BY first_name')
-    user_id = [point for point in data][0]
-    data = cursor.execute('SELECT * FROM transactions WHERE user_id IN (?)', user_id)
-    for row in data:
-        print(row)
-
-    user_test_1(cursor)
+#
+#    data = cursor.execute('SELECT date, cost, user_id FROM transactions ORDER BY cost ASC LIMIT 10')
+#    for row in data:
+#        pass
+#    
+#    data = cursor.execute('SELECT user_id, COUNT(*), SUM(cost) FROM transactions GROUP BY user_id HAVING COUNT(*) > 20 ORDER BY SUM(cost) DESC')
+#    for row in data:
+#        print(row)
+#
+#    data = cursor.execute('SELECT user_id FROM users WHERE last_name LIKE "P%s" ORDER BY first_name')
+#    user_id = [point for point in data][0]
+#    data = cursor.execute('SELECT * FROM transactions WHERE user_id IN (?)', user_id)
+#    for row in data:
+#        print(row)
+#
+#    user_test_1(cursor)
