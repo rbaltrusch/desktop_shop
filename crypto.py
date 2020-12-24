@@ -13,7 +13,7 @@ BASE62 = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
 def hash_string(password, salt):
     encoded_password = bytes(password, encoding='utf-8')
     encoded_salt = bytes(salt, encoding='utf-8')
-    dk = hashlib.pbkdf2_hmac('sha256', encoded_password, encoded_salt, iterations=1)
+    dk = hashlib.pbkdf2_hmac('sha256', encoded_password, encoded_salt, iterations=1) #should  be 100000
     return dk.hex()
 
 def generate_new_salt():
@@ -34,9 +34,7 @@ def _b62encode(num, alphabet=BASE62):
     return encoded_string
 
 def generate_new_session_id():
-    """
-    Creates a cryptographically-secure, URL-safe string
-    """
+    """Creates a cryptographically-secure, URL-safe string"""
     return secrets.token_urlsafe(16)
 
 if __name__ == '__main__':
