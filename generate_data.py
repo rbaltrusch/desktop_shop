@@ -120,6 +120,7 @@ class TransactionDataGenerator:
         chosen_product_ids = random.choices(product_ids, k=number_of_products)
         return chosen_product_ids
 
+
 class SessionDataGenerator:
     '''Used to generate data to fill the sessions table in main.db'''
 
@@ -136,6 +137,7 @@ class SessionDataGenerator:
             timestamp = util.generate_timestamp()
             session_data = [session_id, user_id, timestamp]
             database.add_session(cursor, session_data)
+
 
 def _main():
     #DataBaseConnection automatically saves changes on exit
