@@ -6,6 +6,8 @@ Created on Sat Nov 14 16:31:46 2020
 """
 
 import sqlite3
+import time
+import datetime
 
 class DataBaseConnection():
     def __init__(self, db_file):
@@ -19,3 +21,14 @@ class DataBaseConnection():
     def __exit__(self, *_):
         self.conn.commit()
         self.conn.close()
+
+def timeit(f):
+    def func(*args, **kwargs):
+        time0 = time.time()
+        result = f(*args, **kwargs)
+        print(time.time() - time0)
+        return result
+    return func
+
+def generate_timestamp():
+    return datetime.datetime.now().strftime('%Y%m%d_%H%M%S')
