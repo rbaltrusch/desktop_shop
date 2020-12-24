@@ -6,6 +6,7 @@ Created on Thu Dec 24 14:14:53 2020
 """
 
 import tkinter as tk
+import server
 from util import DataBaseConnection
 
 class Tk(tk.Tk):
@@ -45,11 +46,8 @@ class Gui:
 class View():
     def __init__(self):
         self.active = False
-        self._components = []
-
-    def __iter__(self):
-        for component in self._components:
-            yield component
+        self._components = {}
+        self._frame_components = {}
 
     def activate(self):
         self.active = True
@@ -57,14 +55,15 @@ class View():
     def deactivate(self):
         self.active = False
 
-    def add_component(self, component):
-        self._components.append(component)
+    def add_component(self, component, name):
+        self._components[name] = component
 
-    def get_components(self):
-        return self._components
+    def add_frame_component(self, component, name):
+        self._frame_components[name] = component
 
     def pack(self):
-        for component in self._components:
+        all_components = {**self._components, **self._frame_components}
+        for component in all_components.values():
             component.gridpack()
 
 class Component():
@@ -85,9 +84,10 @@ class Component():
         return self.tk_component.get()
 
 def login():
-    password = gui.views_dict['login']._components[4].get()
-    user_email = gui.views_dict['login']._components[2].get()
-    print(user_email, password)
+    password = gui.views_dict['login']._components['pw_entry'].get()
+    user_email = gui.views_dict['login']._components['email_entry'].get()
+    session_id = server.login(cursor, user_email, password)
+    print(session_id)
 
 def init_window():
     window = Tk()
@@ -98,11 +98,11 @@ def init_window():
     window.add_row(20)
     window.add_row(20)
     window.add_row(280)
-    window.add_col(200)
+    window.add_col(150)
     window.add_col(100)
     window.add_col(100)
     window.add_col(100)
-    window.add_col(200)
+    window.add_col(150)
     return window
 
 def init_login_view(window):
@@ -110,6 +110,8 @@ def init_login_view(window):
 
     #login frame
     login_frame = tk.Frame(window, relief=tk.SUNKEN, bd=2)
+    component = Component(login_frame, row=1, row_span=4, column=1, column_span=3, sticky='nsew')
+    login_view.add_frame_component(component, 'login_frame')
 
     #password entry text label
     login_label = tk.Label(login_frame, text="Login", fg="black")
@@ -124,29 +126,25 @@ def init_login_view(window):
     #email entry
     user_email = tk.StringVar()
     user_email_entry = tk.Entry(login_frame, textvariable=user_email)
-    component = Component(user_email_entry, row=1, column=1)
-    login_view.add_component(component)
+    component = Component(user_email_entry, row=1, column=1, sticky='nsew')
+    login_view.add_component(component, 'email_entry')
 
     #password label
-    password_label = tk.Label(login_frame, text='Password', fg='black')
-    component = Component(password_label, row=2, column=0)
-    login_view.add_component(component)
+    pw_label = tk.Label(login_frame, text='Password', fg='black')
+    component = Component(pw_label, row=2, column=0)
+    login_view.add_component(component, 'pw_label')
 
     #password entry
     password = tk.StringVar()
     pw_entry = tk.Entry(login_frame, textvariable=password, show="*")
     component = Component(pw_entry, row=2, column=1)
-    login_view.add_component(component)
+    login_view.add_component(component, 'pw_entry')
 
     #login button
     login_button = tk.Button(login_frame, text='Log in', command=login)
     component = Component(login_button, row=3, column=1)
-    login_view.add_component(component)
+    login_view.add_component(component, 'login_button')
 
-    #add login frame
-    component = Component(login_frame, row=1, row_span=4, column=1, column_span=3, sticky='nsew')
-    login_view.add_component(component)
-    
     return login_view
 
 window = init_window()
