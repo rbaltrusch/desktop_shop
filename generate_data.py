@@ -9,6 +9,7 @@ import random
 import data
 import database
 import crypto
+import util
 from util import DataBaseConnection
 
 class UserDataGenerator:
@@ -63,6 +64,31 @@ class UserDataGenerator:
         return 'password'
 
 
+class ProductDataGenerator:
+    '''Used to generate data to fill the products table in main.db'''
+
+    def populate_products_table(self, cursor, number_of_products=20):
+        '''Populates the products table in main.db (needs to already exist)
+        with the amount of products specified in the input arg. Expects a
+        DataBaseConnection object to be passed in as first arg
+        '''
+        for _ in range(number_of_products):
+            product_data = self._generate_random_product_data()
+            database.add_product(cursor, product_data)
+
+    @staticmethod
+    def _generate_random_product_data():
+        product_names = ['PumaVoxel', 'PetaBit', 'PersePhone']
+        series = ['A', 'M', 'S', 'X', 'Y', 'Z']
+        versions = ['99', '10', '2', '33', '21']
+
+        product_name = f'{random.choice(product_names)} {random.choice(series)}{random.choice(versions)}'
+        product_price = random.randint(10,50) * 10 - 0.01 #Between 99.99 and 499.99
+
+        product_data = [product_name, product_price]
+        return product_data
+
+
 class TransactionDataGenerator:
     '''Used to generate data to fill the transactions table in main.db'''
 
@@ -71,31 +97,67 @@ class TransactionDataGenerator:
         with the amount of transactions specified in the input arg. Expects a
         DataBaseConnection object to be passed in as first arg
         '''
-        user_ids = database.get_user_ids_from_user_table(cursor)
+        user_ids = database.query_user_ids_from_user_table(cursor)
+        product_ids = database.query_product_ids_from_product_table(cursor)
 
         for _ in range(number_of_transactions):
+            chosen_product_ids = self._generate_random_chosen_product_ids(product_ids)
+#            print(chosen_product_ids)
             transaction_data = self._generate_random_transaction_data(user_ids)
-            database.add_transaction(cursor, transaction_data)
+            database.add_transaction(cursor, transaction_data, chosen_product_ids)
 
     @staticmethod
     def _generate_random_transaction_data(user_ids):
         user_id = random.choice(user_ids)
         date = data.get_random_date(start=[2004, 6, 1], end=[2020, 11, 1])
-        cost = random.randint(1, 1000*100) / 100 #1 cent resolution
 
-        transaction_data = [user_id, date, cost]
+        transaction_data = [user_id, date]
         return transaction_data
+
+    @staticmethod
+    def _generate_random_chosen_product_ids(product_ids):
+        number_of_products = random.randint(1, 5)
+        chosen_product_ids = random.choices(product_ids, k=number_of_products)
+        return chosen_product_ids
+
+class SessionDataGenerator:
+    '''Used to generate data to fill the sessions table in main.db'''
+
+    def populate_sessions_table(self, cursor, number_of_sessions=25):
+        '''Populates the sessions table in main.db (needs to already exist)
+        with the amount of sessions specified in the input arg. Expects a
+        DataBaseConnection object to be passed in as first arg
+        '''
+        user_ids = database.query_user_ids_from_user_table(cursor)
+        chosen_user_ids = random.sample(user_ids, number_of_sessions)
+
+        for user_id in chosen_user_ids:
+            session_id = crypto.generate_new_session_id()
+            timestamp = util.generate_timestamp()
+            session_data = [session_id, user_id, timestamp]
+            database.add_session(cursor, session_data)
 
 def _main():
     #DataBaseConnection automatically saves changes on exit
     with DataBaseConnection('main.db') as cursor:
-        #create and populate user table
+#        create and populate user table
         database.create_user_table(cursor)
         UserDataGenerator().populate_user_table(cursor)
 
+#        create and populate products table
+        database.create_products_table(cursor)
+        ProductDataGenerator().populate_products_table(cursor)
+
+        #create detailed transactions table
+        database.create_detailed_transactions_table(cursor)
+
         #create and populate transactions table
-        database.create_transaction_table(cursor)
+        database.create_transactions_table(cursor)
         TransactionDataGenerator().populate_transactions_table(cursor)
+
+        #create and populate sessions table
+        database.create_sessions_table(cursor)
+        SessionDataGenerator().populate_sessions_table(cursor)
 
 if __name__ == '__main__':
     _main()
