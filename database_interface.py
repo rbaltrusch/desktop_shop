@@ -13,6 +13,7 @@ from util import DataBaseConnection
 def verify_database_call(function):
     def wrapper(*args, user_email='', session_id=''):
         verified = database.verify_session_id_by_user_email(cursor, session_id, user_email)
+        print(session_id, verified)
         if verified:
             results = function(*args)
 
@@ -33,6 +34,14 @@ def add_user(cursor, user_data):
     return database.add_user(cursor, user_data)
 
 @verify_database_call
+def add_transaction(cursor, user_email, chosen_product_ids):
+    print("CALLINMG")
+    user_id = database.query_user_id_from_user_email(cursor, user_email)
+    date = util.get_current_date()
+    transaction_data = [user_id, date]
+    return database.add_transaction(cursor, transaction_data, chosen_product_ids)
+
+@verify_database_call
 def update_user(cursor, user_data, user_email):
     return database.update_user_by_user_email(cursor, user_data, user_email)
 
@@ -51,7 +60,7 @@ def _add_new_session(cursor, user_email):
     return new_session_id
 
 if __name__ == '__main__':
-    user_email = '1937654Juan@emailook.com'
+    user_email = 'FLLKX1924796796@emailook.com'
     password = 'password'
     
     with DataBaseConnection('main.db') as cursor:
@@ -73,3 +82,7 @@ if __name__ == '__main__':
         session_id, user_data = query_user_data(cursor, user_email, user_email=user_email, session_id=session_id)
         for row in user_data:
             print(row)
+
+        chosen_product_ids = [1, 2, 3]
+        session_id, result = add_transaction(cursor, user_email, chosen_product_ids, user_email=user_email, session_id=session_id)
+        print(session_id)
