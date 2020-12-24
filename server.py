@@ -35,7 +35,6 @@ def add_user(cursor, user_data):
 
 @verify_database_call
 def add_transaction(cursor, user_email, chosen_product_ids):
-    print("CALLINMG")
     user_id = database.query_user_id_from_user_email(cursor, user_email)
     date = util.get_current_date()
     transaction_data = [user_id, date]
