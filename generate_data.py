@@ -37,10 +37,9 @@ class UserDataGenerator:
         join_date = data.get_random_date(start=[2014, 6, 1], end=[2020, 11, 1])
         dob = data.get_random_date(start=[1920, 1, 1], end=[2004, 6, 1])
         email_address = self._generate_random_email_address(first_name, last_name, dob)
-        salt = crypto.generate_new_salt()
         password = self._generate_new_password()
 
-        user_data = [first_name, last_name, gender, join_date, dob, email_address, salt, password]
+        user_data = [first_name, last_name, gender, join_date, dob, email_address, password]
         return user_data
 
     def _generate_random_email_address(self, first_name, last_name, dob):
