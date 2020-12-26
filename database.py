@@ -121,6 +121,12 @@ def update_user(cursor, user_data, user_id):
                 WHERE user_id = ?'''
     cursor.execute(command, user_data)
 
+def update_user_password(cursor, password, user_email):
+    salt = crypto.generate_new_salt()
+    pw_hash = crypto.hash_string(password, salt)
+    command = 'UPDATE users SET pw_hash = ?, pw_salt = ? WHERE email_address = ?'
+    cursor.execute(command, [pw_hash, salt, user_email])
+
 def update_user_by_user_email(cursor, user_data, user_email):
     '''user_data needs to be a full set of user_data, without the user_id, which is passed separately'''
     user_data.append(user_email)
