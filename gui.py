@@ -312,6 +312,8 @@ def place_order():
         gui.data['session_id'] = new_session_id
         if new_session_id is not None:
             show_message('We have placed your order.')
+            gui.data['cart'] = []
+            gui.views_dict['checkout'].clear()
         else:
             show_error_message('Your session has expired.')
     else:
