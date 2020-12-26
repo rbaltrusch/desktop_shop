@@ -14,7 +14,6 @@ def verify_database_call(function):
     def wrapper(*args, user_email='', session_id=''):
         cursor, *_ = args
         verified = database.verify_session_id_by_user_email(cursor, session_id, user_email)
-        print(session_id, verified)
         if verified:
             results = function(*args)
 
@@ -30,9 +29,11 @@ def verify_database_call(function):
 def query_user_data(cursor, user_email):
     return database.query_user_data_by_user_email(cursor, user_email)
 
-@verify_database_call
 def add_user(cursor, user_data):
-    return database.add_user(cursor, user_data)
+    *_, user_email, _ = user_data
+    new_session_id = _add_new_session(cursor, user_email)
+    database.add_user(cursor, user_data)
+    return new_session_id
 
 @verify_database_call
 def add_transaction(cursor, user_email, chosen_product_ids):
@@ -44,6 +45,10 @@ def add_transaction(cursor, user_email, chosen_product_ids):
 @verify_database_call
 def update_user(cursor, user_data, user_email):
     return database.update_user_by_user_email(cursor, user_data, user_email)
+
+@verify_database_call
+def update_user_password(cursor, password, user_email):
+    return database.update_user_password(cursor, password, user_email)
 
 def query_product_data_from_product_table(cursor):
     return database.query_product_data_from_product_table(cursor)
@@ -70,8 +75,8 @@ def _add_new_session(cursor, user_email):
     return new_session_id
 
 if __name__ == '__main__':
-    user_email = 'FLLKX1924796796@emailook.com'
-    password = 'password'
+    user_email = 'h2@e.com'
+    password = 'hello'
     
     with DataBaseConnection('main.db') as cursor:
         #test login
@@ -94,6 +99,6 @@ if __name__ == '__main__':
         for row in user_data:
             print(row)
 
-        chosen_product_ids = [1, 2, 3]
+        chosen_product_ids = ['1', '2', '3']
         session_id, result = add_transaction(cursor, user_email, chosen_product_ids, user_email=user_email, session_id=session_id)
         print(session_id)
