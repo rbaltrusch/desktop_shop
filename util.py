@@ -35,3 +35,11 @@ def generate_timestamp():
 
 def get_current_date():
     return datetime.datetime.now().strftime('%Y-%m-%d')
+
+def validate_date_string(date_string):
+    try:
+        datetime.datetime.strptime(date_string, '%Y-%m-%d')
+        valid = True
+    except:
+        valid = False
+    return valid
