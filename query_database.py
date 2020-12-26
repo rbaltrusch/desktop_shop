@@ -35,7 +35,7 @@ with DataBaseConnection('main.db') as cursor:
 #    for row in data:
 #        print(row)
 
-    data = cursor.execute('SELECT * FROM transactions WHERE user_id IN (SELECT user_id FROM users WHERE email_address = ?)', ['FLLKX1924796796@emailook.com'])
+    data = cursor.execute('SELECT * FROM transactions WHERE user_id IN (SELECT user_id FROM users WHERE email_address = ?)', ['FLLKX1924796796@emailook.com']) #h2@e.com
     for row in data:
         print(row)
 
