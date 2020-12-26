@@ -262,7 +262,7 @@ def validate_user_data(user_data):
     first_name, last_name, gender, _, dob, email_address, *_ = user_data
 
     #validate email
-    found_email = re.findall('.+?@.+', email_address)
+    found_email = re.findall('.+?@.+\..+', email_address)
     if not found_email:
         show_error_message('Email needs to be of the format address@domain.')
         return False
@@ -281,12 +281,12 @@ def validate_user_data(user_data):
 
     #validate gender
     found_gender = re.findall('[mf]', gender)
-    if not found_gender:
+    if gender and not found_gender:
         show_error_message('Gender needs to be m or f.')
         return False
 
     #validate dob
-    if not util.validate_date_string(dob):
+    if dob and not util.validate_date_string(dob):
         show_error_message('Date of birth needs to be in the format YYYY-MM-DD.')
         return False
 
