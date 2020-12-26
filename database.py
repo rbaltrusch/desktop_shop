@@ -19,7 +19,7 @@ def query_user_ids_from_user_table(cursor):
 
 def query_product_ids_from_product_table(cursor):
     '''Returns all product ids found in products table as a list'''
-    product_ids = [product_id for product_id, *_ in cursor.execute('SELECT product_id FROM products''')]
+    product_ids = [product_id for product_id, *_ in cursor.execute('SELECT product_id FROM products')]
     return product_ids
 
 def query_product_data_from_product_table(cursor):
