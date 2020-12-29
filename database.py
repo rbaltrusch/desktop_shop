@@ -76,6 +76,8 @@ def verify_session_id(cursor, session_id, user_id):
     data = cursor.execute('SELECT session_id FROM sessions WHERE session_id = ? AND user_id = ?', [session_id, user_id])
     data = [d for d, *_ in data]
     verified = data and data[0] == session_id
+
+    #DONT REMOVE: for some reason, without this useless if, the function doesnt work....
     if not verified:
         verified = False
     return verified
