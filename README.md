@@ -8,3 +8,5 @@ Considerations/Limitations/Problems:
 	no networking/server (to reduce extra complexity)
 
 To try out the graphical database application, simply install all the required packages (specified in requirements.txt) and run gui.py.
+
+Written in Python 3.8.3
