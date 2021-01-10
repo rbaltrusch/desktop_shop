@@ -1,0 +1,1 @@
+Copy the file query_database.py into the root code directory desktop_shop to run commands on the main.db database without authentification.

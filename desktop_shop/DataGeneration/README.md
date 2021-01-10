@@ -1,0 +1,1 @@
+Copy the files in the DataGeneration directory into the desktop_shop root code directory and run generate_data.py to re-generate the random data filling the database file main.db that is used in this project.
