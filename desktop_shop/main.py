@@ -8,6 +8,7 @@ Created on Mon Feb  1 09:52:44 2021
 from gui import init, app, cursor
 
 init.init()
+app.views_dict['main_menu'].pack()
 app.views_dict['home'].pack()
 app.mainloop()
 cursor.close()

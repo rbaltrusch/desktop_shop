@@ -8,6 +8,7 @@ Created on Sun Nov 22 14:31:48 2020
 import crypto
 
 def query_user_id_from_user_email(cursor, user_email):
+    '''Queries for the user id of the user specified by the user_email passed (unique)'''
     command = 'SELECT user_id FROM users WHERE email_address = ?'
     user_ids = [user_id for user_id, *_ in cursor.execute(command, [user_email])]
     return user_ids[0] if user_ids else None
@@ -19,14 +20,16 @@ def query_user_ids_from_user_table(cursor):
 
 def query_product_ids_from_product_table(cursor):
     '''Returns all product ids found in products table as a list'''
-    product_ids = [product_id for product_id, *_ in cursor.execute('SELECT product_id FROM products')]
+    product_ids = [prod_id for prod_id, *_ in cursor.execute('SELECT product_id FROM products')]
     return product_ids
 
 def query_product_data_from_product_table(cursor):
+    '''Queries all produt data from the products table'''
     data = [list(row) for row in cursor.execute('SELECT * FROM products')]
     return data
 
 def query_product_data_from_product_table_by_product_ids(cursor, product_ids):
+    '''Queries product data from the products table, by the passed product ids'''
 
     #sanitize input and make sure all product ids are only numeric
     if not all(product_id.isnumeric() for product_id in product_ids):
@@ -53,27 +56,57 @@ def query_product_price_from_product_table(cursor, product_ids):
     return product_prices
 
 def query_user_data_by_user_email(cursor, user_email):
-    data = cursor.execute('SELECT first_name, last_name, gender, join_date, email_address, dob FROM users where email_address = ?', [user_email])
+    '''Queries the user data from the users table, by the user identified by the user_email'''
+    command = '''SELECT
+                    first_name,
+                    last_name,
+                    gender,
+                    join_date,
+                    email_address,
+                    dob
+                FROM users
+                WHERE email_address = ?'''
+
+    data = cursor.execute(command, [user_email])
     data = list(data)
     return list(data[0]) if data else []
 
 def query_user_data(cursor, user_id):
-    data = cursor.execute('SELECT first_name, last_name, gender, join_date, email_address, dob FROM users WHERE user_id = ?', [str(user_id)])
+    '''Queries the data for the user from the users table, by the user id passed'''
+    command = ''''SELECT
+                    first_name,
+                    last_name,
+                    gender,
+                    join_date,
+                    email_address,
+                    dob
+                FROM users
+                WHERE user_id = ?'''
+
+    data = cursor.execute(command, [str(user_id)])
     data = list(data)
     return list(data[0]) if data else []
 
 def query_pw_hash_and_salt_by_user_email(cursor, user_email):
+    '''Queries the password hash and salt from the users table for the specified user_email'''
     command = 'SELECT pw_salt, pw_hash FROM users WHERE email_address = ?'
     data = cursor.execute(command, [user_email])
     data = list(data)
     return list(data[0]) if data else []
 
 def get_last_added_transaction_id_from_transactions_table(cursor):
+    '''Returns the id of the transaction last added to the transactions table'''
     transaction_id, *_ = [id_ for id_, *_ in cursor.execute('''SELECT last_insert_rowid()''')]
     return transaction_id
 
 def verify_session_id(cursor, session_id, user_id):
-    data = cursor.execute('SELECT session_id FROM sessions WHERE session_id = ? AND user_id = ?', [session_id, user_id])
+    '''Verifies that the passed session_id is held by a user identified by the passed user id'''
+    command = '''SELECT session_id
+                FROM sessions
+                WHERE session_id = ?
+                AND user_id = ?'''
+
+    data = cursor.execute(command, [session_id, user_id])
     data = [d for d, *_ in data]
     verified = data and data[0] == session_id
 
@@ -83,13 +116,14 @@ def verify_session_id(cursor, session_id, user_id):
     return verified
 
 def verify_session_id_by_user_email(cursor, session_id, user_email):
+    '''Verifies that the passed session_id is held by a user identified by the passed user_email'''
     command = '''SELECT session_id FROM sessions
                   WHERE session_id = ?
                   AND user_id IN
                   (
                       SELECT user_id FROM users
                       WHERE email_address = ?)'''
-  
+
     data = cursor.execute(command, [session_id, user_email])
     data = [d for d, *_ in data]
     verified = data and data[0] == session_id
@@ -98,6 +132,7 @@ def verify_session_id_by_user_email(cursor, session_id, user_email):
     return verified
 
 def add_user(cursor, user_data):
+    '''Adds a user with the specified user data to the users table'''
     command = '''INSERT INTO users
                 (first_name, last_name, gender, join_date, dob, email_address, pw_salt, pw_hash)
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?)'''
@@ -111,7 +146,9 @@ def add_user(cursor, user_data):
     cursor.execute(command, user_data)
 
 def update_user(cursor, user_data, user_id):
-    '''user_data needs to be a full set of user_data, without the user_id, which is passed separately'''
+    '''user_data needs to be a full set of user_data, without the user_id,
+    which is passed separately
+    '''
     user_data.append(user_id)
     command = '''UPDATE users
                 SET
@@ -124,13 +161,16 @@ def update_user(cursor, user_data, user_id):
     cursor.execute(command, user_data)
 
 def update_user_password(cursor, password, user_email):
+    '''Updates the password hash in the users table for the user specified'''
     salt = crypto.generate_new_salt()
     pw_hash = crypto.hash_string(password, salt)
     command = 'UPDATE users SET pw_hash = ?, pw_salt = ? WHERE email_address = ?'
     cursor.execute(command, [pw_hash, salt, user_email])
 
 def update_user_by_user_email(cursor, user_data, user_email):
-    '''user_data needs to be a full set of user_data, without the user_id, which is passed separately'''
+    '''user_data needs to be a full set of user_data, without the user_id,
+    which is passed separately
+    '''
     user_data.append(user_email)
     command = '''UPDATE users
                 SET
@@ -143,28 +183,34 @@ def update_user_by_user_email(cursor, user_data, user_email):
     cursor.execute(command, user_data)
 
 def add_transaction(cursor, transaction_data, chosen_product_ids):
+    '''adds a transaction with the specified transaction data to the transactions
+    table and the detailed transactions table.
+    '''
     product_prices = query_product_price_from_product_table(cursor, chosen_product_ids)
     cost = sum(product_prices)
     transaction_data.append(cost)
 
     command = 'INSERT INTO transactions (user_id, date, cost) VALUES (?, ?, ?)'
     cursor.execute(command, transaction_data)
-    
+
     transaction_id = get_last_added_transaction_id_from_transactions_table(cursor)
 
     command = 'INSERT INTO detailed_transactions (transaction_id, product_id) VALUES (?, ?)'
     for chosen_product_id in chosen_product_ids:
         cursor.execute(command, [transaction_id, chosen_product_id])
-    
+
 def add_session(cursor, session_data):
+    '''adds a session with the specified session data to the session table'''
     command = 'INSERT INTO sessions (session_id, user_id, timestamp) VALUES (?, ?, ?)'
     cursor.execute(command, session_data)
 
 def add_product(cursor, product_data):
+    '''adds a product with the specified product data to the products table'''
     command = 'INSERT INTO products (name, price) VALUES (?, ?)'
     cursor.execute(command, product_data)
 
 def create_user_table(cursor):
+    '''Creates user table. Only called in generate_database'''
     #remove table
     cursor.execute('''DROP TABLE IF EXISTS users''')
 
@@ -182,7 +228,7 @@ def create_user_table(cursor):
                      pw_hash NOT NULL
                      CHECK (email_address LIKE '%_@_%._%')
                      )''')
- 
+
     #remove index based on user id
     cursor.execute('''DROP INDEX IF EXISTS idx_user_id''')
 
@@ -191,6 +237,7 @@ def create_user_table(cursor):
 
 
 def create_transactions_table(cursor):
+    '''Creates transactions table. Only called in generate_database'''
     #remove table
     cursor.execute('''DROP TABLE IF EXISTS transactions''')
 
@@ -214,6 +261,7 @@ def create_transactions_table(cursor):
 
 
 def create_detailed_transactions_table(cursor):
+    '''Creates detailed transactions table. Only called in generate_database'''
     #remove table
     cursor.execute('''DROP TABLE IF EXISTS detailed_transactions''')
 
@@ -233,6 +281,7 @@ def create_detailed_transactions_table(cursor):
 
 
 def create_products_table(cursor):
+    '''Creates products table. Only called in generate_database'''
     #remove table
     cursor.execute('''DROP TABLE IF EXISTS products''')
 
@@ -245,6 +294,7 @@ def create_products_table(cursor):
 
 
 def create_sessions_table(cursor):
+    '''Creates sessions table. Only called in generate_database'''
     #remove table
     cursor.execute('''DROP TABLE IF EXISTS sessions''')
 

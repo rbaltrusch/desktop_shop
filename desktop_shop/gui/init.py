@@ -10,7 +10,12 @@ import server
 from gui.components import Component, View
 from gui import app, root, cursor, callbacks
 
+#pylint: disable=too-many-locals
+#pylint: disable=too-many-statements
+#pylint: disable=line-too-long
+
 def init_main_menu_view(window):
+    '''Initialises main menu view, including all its components'''
     main_menu_view = View()
 
     #main menu frame
@@ -77,6 +82,7 @@ def init_main_menu_view(window):
     return main_menu_view
 
 def init_login_view(window):
+    '''Initialises login view, including all its components'''
     login_view = View()
 
     #login frame
@@ -125,6 +131,7 @@ def init_login_view(window):
     return login_view
 
 def init_register_view(window):
+    '''Initialises register view, including all its components'''
     register_view = View()
 
     #register frame
@@ -232,11 +239,17 @@ def init_register_view(window):
     register_view.hide_component('register_failed_label')
     return register_view
 
-def init_home_view(window):
+def init_home_view(_):
+    '''Initialises an empty home view.
+
+    Currently, all home view contents are dynamically generated in the function
+    init_product_data_in_home_view
+    '''
     home_view = View()
     return home_view
 
 def init_product_data_in_home_view():
+    '''Dynamically generates all contents of the home view'''
     product_datas = server.query_product_data_from_product_table(cursor)
     home_view = app.views_dict['home']
     for i, (product_id, name, price) in enumerate(product_datas):
@@ -259,11 +272,17 @@ def init_product_data_in_home_view():
         component = Component(add_to_cart_button, row=row_num, column=2, sticky='e')
         home_view.add_component(component, component_name)
 
-def init_checkout_view(window):
+def init_checkout_view(_):
+    '''Initialises an empty checkout view.
+
+    Currently, all checkout view contents are dynamically generated in the function
+    init_checkout_data_in_checkout_view
+    '''
     checkout_view = View()
     return checkout_view
 
 def init_checkout_data_in_checkout_view():
+    '''Dynamically generates all contents of the checkout view'''
     checkout_view = app.views_dict['checkout']
     chosen_product_ids = app.data['cart']
     product_datas = server.query_product_data_from_product_table_by_product_ids(cursor, chosen_product_ids)
@@ -307,6 +326,7 @@ def init_checkout_data_in_checkout_view():
     checkout_view.add_component(component, 'confirm_button')
 
 def init_profile_view(window):
+    '''Initialises profile view, including all its components'''
     profile_view = View()
 
     date_joined_frame = tk.Frame(window, relief=tk.RAISED, bd=3)
@@ -472,6 +492,7 @@ def init_profile_view(window):
     return profile_view
 
 def init_root():
+    '''Initialises and configures tk root'''
     root.title('OfflineShop')
     root.wm_attributes('-transparentcolor','purple')
     root.bind_all("<Button-1>", callbacks.focus)
@@ -484,6 +505,7 @@ def init_root():
     root.add_col(150)
 
 def init_views(window):
+    '''Initialises all views'''
     views = {'login': init_login_view(window),
              'main_menu': init_main_menu_view(window),
              'home': init_home_view(window),
@@ -495,6 +517,7 @@ def init_views(window):
     return views
 
 def init():
+    '''Init function that needs to be called before gui is started'''
     init_root()
     app.views_dict = init_views(root)
     app.data = callbacks.init_gui_data()
