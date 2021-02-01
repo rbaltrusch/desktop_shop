@@ -987,7 +987,7 @@ global window
 window = init_window()
 views = init_views(window)
 
-with Gui(views, tk) as gui, DataBaseConnection('main.db') as cursor:
+with Gui(views, window) as gui, DataBaseConnection('main.db') as cursor:
     gui.data = init_gui_data()
     init_product_data_in_home_view()
     gui.views_dict['home'].pack()
