@@ -22,6 +22,12 @@ class DataBaseConnection():
         self.conn.commit()
         self.conn.close()
 
+    def enter(self):
+        return self.__enter__()
+
+    def close(self):
+        self.__exit__()
+
 def timeit(f):
     def func(*args, **kwargs):
         time0 = time.time()
