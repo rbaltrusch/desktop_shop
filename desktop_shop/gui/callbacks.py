@@ -8,7 +8,7 @@ import re
 
 import util
 import server
-from gui import app, cursor
+from gui import app, db_conn
 
 #pylint: disable=E1123,E1124
 
@@ -19,15 +19,19 @@ def login():
     '''
     password = app.views_dict['login'].get('pw_entry').get()
     user_email = app.views_dict['login'].get('email_entry').get()
-    session_id = server.login(cursor, user_email, password)
+    with db_conn as cursor:
+        session_id = server.login(cursor, user_email, password)
+
     if session_id is not None:
         app.data['session_id'] = session_id
         app.views_dict['login'].hide_component('login_failed_label')
         switch_to_home()
 
         #pylint: disable=unbalanced-tuple-unpacking
-        session_id, user_data = server.query_user_data(cursor, user_email, user_email=user_email,
-                                                       session_id=session_id)
+        with db_conn as cursor:
+            session_id, user_data = server.query_user_data(cursor, user_email,
+                                                           user_email=user_email,
+                                                           session_id=session_id)
 
         app.data['session_id'] = session_id
         store_user_data(user_data)
@@ -81,7 +85,10 @@ def register():
     valid_data = validate_user_data(user_data)
     valid_password = validate_password(password, confirm_password)
     if valid_data and valid_password:
-        session_id = server.add_user(cursor, user_data)
+
+        with db_conn as cursor:
+            session_id = server.add_user(cursor, user_data)
+
         app.data['session_id'] = session_id
         if session_id is None:
             show_error_message('Failed to register.')
@@ -113,8 +120,9 @@ def edit_user_data():
         session_id = app.data['session_id']
         user_data = [first_name, last_name, gender, dob, user_email]
 
-        new_session_id, *_ = server.update_user(cursor, user_data, user_email,
-                                                user_email=user_email, session_id=session_id)
+        with db_conn as cursor:
+            new_session_id, *_ = server.update_user(cursor, user_data, user_email,
+                                                    user_email=user_email, session_id=session_id)
 
         app.data['session_id'] = new_session_id
         store_user_data([first_name, last_name, gender, join_date, user_email, dob])
@@ -137,9 +145,10 @@ def edit_user_password():
         session_id = app.data['session_id']
         user_email = app.data['user_email']
 
-        new_session_id, *_ = server.update_user_password(cursor, password, user_email,
-                                                         user_email=user_email,
-                                                         session_id=session_id)
+        with db_conn as cursor:
+            new_session_id, *_ = server.update_user_password(cursor, password, user_email,
+                                                             user_email=user_email,
+                                                             session_id=session_id)
 
         app.data['session_id'] = new_session_id
         if not new_session_id:
@@ -212,8 +221,10 @@ def place_order():
     if user_email and chosen_product_ids:
         session_id = app.data['session_id']
 
-        new_session_id, _ = server.add_transaction(cursor, user_email, chosen_product_ids,
-                                                   user_email=user_email, session_id=session_id)
+        with db_conn as cursor:
+            new_session_id, _ = server.add_transaction(cursor, user_email, chosen_product_ids,
+                                                       user_email=user_email,
+                                                       session_id=session_id)
 
         app.data['session_id'] = new_session_id
         if new_session_id is not None:
@@ -295,6 +306,9 @@ def store_user_data(user_data):
         app.data['user_join_date'] = join_date
         app.data['user_email'] = email_address
         app.data['user_dob'] = dob
+    else:
+        sign_out()
+        show_error_message('Something went wrong while logging in. 2')
 
 def clear_user_data():
     '''Resets user data stored in gui to default values'''

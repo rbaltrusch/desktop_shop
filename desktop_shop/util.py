@@ -23,14 +23,6 @@ class DataBaseConnection():
         self.conn.commit()
         self.conn.close()
 
-    def enter(self):
-        '''Calls __enter__ code, use only for cases when contextmanager syntax cannot be used'''
-        return self.__enter__()
-
-    def close(self):
-        '''Calls __exit__ code, use only for cases when contextmanager syntax cannot be used'''
-        self.__exit__()
-
 def timeit(function):
     '''Decorator that prints execution time of a function'''
     def wrapper(*args, **kwargs):

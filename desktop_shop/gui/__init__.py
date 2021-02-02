@@ -11,4 +11,3 @@ from gui.components import Tk, Gui
 root = Tk()
 app = Gui(root)
 db_conn = DataBaseConnection('main.db')
-cursor = db_conn.enter()
