@@ -9,15 +9,19 @@ Considerations/Limitations/Problems:
 A few screenshots of the application:
 
 ![Screenshot of the application GUI](desktop_shop/gui/media/screenshot_new1.png?raw=true "Screenshot of the application GUI")
+
 *Screenshot of the home view in the application GUI*
 
 ![Screenshot of the application GUI](desktop_shop/gui/media/screenshot_new2.png?raw=true "Screenshot of the application GUI")
+
 *Screenshot of the register view in the application GUI*
 
 ![Screenshot of the application GUI](desktop_shop/gui/media/screenshot_new3.png?raw=true "Screenshot of the application GUI")
+
 *Screenshot of the login view in the application GUI*
 
 ![Screenshot of the application GUI](desktop_shop/gui/media/screenshot_new4.png?raw=true "Screenshot of the application GUI")
+
 *Screenshot of the profile view in the application GUI*
 
 ![Screenshot of the application GUI](desktop_shop/gui/media/screenshot_new5.png?raw=true "Screenshot of the application GUI")
