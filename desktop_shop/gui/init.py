@@ -71,7 +71,7 @@ def init_main_menu_view(window):
 
     #message label
     message = tk.StringVar()
-    message_label = tk.Label(message_frame, textvariable=message, **config.FRAME_THEME)
+    message_label = tk.Label(message_frame, textvariable=message, **config.LABEL_THEME)
     component = Component(message_label, row=0, column=0, var=message)
     main_menu_view.add_component(component, 'message_label')
 
