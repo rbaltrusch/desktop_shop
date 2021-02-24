@@ -1,32 +1,27 @@
-# desktop_shop
-Desktop mock shop application interfacing with a generated database of customers, products and transactions (Python / SQLite3).
+# Desktop Shop
 
-Considerations/Limitations/Problems:
+This is a mock shop application, running completely offline on a desktop. The graphical interface connects with a generated, local database of customers, products and transactions (Python / SQLite3). As the application runs completely offline, it does away with any networking or server complexity and showcases a bare implementation of an application interfacing with a production database.
 
-	no cache: shopping cart gets discarded when session is disconnected
-	no networking/server (to reduce extra complexity)
+![Screenshot of the application GUI](desktop_shop/gui/media/screenshot_combined_all.png?raw=true "Screenshot of the application GUI")
 
-A few screenshots of the application:
+## Getting started
 
-![Screenshot of the application GUI](desktop_shop/gui/media/screenshot_new1.png?raw=true "Screenshot of the application GUI")
+To get a copy of this repository, simply open up git bash in an empty folder and use the command:
 
-*Screenshot of the home view in the application GUI*
+    $ git clone https://github.com/rbaltrusch/desktop_shop
 
-![Screenshot of the application GUI](desktop_shop/gui/media/screenshot_new2.png?raw=true "Screenshot of the application GUI")
+To install all python dependencies, run the following in your command line:
 
-*Screenshot of the register view in the application GUI*
+    python -m pip install -r requirements.txt
 
-![Screenshot of the application GUI](desktop_shop/gui/media/screenshot_new3.png?raw=true "Screenshot of the application GUI")
+## Python
 
-*Screenshot of the login view in the application GUI*
+Written in Python 3.8.3.
 
-![Screenshot of the application GUI](desktop_shop/gui/media/screenshot_new4.png?raw=true "Screenshot of the application GUI")
+## License
 
-*Screenshot of the profile view in the application GUI*
+This repository is open-source software available under the [MIT License](https://github.com/rbaltrusch/desktop_shop/blob/master/LICENSE).
 
-![Screenshot of the application GUI](desktop_shop/gui/media/screenshot_new5.png?raw=true "Screenshot of the application GUI")
-*Screenshot of the checkout view in the application GUI*
+## Contact
 
-To try out the graphical database application, simply install all the required packages (specified in requirements.txt) and run gui.py.
-
-Written in Python 3.8.3
+Please raise an issue for code changes. To reach out, please send an email to richard@baltrusch.net.
