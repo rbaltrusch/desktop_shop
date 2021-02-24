@@ -5,23 +5,8 @@ Created on Sat Nov 14 16:31:46 2020
 @author: Korean_Crimson
 """
 
-import sqlite3
 import time
 import datetime
-
-class DataBaseConnection():
-    '''Class that wraps the sqlite3 datebase connection, to safely open and close'''
-    def __init__(self, db_file):
-        self.db_file = db_file
-        self.conn = None
-
-    def __enter__(self):
-        self.conn = sqlite3.connect(self.db_file)
-        return self.conn.cursor()
-
-    def __exit__(self, *_):
-        self.conn.commit()
-        self.conn.close()
 
 def timeit(function):
     '''Decorator that prints execution time of a function'''
