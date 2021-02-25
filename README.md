@@ -6,6 +6,8 @@ Here are some snippets of the user interface:
 
 ![Screenshot of the application GUI](desktop_shop/gui/media/screenshot_combined_all.png?raw=true "Screenshot of the application GUI")
 
+Note that any personal information shown in the gui or stored in the database is not related to any natural people. All information was generated automatically. Any names or other user data which coincide with real individuals are pure coincidence.
+
 ## Getting started
 
 To get a copy of this repository, simply open up git bash in an empty folder and use the command:
