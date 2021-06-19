@@ -2,7 +2,11 @@
 
 This is a mock shop application, running completely offline on a desktop. The graphical interface connects with a generated, local database of customers, products and transactions (Python / SQLite3). As the application runs completely offline, it does away with any networking or server complexity and showcases a bare implementation of an application interfacing with a production database.
 
+Here are some snippets of the user interface:
+
 ![Screenshot of the application GUI](desktop_shop/gui/media/screenshot_combined_all.png?raw=true "Screenshot of the application GUI")
+
+Note that any personal information shown in the gui or stored in the database is not related to any natural people. All information was generated automatically. Any names or other user data which coincide with real individuals are pure coincidence.
 
 ## Getting started
 
