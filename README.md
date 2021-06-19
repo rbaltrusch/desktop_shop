@@ -4,7 +4,7 @@ This is a mock shop application, running completely offline on a desktop. The gr
 
 Here are some snippets of the user interface:
 
-![Screenshot of the application GUI](desktop_shop/gui/media/screenshot_combined_all.png?raw=true "Screenshot of the application GUI")
+![Screenshot of the application GUI](desktop_shop/gui/media/gif.gif?raw=true "Screenshot of the application GUI")
 
 Note that any personal information shown in the gui or stored in the database is not related to any natural people. All information was generated automatically. Any names or other user data which coincide with real individuals are pure coincidence.
 
