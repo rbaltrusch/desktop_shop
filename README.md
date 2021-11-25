@@ -19,6 +19,10 @@ To install all python dependencies, run the following in your command line:
 
     python -m pip install -r requirements.txt
 
+Run the shop application by calling the main.py file:
+
+    python main.py
+
 ## Python
 
 Written in Python 3.8.3.
