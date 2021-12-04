@@ -40,7 +40,7 @@ def login():
         set_logged_in_as_user_text()
         clear_login_data()
     else:
-        app.views_dict['login'].unhide_component('login_failed_label')
+        app.views_dict['login'].unhide_components('login_failed_label')
 
 def sign_out():
     '''Signs out the currently logged in user. clears the user data, login data,
