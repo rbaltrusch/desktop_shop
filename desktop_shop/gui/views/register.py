@@ -6,109 +6,56 @@ Created on Sat Dec  4 16:43:01 2021
 """
 
 import tkinter as tk
-from gui import config, callbacks, components
-from gui.components import Component
+from gui import callbacks, components
 
 class View(components.View):
     @classmethod
-    def create(cls, window):
+    def create(cls, window, builder):
         '''Initialises register view, including all its components'''
-        register_view = cls()
+        builder.view = cls()
+        builder.root = window
 
-        #register frame
-        register_frame = tk.Frame(window, relief=tk.SUNKEN, bd=2, **config.FRAME_THEME)
-        component = Component(register_frame, row=8, row_span=7, col=1, col_span=3, sticky='nsew')
-        register_view.add_frame_component(component, 'register_frame')
+        frame = builder.create('frame', name='register', relief=tk.SUNKEN, bd=2)
+        frame.place(row=8, row_span=7, col=1, col_span=3, sticky='nsew')
+        builder.root = frame.component.tk_component
+
+        builder.create('label', text="Register").place(row=0, col=1)
+
+        #email
+        builder.create('label', text="*Email address").place(row=1, col=0)
+        entry = builder.create('entry', name='email', textvariable=tk.StringVar())
+        entry.place(row=1, col=1, sticky='nsew')
+
+        #first name
+        builder.create('label', text="*First name").place(row=2, col=0)
+        entry = builder.create('entry', name='first_name', textvariable=tk.StringVar())
+        entry.place(row=2, col=1, sticky='nsew')
+
+        #last name
+        builder.create('label', text="*Last name").place(row=3, col=0)
+        entry = builder.create('entry', name='last_name', textvariable=tk.StringVar())
+        entry.place(row=3, col=1, sticky='nsew')
+
+        #gender
+        builder.create('label', text="Gender").place(row=4, col=0)
+        entry = builder.create('entry', name='gender', textvariable=tk.StringVar())
+        entry.place(row=4, col=1, sticky='nsew')
     
-        #register label
-        register_label = tk.Label(register_frame, text="Register", **config.LABEL_THEME)
-        component = Component(register_label, row=0, col=1)
-        register_view.add_component(component, 'register_label')
+        #date of birth
+        builder.create('label', text="Date of Birth").place(row=5, col=0)
+        entry = builder.create('entry', name='dob', textvariable=tk.StringVar())
+        entry.place(row=5, col=1, sticky='nsew')
     
-        #email label
-        email_label = tk.Label(register_frame, text='*Email address', **config.LABEL_THEME)
-        component = Component(email_label, row=1, col=0)
-        register_view.add_component(component, 'email_label')
+        #password
+        builder.create('label', text="*Password").place(row=6, col=0)
+        entry = builder.create('entry', name='pw', textvariable=tk.StringVar())
+        entry.place(row=6, col=1, sticky='nsew')
     
-        #email entry
-        user_email = tk.StringVar()
-        user_email_entry = tk.Entry(register_frame, textvariable=user_email, **config.ENTRY_THEME)
-        component = Component(user_email_entry, row=1, col=1, sticky='nsew', var=user_email)
-        register_view.add_component(component, 'email_entry')
-    
-        #first name label
-        first_name_label = tk.Label(register_frame, text='*First name', **config.LABEL_THEME)
-        component = Component(first_name_label, row=2, col=0)
-        register_view.add_component(component, 'first_name_label')
-    
-        #first name entry
-        first_name = tk.StringVar()
-        first_name_entry = tk.Entry(register_frame, textvariable=first_name, **config.ENTRY_THEME)
-        component = Component(first_name_entry, row=2, col=1, sticky='nsew', var=first_name)
-        register_view.add_component(component, 'first_name_entry')
-    
-        #last name label
-        last_name_label = tk.Label(register_frame, text='*Last name', **config.LABEL_THEME)
-        component = Component(last_name_label, row=3, col=0)
-        register_view.add_component(component, 'last_name_label')
-    
-        #last name entry
-        last_name = tk.StringVar()
-        last_name_entry = tk.Entry(register_frame, textvariable=last_name, **config.ENTRY_THEME)
-        component = Component(last_name_entry, row=3, col=1, sticky='nsew', var=last_name)
-        register_view.add_component(component, 'last_name_entry')
-    
-        #gender label
-        gender_label = tk.Label(register_frame, text='Gender', **config.LABEL_THEME)
-        component = Component(gender_label, row=4, col=0)
-        register_view.add_component(component, 'gender_label')
-    
-        #gender entry
-        gender = tk.StringVar()
-        gender_entry = tk.Entry(register_frame, textvariable=gender, **config.ENTRY_THEME)
-        component = Component(gender_entry, row=4, col=1, sticky='nsew', var=gender)
-        register_view.add_component(component, 'gender_entry')
-    
-        #dob label
-        dob_label = tk.Label(register_frame, text='Date of Birth', **config.LABEL_THEME)
-        component = Component(dob_label, row=5, col=0)
-        register_view.add_component(component, 'dob_label')
-    
-        #dob entry
-        dob = tk.StringVar()
-        dob_entry = tk.Entry(register_frame, textvariable=dob, **config.ENTRY_THEME)
-        component = Component(dob_entry, row=5, col=1, sticky='nsew', var=dob)
-        register_view.add_component(component, 'dob_entry')
-    
-        #pw label
-        pw_label = tk.Label(register_frame, text='*Password', **config.LABEL_THEME)
-        component = Component(pw_label, row=6, col=0)
-        register_view.add_component(component, 'pw_label')
-    
-        #pw entry
-        password = tk.StringVar()
-        pw_entry = tk.Entry(register_frame, textvariable=password, show="*", **config.ENTRY_THEME)
-        component = Component(pw_entry, row=6, col=1, sticky='nsew', var=password)
-        register_view.add_component(component, 'pw_entry')
-    
-        #confirm pw label
-        pw_label = tk.Label(register_frame, text='*Confirm Password', **config.LABEL_THEME)
-        component = Component(pw_label, row=7, col=0)
-        register_view.add_component(component, 'confirm_pw_label')
-    
-        #confirm pw entry
-        confirm_password = tk.StringVar()
-        pw_entry = tk.Entry(register_frame, textvariable=confirm_password, show="*", **config.ENTRY_THEME)
-        component = Component(pw_entry, row=7, col=1, sticky='nsew', var=confirm_password)
-        register_view.add_component(component, 'confirm_pw_entry')
-    
-        #required label
-        required_label = tk.Label(register_frame, text="*required", **config.LABEL_THEME)
-        component = Component(required_label, row=8, col=1)
-        register_view.add_component(component, 'required_label')
-    
-        #register button
-        register_button = tk.Button(register_frame, text='Register', command=callbacks.register, **config.BUTTON_THEME2)
-        component = Component(register_button, row=9, col=1)
-        register_view.add_component(component, 'register_button')
-        return register_view
+        #confirm pw
+        builder.create('label', text="*Confirm Password").place(row=7, col=0)
+        entry = builder.create('entry', name='confirm_pw', textvariable=tk.StringVar())
+        entry.place(row=7, col=1, sticky='nsew')
+
+        builder.create('label', text="*required").place(row=8, col=1)
+        builder.create('button2', text='Register', command=callbacks.register).place(row=9, col=1)
+        return builder.view
