@@ -231,13 +231,13 @@ def place_order():
 
 def show_message(message):
     '''Shows the specified message in the main menu view'''
-    app['main_menu'].hide_component('error_message_label')
     app['main_menu']['message_label'].set_var(message)
+    app['main_menu'].hide_components('error_message_label')
     app['main_menu'].unhide_components('message_label', 'message_frame')
 
 def show_error_message(message):
     '''Shows the specified error message in the main menu view'''
-    app['main_menu'].get('error_message_label').set_var(message)
+    app['main_menu']['error_message_label'].set_var(message)
     app['main_menu'].hide_components('message_frame')
     app['main_menu'].unhide_components('error_message_label', 'message_frame')
 
