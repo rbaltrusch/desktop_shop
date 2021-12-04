@@ -73,6 +73,7 @@ class View():
     def __init__(self):
         self.active = False
         self._components = {}
+        self._entries = {}
         self._frame_components = {}
 
     def get(self, component_name):
@@ -106,6 +107,10 @@ class View():
     def add_component(self, component, name):
         '''Adds the passed Component under the specified name and stores it in the view'''
         self._components[name] = component
+
+    def add_entry_component(self, component, name):
+        self._components[f'{name}_entry'] = component
+        self._entries[name] = component
 
     def add_frame_component(self, component, name):
         '''Adds the passed Component under the specified name and stores it in the view, as
