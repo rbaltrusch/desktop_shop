@@ -17,14 +17,14 @@ def login():
     user_email to it. If a new session is granted (password and user_email match),
     gui switches to logged-in home view (login/register button hide, logged-in-as shows)
     '''
-    password = app.views_dict['login'].get('pw_entry').get()
-    user_email = app.views_dict['login'].get('email_entry').get()
+    password = app['login']['pw_entry'].get()
+    user_email = app['login']['email_entry'].get()
     with db_conn as cursor:
         session_id = server.login(cursor, user_email, password)
 
     if session_id is not None:
         app.data['session_id'] = session_id
-        app.views_dict['login'].hide_component('login_failed_label')
+        app['login'].hide_components('login_failed_label')
         switch_to_home()
 
         #pylint: disable=unbalanced-tuple-unpacking
@@ -35,10 +35,8 @@ def login():
 
         app.data['session_id'] = session_id
         store_user_data(user_data)
-        app.views_dict['main_menu'].unhide_component('logged_in_as_frame')
-        app.views_dict['main_menu'].hide_component('message_frame')
-        app.views_dict['main_menu'].hide_component('login_button')
-        app.views_dict['main_menu'].hide_component('register_button')
+        app['main_menu'].unhide_components('logged_in_as_frame')
+        app['main_menu'].hide_components('message_frame', 'login_button', 'register_button')
         set_logged_in_as_user_text()
         clear_login_data()
     else:
@@ -52,33 +50,29 @@ def sign_out():
     clear_user_data()
     clear_login_data()
     clear_register_data()
-    app.views_dict['checkout'].clear()
-    app.views_dict['main_menu'].hide_component('logged_in_as_frame')
-    app.views_dict['main_menu'].hide_component('message_frame')
-    app.views_dict['main_menu'].unhide_component('login_button')
-    app.views_dict['main_menu'].unhide_component('register_button')
-    app.views_dict['main_menu'].hide_component('checkout_button')
+    app['checkout'].clear()
+    app['main_menu'].hide_components('logged_in_as_frame', 'message_frame', 'checkout_button')
+    app['main_menu'].unhide_components('login_button', 'register_button')
     switch_to_home()
 
 def set_logged_in_as_user_text():
     '''Sets text of options_dropdown in main menu view to --> Logged in as {full_name}'''
     first_name, last_name = app.data['user_first_name'], app.data['user_last_name']
     full_name = f'{first_name} {last_name}'
-    app.views_dict['main_menu'].get('options_dropdown').set_var(f'Logged in as {full_name}')
+    app['main_menu']['options_dropdown'].set_var(f'Logged in as {full_name}')
 
 def register():
     '''Gets all data entered in the register view and validates it. If valid,
     send the data and the current date to the server and add it to a new user
     in the database, else show an error message
     '''
-    register_view = app.views_dict['register']
-    email_address = register_view.get('email_entry').get_var()
-    first_name = register_view.get('first_name_entry').get_var()
-    last_name = register_view.get('last_name_entry').get_var()
-    gender = register_view.get('gender_entry').get_var()
-    dob = register_view.get('dob_entry').get_var()
-    password = register_view.get('pw_entry').get_var()
-    confirm_password = register_view.get('confirm_pw_entry').get_var()
+    email_address = app['register']['email_entry'].get_var()
+    first_name = app['register']['first_name_entry'].get_var()
+    last_name = app['register']['last_name_entry'].get_var()
+    gender = app['register']['gender_entry'].get_var()
+    dob = app['register']['dob_entry'].get_var()
+    password = app['register']['pw_entry'].get_var()
+    confirm_password = app['register']['confirm_pw_entry'].get_var()
 
     join_date = util.get_current_date()
     user_data = [first_name, last_name, gender, join_date, dob, email_address, password]
@@ -94,8 +88,8 @@ def register():
             show_error_message('Failed to register.')
         else:
             #log in
-            app.views_dict['login'].get('pw_entry').set_var(password)
-            app.views_dict['login'].get('email_entry').set_var(email_address)
+            app['login']['pw_entry'].set_var(password)
+            app['login']['email_entry'].set_var(email_address)
             login()
             clear_register_data()
 
@@ -106,13 +100,12 @@ def edit_user_data():
     a valid new session id, the changes failed and a corresponding error message
     is shown.
     '''
-    profile_view = app.views_dict['profile']
-    first_name = profile_view.get('first_name_entry').get_var()
-    last_name = profile_view.get('last_name_entry').get_var()
-    gender = profile_view.get('gender_entry').get_var()
-    join_date = profile_view.get('date_joined_data_label').get_var()
-    user_email = profile_view.get('email_entry').get_var()
-    dob = profile_view.get('dob_entry').get_var()
+    first_name = app['profile']['first_name_entry'].get_var()
+    last_name = app['profile']['last_name_entry'].get_var()
+    gender = app['profile']['gender_entry'].get_var()
+    join_date = app['profile']['date_joined_data_label'].get_var()
+    user_email = app['profile']['email_entry'].get_var()
+    dob = app['profile']['dob_entry'].get_var()
 
     user_data = [first_name, last_name, gender, join_date, dob, user_email]
     valid_data = validate_user_data(user_data)
@@ -137,9 +130,8 @@ def edit_user_password():
     valid session id, the password change failed and the user is shown an error
     message, else a confirmation message is shown.
     '''
-    profile_view = app.views_dict['profile']
-    password = profile_view.get('pw_entry').get_var()
-    confirm_password = profile_view.get('confirm_pw_entry').get_var()
+    password = app['profile']['pw_entry'].get_var()
+    confirm_password = app['profile']['confirm_pw_entry'].get_var()
     valid_password = validate_password(password, confirm_password)
     if valid_password:
         session_id = app.data['session_id']
@@ -155,10 +147,10 @@ def edit_user_password():
             show_error_message('Failed to edit password.')
         else:
             show_message('Set new password successfully.')
-            profile_view.get('confirm_pw_entry').set_var('')
-            profile_view.get('pw_entry').set_var('')
-            profile_view.hide_component('password_change_frame')
-            profile_view.unhide_component('password_change_frame_button')
+            app['profile']['confirm_pw_entry'].set_var('')
+            app['profile']['pw_entry'].set_var('')
+            app['profile'].hide_components('password_change_frame')
+            app['profile'].unhide_components('password_change_frame_button')
 
 def validate_user_data(user_data):
     '''Validates all the data entered in the register view. Validates that the
@@ -239,25 +231,20 @@ def place_order():
 
 def show_message(message):
     '''Shows the specified message in the main menu view'''
-    main_menu_view = app.views_dict['main_menu']
-    main_menu_view.hide_component('error_message_label')
-    main_menu_view.get('message_label').set_var(message)
-    main_menu_view.unhide_component('message_label')
-    main_menu_view.unhide_component('message_frame')
+    app['main_menu'].hide_component('error_message_label')
+    app['main_menu']['message_label'].set_var(message)
+    app['main_menu'].unhide_components('message_label', 'message_frame')
 
 def show_error_message(message):
     '''Shows the specified error message in the main menu view'''
-    main_menu_view = app.views_dict['main_menu']
-    main_menu_view.get('error_message_label').set_var(message)
-    main_menu_view.hide_component('message_frame')
-    main_menu_view.unhide_component('error_message_label')
-    main_menu_view.unhide_component('message_frame')
+    app['main_menu'].get('error_message_label').set_var(message)
+    app['main_menu'].hide_components('message_frame')
+    app['main_menu'].unhide_components('error_message_label', 'message_frame')
 
 def show_password_change_frame():
     '''Callback for change password button in profile view, unhides the password change frame'''
-    profile_view = app.views_dict['profile']
-    profile_view.unhide_component('password_change_frame')
-    profile_view.hide_component('password_change_frame_button')
+    app['profile'].unhide_components('password_change_frame')
+    app['profile'].hide_components('password_change_frame_button')
 
 def add_to_cart():
     '''Callback for dynamically generated add to cart button in home view. Gets the
@@ -269,7 +256,7 @@ def add_to_cart():
         *_, product_id = button_name.split('_')
         app.data['cart'].append(product_id)
     if len(app.data['cart']) == 1:
-        app.views_dict['main_menu'].unhide_component('checkout_button')
+        app['main_menu'].unhide_components('checkout_button')
 
 def focus(event):
     '''Callback for left-click: stores the currently clicked widget in the app'''
@@ -285,15 +272,15 @@ def remove_from_cart():
     if button_name is not None:
         *_, row_num, product_id = button_name.split('_')
         app.data['cart'].remove(product_id)
-        app.views_dict['checkout'].get(f'product_frame_{row_num}_{product_id}').hide()
+        app['checkout'][f'product_frame_{row_num}_{product_id}'].hide()
         row_counter = 1
-        for frame in app.views_dict['checkout'].get_frames():
+        for frame in app['checkout'].get_frames():
             if not frame.hidden:
                 frame.row = row_counter
                 row_counter += 1
-        app.views_dict['checkout'].repack()
+        app['checkout'].repack()
     if not app.data['cart']:
-        app.views_dict['main_menu'].hide_component('checkout_button')
+        app['main_menu'].hide_components('checkout_button')
         switch_to_home()
 
 def store_user_data(user_data):
@@ -325,19 +312,18 @@ def clear_user_data():
 
 def clear_login_data():
     '''Clears all data from the text entries in the login view'''
-    app.views_dict['login'].get('pw_entry').set_var('')
-    app.views_dict['login'].get('email_entry').set_var('')
+    app['login']['pw_entry'].set_var('')
+    app['login']['email_entry'].set_var('')
 
 def clear_register_data():
     '''Clears all data from the text entries in the register view'''
-    register_view = app.views_dict['register']
-    register_view.get('email_entry').set_var('')
-    register_view.get('first_name_entry').set_var('')
-    register_view.get('last_name_entry').set_var('')
-    register_view.get('gender_entry').set_var('')
-    register_view.get('dob_entry').set_var('')
-    register_view.get('pw_entry').set_var('')
-    register_view.get('confirm_pw_entry').set_var('')
+    app['register']['email_entry'].set_var('')
+    app['register']['first_name_entry'].set_var('')
+    app['register']['last_name_entry'].set_var('')
+    app['register']['gender_entry'].set_var('')
+    app['register']['dob_entry'].set_var('')
+    app['register']['pw_entry'].set_var('')
+    app['register']['confirm_pw_entry'].set_var('')
 
 def switch_to_home():
     '''Switches to home view'''
@@ -368,18 +354,18 @@ def switch_to_profile():
 
 def activate_profile_entry(entry_name):
     '''Callback for edit button for the respective field in the user data profile view'''
-    app.views_dict['profile'].get(entry_name).config(state='normal')
-    app.views_dict['profile'].get('edit_user_data_button').config(state='normal')
+    app['profile'][entry_name].config(state='normal')
+    app['profile']['edit_user_data_button'].config(state='normal')
 
 def on_dropdown_value_write_event(*_):
     '''Callback for options dropdown selection, either switches to profile view or signs out'''
-    selected_option = app.views_dict['main_menu'].get('options_dropdown').get_var()
+    selected_option = app['main_menu']['options_dropdown'].get_var()
     if selected_option == 'Profile':
         switch_to_profile()
         set_logged_in_as_user_text()
     elif selected_option == 'Sign out':
         sign_out()
-    app.views_dict['main_menu'].get('options_dropdown').config(state='active')
+    app['main_menu']['options_dropdown'].config(state='active')
 
 def populate_profile_with_user_data():
     '''Stores all user data of the currently logged in user in the profile view'''
@@ -390,19 +376,18 @@ def populate_profile_with_user_data():
     user_email = app.data['user_email']
     dob = app.data['user_dob']
 
-    profile_view = app.views_dict['profile']
-    profile_view.get('first_name_entry').set_var(first_name)
-    profile_view.get('last_name_entry').set_var(last_name)
-    profile_view.get('gender_entry').set_var(gender)
-    profile_view.get('date_joined_data_label').set_var(join_date)
-    profile_view.get('email_entry').set_var(user_email)
-    profile_view.get('dob_entry').set_var(dob)
+    app['profile']['first_name_entry'].set_var(first_name)
+    app['profile']['last_name_entry'].set_var(last_name)
+    app['profile']['gender_entry'].set_var(gender)
+    app['profile']['date_joined_data_label'].set_var(join_date)
+    app['profile']['email_entry'].set_var(user_email)
+    app['profile']['dob_entry'].set_var(dob)
 
-    profile_view.get('first_name_entry').config(state='disabled')
-    profile_view.get('last_name_entry').config(state='disabled')
-    profile_view.get('gender_entry').config(state='disabled')
-    profile_view.get('date_joined_data_label').config(state='disabled')
-    profile_view.get('email_entry').config(state='disabled')
-    profile_view.get('dob_entry').config(state='disabled')
+    app['profile']['first_name_entry'].config(state='disabled')
+    app['profile']['last_name_entry'].config(state='disabled')
+    app['profile']['gender_entry'].config(state='disabled')
+    app['profile']['date_joined_data_label'].config(state='disabled')
+    app['profile']['email_entry'].config(state='disabled')
+    app['profile']['dob_entry'].config(state='disabled')
 
-    app.views_dict['profile'].get('edit_user_data_button').config(state='disabled')
+    app['profile']['edit_user_data_button'].config(state='disabled')

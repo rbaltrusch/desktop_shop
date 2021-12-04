@@ -38,6 +38,6 @@ class View(components.View):
         message = 'Logging in has failed. Please check your credentials.'
         label = builder.create('label2', name='login_failed', text=message)
         label.place(row=4, col=0, col_span=3)
-        builder.view.hide_component('login_failed_label')
+        builder.view.hide_components('login_failed_label')
 
         return builder.view

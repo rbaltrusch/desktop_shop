@@ -78,7 +78,7 @@ class View():
         self._entries = {}
         self._frame_components = {}
 
-    def get(self, component_name):
+    def __getitem__(self, component_name):
         '''Returns the component identified by the passed name'''
         return self._all_components[component_name]
 
@@ -135,15 +135,17 @@ class View():
         for component in self._all_components.values():
             component.unpack()
 
-    def hide_component(self, component_name):
+    def hide_components(self, *component_names):
         '''Hides a particular component'''
-        self._all_components[component_name].hide()
+        for component_name in component_names:
+            self._all_components[component_name].hide()
 
-    def unhide_component(self, component_name):
+    def unhide_components(self, *component_names):
         '''Unhides a particular component'''
-        component = self._all_components[component_name]
-        component.unhide()
-        component.gridpack()
+        for component_name in component_names:
+            component = self._all_components[component_name]
+            component.unhide()
+            component.gridpack()
 
     @property
     def _all_components(self):

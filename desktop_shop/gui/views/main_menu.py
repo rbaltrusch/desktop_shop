@@ -30,13 +30,13 @@ class View(components.View):
 
         button = builder.create('button', name='checkout', text='Checkout', command=callbacks.switch_to_checkout)
         button.place(row=0, col=3)
-        builder.view.hide_component('checkout_button')
+        builder.view.hide_components('checkout_button')
 
         #logged in as frame
         logged_in_as_frame = tk.Frame(window, borderwidth=0, highlightthickness=0, bg=config.BG2)
         component = Component(logged_in_as_frame, row=0, col=4, sticky='e')
         builder.view.add_frame_component(component, 'logged_in_as_frame')
-        builder.view.hide_component('logged_in_as_frame')
+        builder.view.hide_components('logged_in_as_frame')
 
         #options dropdown
         variable = tk.StringVar()
@@ -54,7 +54,7 @@ class View(components.View):
         builder.root = window
         frame = builder.create('frame', name='message', relief=tk.RIDGE, bd=0)
         frame.place(row=0, col=3, col_span=1, sticky='w')
-        builder.view.hide_component('message_frame')
+        builder.view.hide_components('message_frame')
         builder.root = frame.component.tk_component
 
         builder.create('label', name='message', textvariable=tk.StringVar()).place(row=0, col=0)

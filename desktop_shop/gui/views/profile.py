@@ -55,7 +55,7 @@ class View(components.View):
         frame = builder.create('frame', name='password_change', relief=tk.RAISED, bd=0)
         frame.place(row=0, row_span=2, col=0, col_span=3)
         builder.root = frame.component.tk_component
-        builder.view.hide_component('password_change_frame')
+        builder.view.hide_components('password_change_frame')
 
         #password
         builder.create('label', text='*Password').place(row=0, col=0)
