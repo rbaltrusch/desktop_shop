@@ -114,7 +114,7 @@ def init_builder():
     builder.register('label', factory)
 
     factory = components.EntryFactory(tk.Label, components.Component, kwargs=config.ERROR_THEME)
-    builder.register('label', factory)
+    builder.register('label2', factory)
 
     factory = components.EntryFactory(tk.Entry, components.Component, kwargs=config.ENTRY_THEME)
     builder.register('entry', factory)
