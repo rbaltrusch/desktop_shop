@@ -8,7 +8,7 @@ Created on Mon Feb  1 10:00:48 2021
 import tkinter as tk
 import server
 from gui.components import Component
-from gui import app, root, db_conn, callbacks, config
+from gui import app, root, db_conn, callbacks, config, components
 from gui.views import login, main_menu, home, register, checkout, profile
 
 #pylint: disable=too-many-locals
@@ -101,12 +101,30 @@ def init_root():
     root.add_col(100)
     root.add_col(150)
 
+def init_builder():
+    builder = components.Builder()
+
+    factory = components.Factory(tk.Frame, components.Frame, kwargs=config.FRAME_THEME)
+    builder.register('frame', factory)
+
+    factory = components.Factory(tk.Label, components.Component, kwargs=config.LABEL_THEME)
+    builder.register('label', factory)
+
+    factory = components.EntryFactory(tk.Entry, components.Component, kwargs=config.ENTRY_THEME)
+    builder.register('entry', factory)
+
+    factory = components.EntryFactory(tk.Button, components.Component, kwargs=config.BUTTON_THEME2)
+    builder.register('button2', factory)
+
+    return builder
+
 def init_views(window):
     '''Initialises all views'''
+    builder = init_builder()
     views = {'login': login.View.create(window),
              'main_menu': main_menu.View.create(window),
              'home': home.View.create(window),
-             'register': register.View.create(window),
+             'register': register.View.create(window, builder),
              'checkout': checkout.View.create(window),
              'profile': profile.View.create(window)}
     views['home'].activate()
