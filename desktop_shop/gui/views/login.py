@@ -6,56 +6,38 @@ Created on Sat Dec  4 17:04:48 2021
 """
 
 import tkinter as tk
-from gui import config, callbacks, components
-from gui.components import Component
+from gui import callbacks, components
 
 class View(components.View):
     @classmethod
     def create(cls, window, builder):
         '''Initialises login view, including all its components'''
-        login_view = cls()
+        builder.view = cls()
+        builder.root = window
     
         #login frame
-        login_frame = tk.Frame(window, relief=tk.SUNKEN, bd=2, **config.FRAME_THEME)
-        component = Component(login_frame, row=8, row_span=4, col=1, col_span=3, sticky='nsew')
-        login_view.add_frame_component(component, 'login_frame')
+        frame = builder.create('frame', relief=tk.SUNKEN, bd=2)
+        frame.place(row=8, row_span=4, col=1, col_span=3, sticky='nsew')
+        builder.root = frame.component.tk_component
+
+        builder.create('label', text='Login').place(row=0, col=1)
+
+        #email
+        builder.create('label', text='Email address').place(row=1, col=0)
+        edit = builder.create('entry', name='email', textvariable=tk.StringVar())
+        edit.place(row=1, col=1, sticky='nsew')
     
-        #password entry text label
-        login_label = tk.Label(login_frame, text="Login", **config.LABEL_THEME)
-        component = Component(login_label, row=0, col=1)
-        login_view.add_component(component, 'login_label')
-    
-        #email label
-        email_label = tk.Label(login_frame, text='Email address', **config.LABEL_THEME)
-        component = Component(email_label, row=1, col=0)
-        login_view.add_component(component, 'email_label')
-    
-        #email entry
-        user_email = tk.StringVar()
-        user_email_entry = tk.Entry(login_frame, textvariable=user_email, **config.ENTRY_THEME)
-        component = Component(user_email_entry, row=1, col=1, sticky='nsew', var=user_email)
-        login_view.add_component(component, 'email_entry')
-    
-        #password label
-        pw_label = tk.Label(login_frame, text='Password', **config.LABEL_THEME)
-        component = Component(pw_label, row=2, col=0)
-        login_view.add_component(component, 'pw_label')
-    
-        #password entry
-        password = tk.StringVar()
-        pw_entry = tk.Entry(login_frame, textvariable=password, show="*", **config.ENTRY_THEME)
-        component = Component(pw_entry, row=2, col=1, sticky='nsew', var=password)
-        login_view.add_component(component, 'pw_entry')
-    
-        #login button
-        login_button = tk.Button(login_frame, text='Log in', command=callbacks.login, **config.BUTTON_THEME2)
-        component = Component(login_button, row=3, col=1)
-        login_view.add_component(component, 'login_button')
+        #password
+        builder.create('label', text='Password').place(row=2, col=0)
+        edit = builder.create('entry', name='pw', textvariable=tk.StringVar(), show="*")
+        edit.place(row=2, col=1, sticky='nsew')
+
+        builder.create('button2', text='Log in', command=callbacks.login).place(row=3, col=1)
     
         #login unsuccessful
         message = 'Logging in has failed. Please check your credentials.'
-        login_failed_label = tk.Label(login_frame, text=message, **config.ERROR_THEME)
-        component = Component(login_failed_label, row=4, col=0, col_span=3)
-        login_view.add_component(component, 'login_failed_label')
-        login_view.hide_component('login_failed_label')
-        return login_view
+        label = builder.create('label2', name='login_failed', text=message)
+        label.place(row=4, col=0, col_span=3)
+        builder.view.hide_component('login_failed_label')
+
+        return builder.view
