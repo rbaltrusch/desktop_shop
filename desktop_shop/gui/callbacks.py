@@ -6,6 +6,7 @@ Created on Mon Feb  1 09:53:07 2021
 """
 import re
 
+import user
 import util
 import server
 from gui import app, db_conn
@@ -57,8 +58,7 @@ def sign_out():
 
 def set_logged_in_as_user_text():
     '''Sets text of options_dropdown in main menu view to --> Logged in as {full_name}'''
-    first_name, last_name = app.data['user_first_name'], app.data['user_last_name']
-    full_name = f'{first_name} {last_name}'
+    full_name = app.data["user_data"].full_name
     app['main_menu']['options_dropdown'].set_var(f'Logged in as {full_name}')
 
 def register():
@@ -135,7 +135,7 @@ def edit_user_password():
     valid_password = validate_password(password, confirm_password)
     if valid_password:
         session_id = app.data['session_id']
-        user_email = app.data['user_email']
+        user_email = app.data['user_data'].email
 
         with db_conn as cursor:
             new_session_id, *_ = server.update_user_password(cursor, password, user_email,
@@ -208,7 +208,7 @@ def place_order():
     server. If the server does not answer with a valid session id, the transaction failed
     and an error message is shown, else a confirmation message is shown to the user
     '''
-    user_email = app.data['user_email']
+    user_email = app.data['user_data'].email
     chosen_product_ids = app.data['cart']
     if user_email and chosen_product_ids:
         session_id = app.data['session_id']
@@ -286,13 +286,7 @@ def remove_from_cart():
 def store_user_data(user_data):
     '''Stores the passed user data in the appropriate gui data fields'''
     if len(user_data) == 6:
-        first_name, last_name, gender, join_date, email_address, dob = user_data
-        app.data['user_first_name'] = first_name
-        app.data['user_last_name'] = last_name
-        app.data['user_gender'] = gender
-        app.data['user_join_date'] = join_date
-        app.data['user_email'] = email_address
-        app.data['user_dob'] = dob
+        app.data['user_data'] = user.UserData(*user_data)
     else:
         sign_out()
         show_error_message('Something went wrong while logging in. 2')
@@ -300,12 +294,7 @@ def store_user_data(user_data):
 def clear_user_data():
     '''Resets user data stored in gui to default values'''
     app.data = {'session_id': None,
-                'user_email': '',
-                'user_first_name': '',
-                'user_last_name': '',
-                'user_dob': '',
-                'user_gender': '',
-                'user_join_date': '',
+                'user_data': user.UserData(),
                 'pw_hash': '',
                 'cart': []
                 }
@@ -369,19 +358,7 @@ def on_dropdown_value_write_event(*_):
 
 def populate_profile_with_user_data():
     '''Stores all user data of the currently logged in user in the profile view'''
-    first_name = app.data['user_first_name']
-    last_name = app.data['user_last_name']
-    gender = app.data['user_gender']
-    join_date = app.data['user_join_date']
-    user_email = app.data['user_email']
-    dob = app.data['user_dob']
-
-    app['profile']['first_name_entry'].set_var(first_name)
-    app['profile']['last_name_entry'].set_var(last_name)
-    app['profile']['gender_entry'].set_var(gender)
-    app['profile']['date_joined_data_label'].set_var(join_date)
-    app['profile']['email_entry'].set_var(user_email)
-    app['profile']['dob_entry'].set_var(dob)
+    app['profile'].store_user_data(app.data['user_data'])
 
     app['profile']['first_name_entry'].config(state='disabled')
     app['profile']['last_name_entry'].config(state='disabled')
@@ -389,5 +366,4 @@ def populate_profile_with_user_data():
     app['profile']['date_joined_data_label'].config(state='disabled')
     app['profile']['email_entry'].config(state='disabled')
     app['profile']['dob_entry'].config(state='disabled')
-
     app['profile']['edit_user_data_button'].config(state='disabled')

@@ -71,6 +71,14 @@ class View(components.View):
 
         return builder.view
 
+    def store_user_data(self, user_data):
+        self['first_name_entry'].set_var(user_data.first_name)
+        self['last_name_entry'].set_var(user_data.last_name)
+        self['gender_entry'].set_var(user_data.gender)
+        self['date_joined_data_label'].set_var(user_data.join_date)
+        self['email_entry'].set_var(user_data.user_email)
+        self['dob_entry'].set_var(user_data.dob)
+
 
 def _create_profile_data_entry(builder, text: str, name: str, row: int):
     """Creates a labelled entry + edit button"""
