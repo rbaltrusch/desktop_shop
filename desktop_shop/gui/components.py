@@ -41,6 +41,9 @@ class Gui:
     def __exit__(self, *_):
         pass
 
+    def __getitem__(self, key):
+        return self.views_dict.get(key)
+
     def mainloop(self):
         '''Wraps around tk.Tk.mainloop'''
         self.window.mainloop()
