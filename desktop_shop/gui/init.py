@@ -113,10 +113,10 @@ def init_builder():
     factory = components.EntryFactory(tk.Entry, components.Component, kwargs=config.ENTRY_THEME)
     builder.register('entry', factory)
 
-    factory = components.EntryFactory(tk.Button, components.Component, kwargs=config.BUTTON_THEME)
+    factory = components.Factory(tk.Button, components.Component, kwargs=config.BUTTON_THEME)
     builder.register('button', factory)
 
-    factory = components.EntryFactory(tk.Button, components.Component, kwargs=config.BUTTON_THEME2)
+    factory = components.Factory(tk.Button, components.Component, kwargs=config.BUTTON_THEME2)
     builder.register('button2', factory)
 
     return builder
