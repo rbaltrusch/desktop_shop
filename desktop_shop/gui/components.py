@@ -171,15 +171,17 @@ class Component():
 
     def gridpack(self):
         '''calls .grid on the tk_component if it is not hidden'''
-        if not self.hidden:
-            self.tk_component.grid(row=self.row,
-                                   column=self.column,
-                                   sticky=self.sticky,
-                                   padx=self.padx,
-                                   pady=self.padx,
-                                   rowspan=self.row_span,
-                                   columnspan=self.column_span
-                                   )
+        if self.hidden:
+            return
+
+        self.tk_component.grid(row=self.row,
+                               column=self.column,
+                               sticky=self.sticky,
+                               padx=self.padx,
+                               pady=self.padx,
+                               rowspan=self.row_span,
+                               columnspan=self.column_span
+                               )
 
     def unpack(self):
         '''calls .grid_forget on the tk_component'''
