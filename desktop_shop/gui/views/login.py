@@ -11,7 +11,7 @@ from gui.components import Component
 
 class View(components.View):
     @classmethod
-    def create(cls, window):
+    def create(cls, window, builder):
         '''Initialises login view, including all its components'''
         login_view = cls()
     

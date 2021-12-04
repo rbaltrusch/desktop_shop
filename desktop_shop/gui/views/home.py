@@ -9,7 +9,7 @@ from gui import components
 
 class View(components.View):
     @classmethod
-    def create(cls, _):
+    def create(cls, *_):
         '''Initialises an empty home view.
     
         Currently, all home view contents are dynamically generated in the function

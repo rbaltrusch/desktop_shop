@@ -113,6 +113,9 @@ def init_builder():
     factory = components.EntryFactory(tk.Entry, components.Component, kwargs=config.ENTRY_THEME)
     builder.register('entry', factory)
 
+    factory = components.EntryFactory(tk.Button, components.Component, kwargs=config.BUTTON_THEME)
+    builder.register('button', factory)
+
     factory = components.EntryFactory(tk.Button, components.Component, kwargs=config.BUTTON_THEME2)
     builder.register('button2', factory)
 
@@ -121,12 +124,13 @@ def init_builder():
 def init_views(window):
     '''Initialises all views'''
     builder = init_builder()
-    views = {'login': login.View.create(window),
-             'main_menu': main_menu.View.create(window),
-             'home': home.View.create(window),
+    views = {'login': login.View.create(window, builder),
+             'main_menu': main_menu.View.create(window, builder),
+             'home': home.View.create(window, builder),
              'register': register.View.create(window, builder),
-             'checkout': checkout.View.create(window),
-             'profile': profile.View.create(window)}
+             'checkout': checkout.View.create(window, builder),
+             'profile': profile.View.create(window, builder),
+             }
     views['home'].activate()
     views['main_menu'].activate()
     return views
