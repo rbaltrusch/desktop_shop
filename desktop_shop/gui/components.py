@@ -5,6 +5,7 @@ Created on Mon Feb  1 09:53:11 2021
 @author: Korean_Crimson
 """
 
+import re
 import uuid
 import tkinter as tk
 from typing import Any, Dict, List
@@ -262,7 +263,10 @@ class Builder:
 
     def create(self, method_name: str, name: str = None, *args, **kwargs):
         factory = self.factory_methods[method_name]
-        name = f'{name}_{method_name}' if name is not None else str(uuid.uuid4())
+
+        method_name_ = re.sub("[0-9]+", "", method_name)
+        name = f'{name}_{method_name_}' if name is not None else str(uuid.uuid4())
+
         component_placer = factory.create(self.root, name, *args, **kwargs)
         component_placer.component.add_to(self.view)
         return component_placer
