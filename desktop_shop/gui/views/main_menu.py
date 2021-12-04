@@ -17,6 +17,7 @@ class View(components.View):
     def create(cls, window, builder):
         '''Initialises main menu view, including all its components'''
         builder.view = cls()
+        builder.root = window
 
         frame = builder.create('menu_frame')
         frame.place(row=0, col=0, col_span=5, row_span=1, sticky='nsew')
@@ -54,7 +55,7 @@ class View(components.View):
         frame = builder.create('frame', name='message', relief=tk.RIDGE, bd=0)
         frame.place(row=0, col=3, col_span=1, sticky='w')
         builder.view.hide_component('message_frame')
-        builder.root = frame
+        builder.root = frame.component.tk_component
 
         builder.create('label', name='message', textvariable=tk.StringVar()).place(row=0, col=0)
         builder.create('label2', name='error_message', textvariable=tk.StringVar()).place(row=0, col=0)
