@@ -107,7 +107,7 @@ def init_builder():
     factory = components.Factory(tk.Frame, components.Frame, kwargs=config.FRAME_THEME)
     builder.register('frame', factory)
 
-    factory = components.Factory(tk.Label, components.Component, kwargs=config.LABEL_THEME)
+    factory = components.EntryFactory(tk.Label, components.Component, kwargs=config.LABEL_THEME)
     builder.register('label', factory)
 
     factory = components.EntryFactory(tk.Entry, components.Component, kwargs=config.ENTRY_THEME)
