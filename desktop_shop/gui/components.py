@@ -156,11 +156,11 @@ class Component():
     '''
     tk_component: Any
     row: int = 0
-    column: int = 0
+    col: int = 0
     sticky: str = 'n'
     padx: int = 0
     pady: int = 0
-    column_span: int = 1
+    col_span: int = 1
     row_span: int = 1
     var: Any = None
 
@@ -183,12 +183,12 @@ class Component():
             return
 
         self.tk_component.grid(row=self.row,
-                               column=self.column,
+                               column=self.col,
                                sticky=self.sticky,
                                padx=self.padx,
                                pady=self.padx,
                                rowspan=self.row_span,
-                               columnspan=self.column_span
+                               columnspan=self.col_span
                                )
 
     def unpack(self):

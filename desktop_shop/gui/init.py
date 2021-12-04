@@ -25,20 +25,20 @@ def init_product_data_in_home_view():
         row_num = i + 1
 
         product_frame = tk.Frame(root, relief=tk.RAISED, bd=3, bg=config.BG2)
-        component = Component(product_frame, row=row_num, row_span=1, column=1, column_span=3, sticky='we')
+        component = Component(product_frame, row=row_num, row_span=1, col=1, col_span=3, sticky='we')
         frame_name = f'product_frame_{product_id}'
         home_view.add_frame_component(component, frame_name)
 
         #product name label
         product_name_label = tk.Label(product_frame, width=40, text=f'{name:>30} ${price:<7}', **config.LABEL_THEME)
-        component = Component(product_name_label, row=row_num, column=0, sticky='w')
+        component = Component(product_name_label, row=row_num, col=0, sticky='w')
         component_name = f'product_name_label_{product_id}'
         home_view.add_component(component, component_name)
 
         #add to cart button
         component_name = f'add_to_cart_button_{product_id}'
         add_to_cart_button = tk.Button(product_frame, text='Add to cart', command=callbacks.add_to_cart, bd=3, name=component_name, **config.BUTTON_THEME)
-        component = Component(add_to_cart_button, row=row_num, column=2, sticky='e')
+        component = Component(add_to_cart_button, row=row_num, col=2, sticky='e')
         home_view.add_component(component, component_name)
 
 def init_checkout_data_in_checkout_view():
@@ -62,7 +62,7 @@ def init_checkout_data_in_checkout_view():
         row_num = i
 
         product_frame = tk.Frame(root, relief=tk.RAISED, bd=3, **config.FRAME_THEME)
-        component = Component(product_frame, row=row_num, row_span=1, column=1, column_span=3, sticky='we')
+        component = Component(product_frame, row=row_num, row_span=1, col=1, col_span=3, sticky='we')
         frame_name = f'product_frame_{row_num}_{product_id}'
         checkout_view.add_frame_component(component, frame_name)
 
@@ -71,20 +71,20 @@ def init_checkout_data_in_checkout_view():
         full_product_name = f'{name} {product_id_string}:'
         full_text = f'#{i:<3} {full_product_name:<25} ${price:<7}'
         product_name_label = tk.Label(product_frame, width=42, text=full_text, **config.LABEL_THEME)
-        component = Component(product_name_label, row=row_num, column=0, sticky='w')
+        component = Component(product_name_label, row=row_num, col=0, sticky='w')
         component_name = f'product_name_label_{row_num}_{product_id}'
         checkout_view.add_component(component, component_name)
 
         #add to cart button
         component_name = f'remove_from_cart_button__{row_num}_{product_id}'
         add_to_cart_button = tk.Button(product_frame, text='Remove from cart', command=callbacks.remove_from_cart, bd=3, name=component_name, **config.BUTTON_THEME)
-        component = Component(add_to_cart_button, row=row_num, column=2, sticky='e')
+        component = Component(add_to_cart_button, row=row_num, col=2, sticky='e')
         checkout_view.add_component(component, component_name)
 
     row_num += 1
     #confirm transaction button
     confirm_button = tk.Button(root, text='Confirm transaction', command=callbacks.place_order, bd=3, name=component_name, **config.BUTTON_THEME2)
-    component = Component(confirm_button, row=row_num, column=3, sticky='we')
+    component = Component(confirm_button, row=row_num, col=3, sticky='we')
     checkout_view.add_component(component, 'confirm_button')
 
 def init_root():
