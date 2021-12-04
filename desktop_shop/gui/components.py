@@ -6,6 +6,8 @@ Created on Mon Feb  1 09:53:11 2021
 """
 
 import tkinter as tk
+from typing import Any
+from dataclasses import dataclass
 
 class Tk(tk.Tk):
     '''Wrapper around tk.Tk class with easier rowconfigure and columnconfigure functionality'''
@@ -138,25 +140,25 @@ class View():
         return {**self._components, **self._frame_components}
 
 #pylint: disable=too-many-instance-attributes
-#pylint: disable=too-many-arguments
+@dataclass
 class Component():
     '''Wrapper class around tk widgets, that stores all data usually required when
     calling .grid(). Using this class makes it possible to repeatedly call grid()
     and grid_forget() for variable gui layouts without passing the arguments repeatedly
     '''
-    def __init__(self, tk_component, row=0, column=0, sticky='n', padx=0, pady=0,
-                 column_span=1, row_span=1, var=None):
-        self.tk_component = tk_component
-        self.row = row
-        self.column = column
-        self.sticky = sticky
-        self.padx = padx
-        self.pady = pady
-        self.column_span = column_span
-        self.row_span = row_span
-        self.hidden = False
-        self.var = var
+    tk_component: Any
+    row: int = 0
+    column: int = 0
+    sticky: str = 'n'
+    padx: int = 0
+    pady: int = 0
+    column_span: int = 1
+    row_span: int = 1
+    var: Any = None
+
+    def __post_init__(self):
         self.data = None
+        self.hidden = False
 
     def hide(self):
         '''Hides the component and calls unpack'''
