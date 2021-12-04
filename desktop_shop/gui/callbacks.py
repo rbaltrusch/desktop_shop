@@ -203,32 +203,6 @@ def validate_password(password, confirm_password):
 
     return True
 
-def place_order():
-    '''Gets all product ids stored in the user cart and sends a transaction request to the
-    server. If the server does not answer with a valid session id, the transaction failed
-    and an error message is shown, else a confirmation message is shown to the user
-    '''
-    user_email = app.data['user_data'].email
-    chosen_product_ids = app.data['cart']
-    if user_email and chosen_product_ids:
-        session_id = app.data['session_id']
-
-        with db_conn as cursor:
-            new_session_id, _ = server.add_transaction(cursor, user_email, chosen_product_ids,
-                                                       user_email=user_email,
-                                                       session_id=session_id)
-
-        app.data['session_id'] = new_session_id
-        if new_session_id is not None:
-            show_message('We have placed your order.')
-            app.data['cart'] = []
-            app.views_dict['checkout'].clear()
-        else:
-            show_error_message('Your session has expired.')
-    else:
-        show_error_message('We were not able to place your order.')
-    switch_to_home()
-
 def show_message(message):
     '''Shows the specified message in the main menu view'''
     app['main_menu']['message_label'].set_var(message)
@@ -261,27 +235,6 @@ def add_to_cart():
 def focus(event):
     '''Callback for left-click: stores the currently clicked widget in the app'''
     app.focused_widget_name = str(event.widget)
-
-def remove_from_cart():
-    '''Callback for dynamically generated remove product from cart button. Gets
-    the product to remove directly from the button_name (kind of hacky...),
-    removes all dynamically generated widgets on the same row as the button and then
-    repacks all other components to fill the resulting gap
-    '''
-    button_name = app.focused_widget_name
-    if button_name is not None:
-        *_, row_num, product_id = button_name.split('_')
-        app.data['cart'].remove(product_id)
-        app['checkout'][f'product_frame_{row_num}_{product_id}'].hide()
-        row_counter = 1
-        for frame in app['checkout'].get_frames():
-            if not frame.hidden:
-                frame.row = row_counter
-                row_counter += 1
-        app['checkout'].repack()
-    if not app.data['cart']:
-        app['main_menu'].hide_components('checkout_button')
-        switch_to_home()
 
 def store_user_data(user_data):
     '''Stores the passed user data in the appropriate gui data fields'''
@@ -328,10 +281,7 @@ def switch_to_register():
 
 def switch_to_checkout():
     '''Switches to checkout view. If no valid session id is stored, a warning is given to user'''
-    #circular dependency between init and callbacks
-    #pylint: disable=import-outside-toplevel
-    import gui.init
-    gui.init.init_checkout_data_in_checkout_view()
+    app['checkout'].init_checkout()
     app.switch_to('checkout', 'main_menu')
     if app.data['session_id'] is None:
         show_error_message('Please login to place your order')

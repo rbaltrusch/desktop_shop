@@ -41,52 +41,6 @@ def init_product_data_in_home_view():
         component = Component(add_to_cart_button, row=row_num, col=2, sticky='e')
         home_view.add_component(component, component_name)
 
-def init_checkout_data_in_checkout_view():
-    '''Dynamically generates all contents of the checkout view'''
-    checkout_view = app.views_dict['checkout']
-    chosen_product_ids = app.data['cart']
-
-    with db_conn as cursor:
-        product_datas = server.query_product_data_from_product_table_by_product_ids(cursor, chosen_product_ids)
-
-    #adjust for duplicate chosen product ids
-    data_packets = []
-    for id_ in chosen_product_ids:
-        for product_id, name, price in product_datas:
-            if str(product_id) == id_:
-                data = (product_id, name, price)
-                data_packets.append(data)
-
-    row_num = 1
-    for i, (product_id, name, price) in enumerate(data_packets, 1):
-        row_num = i
-
-        product_frame = tk.Frame(root, relief=tk.RAISED, bd=3, **config.FRAME_THEME)
-        component = Component(product_frame, row=row_num, row_span=1, col=1, col_span=3, sticky='we')
-        frame_name = f'product_frame_{row_num}_{product_id}'
-        checkout_view.add_frame_component(component, frame_name)
-
-        #product information label
-        product_id_string = f'(#{product_id})'
-        full_product_name = f'{name} {product_id_string}:'
-        full_text = f'#{i:<3} {full_product_name:<25} ${price:<7}'
-        product_name_label = tk.Label(product_frame, width=42, text=full_text, **config.LABEL_THEME)
-        component = Component(product_name_label, row=row_num, col=0, sticky='w')
-        component_name = f'product_name_label_{row_num}_{product_id}'
-        checkout_view.add_component(component, component_name)
-
-        #add to cart button
-        component_name = f'remove_from_cart_button__{row_num}_{product_id}'
-        add_to_cart_button = tk.Button(product_frame, text='Remove from cart', command=callbacks.remove_from_cart, bd=3, name=component_name, **config.BUTTON_THEME)
-        component = Component(add_to_cart_button, row=row_num, col=2, sticky='e')
-        checkout_view.add_component(component, component_name)
-
-    row_num += 1
-    #confirm transaction button
-    confirm_button = tk.Button(root, text='Confirm transaction', command=callbacks.place_order, bd=3, name=component_name, **config.BUTTON_THEME2)
-    component = Component(confirm_button, row=row_num, col=3, sticky='we')
-    checkout_view.add_component(component, 'confirm_button')
-
 def init_root():
     '''Initialises and configures tk root'''
     root.title('OfflineShop')
@@ -127,9 +81,8 @@ def init_builder():
 
     return builder
 
-def init_views(window):
+def init_views(window, builder):
     '''Initialises all views'''
-    builder = init_builder()
     views = {'login': login.View.create(window, builder),
              'main_menu': main_menu.View.create(window, builder),
              'home': home.View.create(window, builder),
@@ -144,6 +97,7 @@ def init_views(window):
 def init():
     '''Init function that needs to be called before gui is started'''
     init_root()
-    app.views_dict = init_views(root)
+    app.builder = init_builder()
+    app.views_dict = init_views(root, app.builder)
     callbacks.clear_user_data()
     init_product_data_in_home_view()
