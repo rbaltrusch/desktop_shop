@@ -5,9 +5,10 @@ Created on Mon Feb  1 09:53:11 2021
 @author: Korean_Crimson
 """
 
+import uuid
 import tkinter as tk
 from typing import Any, Dict, List
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 class Tk(tk.Tk):
     '''Wrapper around tk.Tk class with easier rowconfigure and columnconfigure functionality'''
@@ -163,6 +164,7 @@ class Component():
     col_span: int = 1
     row_span: int = 1
     var: Any = None
+    name: str = None
 
     def __post_init__(self):
         self.data = None
@@ -176,6 +178,9 @@ class Component():
     def unhide(self):
         '''Unhides the component'''
         self.hidden = False
+
+    def add_to(self, view):
+        view.add_component(self, self.name)
 
     def gridpack(self):
         '''calls .grid on the tk_component if it is not hidden'''
@@ -212,27 +217,52 @@ class Component():
         '''calls .config on the tk_component'''
         self.tk_component.config(*args, **kwargs)
 
+class Frame(Component):
+    def add_to(self, view):
+        view.add_frame_component(self, self.name)
+
+@dataclass
+class ComponentPlacer:
+    component: Component
+
+    def place(self, **kwargs):
+        for key, value in kwargs.items():
+            setattr(self.component, key, value)
 
 @dataclass
 class Factory:
     method: callable
-    args: List[Any]
-    kwargs: Dict[str, Any]
+    component: Component
+    args: List[Any] = field(default_factory=list)
+    kwargs: Dict[str, Any] = field(default_factory=dict)
 
+    def create(self, root, name=None, *args, **kwargs):
+        widget = self.method(root, *self.args, *args, **self.kwargs, **kwargs)
+        component = self.component(widget, name=name)
+        return ComponentPlacer(component)
+
+class EntryFactory(Factory):
     def create(self, *args, **kwargs):
-        return self.method(*self.args, *args, **self.kwargs, **kwargs)
-
+        component_placer = super().create(*args, **kwargs)
+        component_placer.component.var = kwargs.get('textvariable')
+        return component_placer
 
 @dataclass
 class Builder:
     factory_methods: Dict[str, Factory] = None
 
     def __post_init__(self):
+        self.view = None
+        self.root = None
         if self.factory_methods is None:
             self.factory_methods = {}
 
-    def register(self, method_name: str, factory_method: callable, *args, **kwargs):
-        self.factory_methods[method_name] = Factory(factory_method, args, kwargs)
+    def register(self, method_name: str, factory: Factory):
+        self.factory_methods[method_name] = factory
 
-    def create(self, method_name: str, *args, **kwargs):
-        return self.factory_methods[method_name].create(*args, **kwargs)
+    def create(self, method_name: str, name: str = None, *args, **kwargs):
+        factory = self.factory_methods[method_name]
+        name = f'{name}_{method_name}' if name is not None else str(uuid.uuid4())
+        component_placer = factory.create(self.root, name, *args, **kwargs)
+        component_placer.component.add_to(self.view)
+        return component_placer
