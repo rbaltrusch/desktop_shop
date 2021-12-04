@@ -519,5 +519,5 @@ def init():
     '''Init function that needs to be called before gui is started'''
     init_root()
     app.views_dict = init_views(root)
-    app.data = callbacks.init_gui_data()
+    callbacks.clear_user_data()
     init_product_data_in_home_view()

@@ -312,7 +312,16 @@ def store_user_data(user_data):
 
 def clear_user_data():
     '''Resets user data stored in gui to default values'''
-    app.data = init_gui_data()
+    app.data = {'session_id': None,
+                'user_email': '',
+                'user_first_name': '',
+                'user_last_name': '',
+                'user_dob': '',
+                'user_gender': '',
+                'user_join_date': '',
+                'pw_hash': '',
+                'cart': []
+                }
 
 def clear_login_data():
     '''Clears all data from the text entries in the login view'''
@@ -397,16 +406,3 @@ def populate_profile_with_user_data():
     profile_view.get('dob_entry').config(state='disabled')
 
     app.views_dict['profile'].get('edit_user_data_button').config(state='disabled')
-
-def init_gui_data():
-    '''Initialises the data stored in the gui'''
-    data_dict = {'session_id': None,
-                 'user_email': '',
-                 'user_first_name': '',
-                 'user_last_name': '',
-                 'user_dob': '',
-                 'user_gender': '',
-                 'user_join_date': '',
-                 'pw_hash': '',
-                 'cart': []}
-    return data_dict
