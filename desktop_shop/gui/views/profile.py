@@ -39,7 +39,8 @@ class View(components.View):
         _create_profile_data_entry(builder, text="Gender:", name='gender', row=2)
         _create_profile_data_entry(builder, text="Email address:", name='email', row=3)
         _create_profile_data_entry(builder, text="Date of Birth:", name='dob', row=4)
-        button = builder.create('button2', text='Confirm changes', command=callbacks.edit_user_data, bd=3)
+        button = builder.create('button2', name='edit_user_data',
+                                text='Confirm changes', command=callbacks.edit_user_data, bd=3)
         button.place(row=5, col=1, col_span=2, sticky='nse')
 
 
@@ -64,7 +65,8 @@ class View(components.View):
         builder.create('label', text='*Password').place(row=1, col=0)
         builder.create('entry', name='confirm_pw', textvariable=tk.StringVar(), show="*").place(row=1, col=1)
 
-        button = builder.create('button2', text='Confirm password change', command=callbacks.edit_user_password, bd=3)
+        button = builder.create('button2', name='password_change_frame',
+                                text='Confirm password change', command=callbacks.edit_user_password, bd=3)
         button.place(row=2, col=1, sticky='e')
 
         return builder.view
