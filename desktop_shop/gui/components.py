@@ -6,7 +6,7 @@ Created on Mon Feb  1 09:53:11 2021
 """
 
 import tkinter as tk
-from typing import Any
+from typing import Any, Dict, List
 from dataclasses import dataclass
 
 class Tk(tk.Tk):
@@ -211,3 +211,28 @@ class Component():
     def config(self, *args, **kwargs):
         '''calls .config on the tk_component'''
         self.tk_component.config(*args, **kwargs)
+
+
+@dataclass
+class Factory:
+    method: callable
+    args: List[Any]
+    kwargs: Dict[str, Any]
+
+    def create(self, *args, **kwargs):
+        return self.method(*self.args, *args, **self.kwargs, **kwargs)
+
+
+@dataclass
+class Builder:
+    factory_methods: Dict[str, Factory] = None
+
+    def __post_init__(self):
+        if self.factory_methods is None:
+            self.factory_methods = {}
+
+    def register(self, method_name: str, factory_method: callable, *args, **kwargs):
+        self.factory_methods[method_name] = Factory(factory_method, args, kwargs)
+
+    def create(self, method_name: str, *args, **kwargs):
+        return self.factory_methods[method_name].create(*args, **kwargs)
