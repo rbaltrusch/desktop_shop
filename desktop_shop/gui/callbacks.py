@@ -13,13 +13,13 @@ from gui import app, db_conn
 
 #pylint: disable=E1123,E1124
 
-def login():
+def login(password=None, email=None):
     '''Tries to get a fresh session id from the server by sending password and
     user_email to it. If a new session is granted (password and user_email match),
     gui switches to logged-in home view (login/register button hide, logged-in-as shows)
     '''
-    password = app['login']['pw_entry'].get()
-    user_email = app['login']['email_entry'].get()
+    password = app['login']['pw_entry'].get() if password is None else password
+    user_email = app['login']['email_entry'].get() if email is None else email
     with db_conn as cursor:
         session_id = server.login(cursor, user_email, password)
 
@@ -66,32 +66,23 @@ def register():
     send the data and the current date to the server and add it to a new user
     in the database, else show an error message
     '''
-    email_address = app['register']['email_entry'].get_var()
-    first_name = app['register']['first_name_entry'].get_var()
-    last_name = app['register']['last_name_entry'].get_var()
-    gender = app['register']['gender_entry'].get_var()
-    dob = app['register']['dob_entry'].get_var()
-    password = app['register']['pw_entry'].get_var()
-    confirm_password = app['register']['confirm_pw_entry'].get_var()
-
-    join_date = util.get_current_date()
-    user_data = [first_name, last_name, gender, join_date, dob, email_address, password]
+    user_data = app['register'].get_user_data()
     valid_data = validate_user_data(user_data)
-    valid_password = validate_password(password, confirm_password)
-    if valid_data and valid_password:
 
+    confirm_password = app['register']['confirm_pw_entry'].get_var()
+    valid_password = validate_password(user_data.password, confirm_password)
+
+    if valid_data and valid_password:
+        join_date = util.get_current_date()
         with db_conn as cursor:
-            session_id = server.add_user(cursor, user_data)
+            session_id = server.add_user(cursor, user_data, join_date)
 
         app.data['session_id'] = session_id
-        if session_id is None:
-            show_error_message('Failed to register.')
-        else:
-            #log in
-            app['login']['pw_entry'].set_var(password)
-            app['login']['email_entry'].set_var(email_address)
-            login()
+        if session_id is not None:
+            login(user_data.password, user_data.email_address)
             clear_register_data()
+        else:
+            show_error_message('Failed to register.')
 
 def edit_user_data():
     '''Edits the user data (callback for edit in profile view). Gets all user

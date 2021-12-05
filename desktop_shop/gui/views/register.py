@@ -6,6 +6,8 @@ Created on Sat Dec  4 16:43:01 2021
 """
 
 import tkinter as tk
+
+import user
 from gui import callbacks, components
 
 class View(components.View):
@@ -59,3 +61,7 @@ class View(components.View):
         builder.create('label', text="*required").place(row=8, col=1)
         builder.create('button2', text='Register', command=callbacks.register).place(row=9, col=1)
         return builder.view
+
+    def get_user_data(self):
+        entry_names = ['first_name', 'last_name', 'gender', 'dob', 'email_address', 'password']
+        return user.UserData(*(self[f'{name}_entry'].get_var() for name in entry_names))
