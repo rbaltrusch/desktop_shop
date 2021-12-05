@@ -5,6 +5,8 @@ Created on Wed Nov 25 20:07:42 2020
 @author: Korean_Crimson
 """
 
+import hmac
+
 import database
 import crypto
 import util
@@ -92,7 +94,8 @@ def login(cursor, user_email, password):
     if len(data) == 2:
         #pylint: disable=unbalanced-tuple-unpacking
         pw_salt, pw_hash = data
-        verified = crypto.hash_string(password, pw_salt) == pw_hash
+        hashed_password = crypto.hash_string(password, pw_salt)
+        verified = hmac.compare_digest(hashed_password, pw_hash)
         new_session_id = _add_new_session(cursor, user_email) if verified else None
     else:
         new_session_id = None
