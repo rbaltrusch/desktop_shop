@@ -48,7 +48,7 @@ def sign_out():
     register data, checkout basket and returns to not-logged-in home view
     (unhides register/login buttons, hides logged-in-as message)
     '''
-    app.data = {'session_id': None, 'user_data': user.UserData(), 'pw_hash': '', 'cart': []}
+    app.data = {'session_id': None, 'user_data': user.UserSignUpData(), 'pw_hash': '', 'cart': []}
     app['login'].clear_entries()
     app['register'].clear_entries()
     app['checkout'].clear()
@@ -79,7 +79,7 @@ def register():
 
         app.data['session_id'] = session_id
         if session_id is not None:
-            login(user_data.password, user_data.email_address)
+            login(password, user_data.email)
             app['register'].clear_entries()
         else:
             show_error_message('Failed to register.')
@@ -98,18 +98,17 @@ def edit_user_data():
     user_email = app['profile']['email_entry'].get_var()
     dob = app['profile']['dob_entry'].get_var()
 
-    user_data = [first_name, last_name, gender, join_date, dob, user_email]
+    user_data = user.UserData(first_name, last_name, gender, dob, user_email)
     valid_data = validate_user_data(user_data)
     if valid_data:
         session_id = app.data['session_id']
-        user_data = [first_name, last_name, gender, dob, user_email]
 
         with db_conn as cursor:
             new_session_id, *_ = server.update_user(cursor, user_data, user_data.email,
-                                                    user_email=user_email, session_id=session_id)
+                                                    user_email=user_data.email, session_id=session_id)
 
         app.data['session_id'] = new_session_id
-        store_user_data([first_name, last_name, gender, join_date, user_email, dob])
+        store_user_data([*user_data, join_date])
         populate_profile_with_user_data()
         if not new_session_id:
             show_error_message('Failed to edit data.')
@@ -212,7 +211,7 @@ def show_password_change_frame():
 def store_user_data(user_data):
     '''Stores the passed user data in the appropriate gui data fields'''
     if len(user_data) == 6:
-        app.data['user_data'] = user.UserData(*user_data)
+        app.data['user_data'] = user.UserSignUpData(*user_data)
     else:
         sign_out()
         show_error_message('Something went wrong while logging in. 2')
