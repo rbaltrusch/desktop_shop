@@ -44,4 +44,4 @@ class View(components.View):
 
     def clear_entries(self):
         for entry in ['pw_entry', 'email_entry']:
-            entry.set_var('')
+            self[entry].set_var('')
