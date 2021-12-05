@@ -39,7 +39,7 @@ def login(password=None, email=None):
         app['main_menu'].unhide_components('logged_in_as_frame')
         app['main_menu'].hide_components('message_frame', 'login_button', 'register_button')
         set_logged_in_as_user_text()
-        clear_login_data()
+        app['login'].clear_entries()
     else:
         app.views_dict['login'].unhide_components('login_failed_label')
 
@@ -49,7 +49,7 @@ def sign_out():
     (unhides register/login buttons, hides logged-in-as message)
     '''
     app.data = {'session_id': None, 'user_data': user.UserData(), 'pw_hash': '', 'cart': []}
-    clear_login_data()
+    app['login'].clear_entries()
     app['register'].clear_entries()
     app['checkout'].clear()
     app['main_menu'].hide_components('logged_in_as_frame', 'message_frame', 'checkout_button')
@@ -220,11 +220,6 @@ def store_user_data(user_data):
     else:
         sign_out()
         show_error_message('Something went wrong while logging in. 2')
-
-def clear_login_data():
-    '''Clears all data from the text entries in the login view'''
-    app['login']['pw_entry'].set_var('')
-    app['login']['email_entry'].set_var('')
 
 def switch_to_home():
     '''Switches to home view'''

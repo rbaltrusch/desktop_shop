@@ -41,3 +41,7 @@ class View(components.View):
         builder.view.hide_components('login_failed_label')
 
         return builder.view
+
+    def clear_entries(self):
+        for entry in ['pw_entry', 'email_entry']:
+            entry.set_var('')
