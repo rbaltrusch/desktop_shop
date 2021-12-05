@@ -105,7 +105,7 @@ def edit_user_data():
         user_data = [first_name, last_name, gender, dob, user_email]
 
         with db_conn as cursor:
-            new_session_id, *_ = server.update_user(cursor, user_data, user_email,
+            new_session_id, *_ = server.update_user(cursor, user_data, user_data.email,
                                                     user_email=user_email, session_id=session_id)
 
         app.data['session_id'] = new_session_id
