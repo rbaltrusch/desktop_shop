@@ -76,7 +76,7 @@ class View(components.View):
         self['last_name_entry'].set_var(user_data.last_name)
         self['gender_entry'].set_var(user_data.gender)
         self['date_joined_data_label'].set_var(user_data.join_date)
-        self['email_entry'].set_var(user_data.user_email)
+        self['email_entry'].set_var(user_data.email)
         self['dob_entry'].set_var(user_data.dob)
 
 

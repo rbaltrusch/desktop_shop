@@ -13,7 +13,7 @@ class UserData:
     last_name: str = ''
     gender: str = ''
     join_date: str = ''
-    user_email: str = ''
+    email: str = ''
     dob: str = ''
 
     @property
