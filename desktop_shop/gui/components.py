@@ -5,6 +5,8 @@ Created on Mon Feb  1 09:53:11 2021
 @author: Korean_Crimson
 """
 
+from __future__ import annotations
+
 import re
 import uuid
 import tkinter as tk
@@ -93,6 +95,10 @@ class View():
         self.unpack()
         self._components = {}
         self._frame_components = {}
+
+    def filter(self, value: str) -> List[Component]:
+        """Returns components containing the passed string in their name"""
+        return [c for c in self._all_components if c.name is not None and value in c.name]
 
     def activate(self):
         '''Activates the current view (when the Gui object next calls pack on it,
