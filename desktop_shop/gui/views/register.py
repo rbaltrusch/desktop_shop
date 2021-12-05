@@ -7,6 +7,7 @@ Created on Sat Dec  4 16:43:01 2021
 
 import tkinter as tk
 
+import util
 import user
 from gui import callbacks, components
 
@@ -67,5 +68,7 @@ class View(components.View):
             entry.set_var('')
 
     def get_user_data(self):
-        entry_names = ['first_name', 'last_name', 'gender', 'dob', 'email_address', 'password']
-        return user.UserData(*(self[f'{name}_entry'].get_var() for name in entry_names))
+        entry_names = ['first_name', 'last_name', 'gender', 'dob', 'email']
+        user_data = user.UserData(*(self[f'{name}_entry'].get_var() for name in entry_names))
+        user_data.join_date = util.get_current_date()
+        return user_data
