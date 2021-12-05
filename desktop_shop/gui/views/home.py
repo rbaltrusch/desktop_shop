@@ -42,6 +42,6 @@ class View(components.View):
         '''Callback for Add to Cart button. Appends the product id to cart
         and shows checkout button
         '''
-        app.data['cart'].append(product_id)
+        app.data['cart'].append(str(product_id))
         if app['main_menu']['checkout_button'].hidden:
             app['main_menu'].unhide_components('checkout_button')
