@@ -98,6 +98,7 @@ class View(components.View):
                 callbacks.show_message('We have placed your order.')
                 app.data['cart'] = []
                 app.views_dict['checkout'].clear()
+                app['main_menu'].hide_components('checkout_button')
             else:
                 callbacks.show_error_message('Your session has expired.')
         else:
