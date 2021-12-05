@@ -14,7 +14,6 @@ class UserData:
     gender: str = ''
     dob: str = ''
     email: str = ''
-    join_date: str = ''
 
     @property
     def full_name(self) -> str:
@@ -26,4 +25,12 @@ class UserData:
         yield self.gender
         yield self.dob
         yield self.email
+
+@dataclass
+class UserSignUpData(UserData):
+    join_date: str = ''
+
+    def __iter__(self):
+        for attr in super().__iter__():
+            yield attr
         yield self.join_date
