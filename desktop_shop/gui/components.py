@@ -97,7 +97,7 @@ class View():
 
     def filter(self, value: str) -> List[Component]:
         """Returns components containing the passed string in their name"""
-        return [c for c in self._all_components if c.name is not None and value in c.name]
+        return [c for c in self._all_components.values() if c.name is not None and value in c.name]
 
     def activate(self):
         '''Activates the current view (when the Gui object next calls pack on it,
