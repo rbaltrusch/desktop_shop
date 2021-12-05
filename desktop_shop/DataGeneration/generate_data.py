@@ -5,12 +5,16 @@ Created on Sat Nov 14 16:29:44 2020
 @author: Korean_Crimson
 """
 
+import sys
+sys.path.append('..')
+
 import random
+import sqlite3
+
 import data
 import database
 import crypto
 import util
-from util import DataBaseConnection
 
 class UserDataGenerator:
     '''Used to generate data to fill the users table in main.db'''
@@ -28,7 +32,8 @@ class UserDataGenerator:
 
         for _ in range(number_of_users):
             user_data = self._generate_random_user_data(first_names, last_names)
-            database.add_user(cursor, user_data)
+            password = self._generate_new_password()
+            database.add_user(cursor, user_data, password)
 
     def _generate_random_user_data(self, first_names, last_names):
         first_name = random.choice(list(first_names.keys()))
@@ -37,10 +42,7 @@ class UserDataGenerator:
         join_date = data.get_random_date(start=[2014, 6, 1], end=[2020, 11, 1])
         dob = data.get_random_date(start=[1920, 1, 1], end=[2004, 6, 1])
         email_address = self._generate_random_email_address(first_name, last_name, dob)
-        password = self._generate_new_password()
-
-        user_data = [first_name, last_name, gender, dob, email_address, join_date, password]
-        return user_data
+        return [first_name, last_name, gender, dob, email_address, join_date]
 
     def _generate_random_email_address(self, first_name, last_name, dob):
         '''generates unique email using _email_cache storing all generated emails'''
@@ -101,7 +103,6 @@ class TransactionDataGenerator:
 
         for _ in range(number_of_transactions):
             chosen_product_ids = self._generate_random_chosen_product_ids(product_ids)
-#            print(chosen_product_ids)
             transaction_data = self._generate_random_transaction_data(user_ids)
             database.add_transaction(cursor, transaction_data, chosen_product_ids)
 
@@ -117,7 +118,7 @@ class TransactionDataGenerator:
     def _generate_random_chosen_product_ids(product_ids):
         number_of_products = random.randint(1, 5)
         chosen_product_ids = random.choices(product_ids, k=number_of_products)
-        return chosen_product_ids
+        return list(map(str, chosen_product_ids))
 
 
 class SessionDataGenerator:
@@ -140,7 +141,9 @@ class SessionDataGenerator:
 
 def _main():
     #DataBaseConnection automatically saves changes on exit
-    with DataBaseConnection('main.db') as cursor:
+    number_of_transactions = 1 if '--fast' in sys.argv else 100_000
+
+    with sqlite3.connect('main.db') as cursor:
 #        create and populate user table
         database.create_user_table(cursor)
         UserDataGenerator().populate_user_table(cursor)
@@ -154,7 +157,7 @@ def _main():
 
         #create and populate transactions table
         database.create_transactions_table(cursor)
-        TransactionDataGenerator().populate_transactions_table(cursor)
+        TransactionDataGenerator().populate_transactions_table(cursor, number_of_transactions)
 
         #create and populate sessions table
         database.create_sessions_table(cursor)
