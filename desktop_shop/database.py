@@ -149,6 +149,9 @@ def add_user(cursor, user_data, password, pepper='', iterations=100_000):
     hashed_password = hash_function.hash(password, salt + pepper)
     user_data = list(user_data) + [salt, hashed_password, str(hash_function)]
 
+    user_data[0] = user_data[0][0].upper() + user_data[0][1:].lower()
+    user_data[1] = user_data[1][0].upper() + user_data[1][1:].lower()
+
     cursor.execute(command, user_data)
 
 def update_user(cursor, user_data, user_id):
@@ -164,6 +167,10 @@ def update_user(cursor, user_data, user_id):
                     dob = ?,
                     email_address = ?
                 WHERE user_id = ?'''
+
+    user_data[0] = user_data[0][0].upper() + user_data[0][1:].lower()
+    user_data[1] = user_data[1][0].upper() + user_data[1][1:].lower()
+
     cursor.execute(command, user_data)
 
 def update_user_password(cursor, password, user_email, pepper='', iterations=100_000):
@@ -186,6 +193,10 @@ def update_user_by_user_email(cursor, user_data, user_email):
                     dob = ?,
                     email_address = ?
                 WHERE email_address = ?'''
+
+    user_data[0] = user_data[0][0].upper() + user_data[0][1:].lower()
+    user_data[1] = user_data[1][0].upper() + user_data[1][1:].lower()
+
     cursor.execute(command, user_data)
 
 def add_transaction(cursor, transaction_data, chosen_product_ids):
