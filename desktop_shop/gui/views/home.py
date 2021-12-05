@@ -6,9 +6,7 @@ Created on Sat Dec  4 17:05:23 2021
 """
 
 import functools
-import tkinter as tk
 
-import config
 import server
 from gui import components, db_conn, app
 
@@ -24,12 +22,14 @@ class View(components.View):
 
     def init_product_data(self, window, builder):
         '''Dynamically generates all contents of the home view'''
+        builder.view = self
+
         with db_conn as cursor:
             product_datas = server.query_product_data_from_product_table(cursor)
 
         for i, (product_id, name, price) in enumerate(product_datas, 1):
             builder.root = window
-            frame = builder.create('frame', name=product_id, relief=tk.RAISED, bd=3, bg=config.BG2)
+            frame = builder.create('menu_frame')
             frame.place(row=i, row_span=1, col=1, col_span=3, sticky='we')
             builder.root = frame.component.tk_component
 
