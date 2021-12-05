@@ -48,7 +48,7 @@ def sign_out():
     register data, checkout basket and returns to not-logged-in home view
     (unhides register/login buttons, hides logged-in-as message)
     '''
-    clear_user_data()
+    app.data = {'session_id': None, 'user_data': user.UserData(), 'pw_hash': '', 'cart': []}
     clear_login_data()
     app['register'].clear_entries()
     app['checkout'].clear()
@@ -220,14 +220,6 @@ def store_user_data(user_data):
     else:
         sign_out()
         show_error_message('Something went wrong while logging in. 2')
-
-def clear_user_data():
-    '''Resets user data stored in gui to default values'''
-    app.data = {'session_id': None,
-                'user_data': user.UserData(),
-                'pw_hash': '',
-                'cart': []
-                }
 
 def clear_login_data():
     '''Clears all data from the text entries in the login view'''
