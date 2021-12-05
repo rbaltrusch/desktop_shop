@@ -92,8 +92,10 @@ def query_user_data(cursor, user_id):
     return list(data[0]) if data else []
 
 def query_pw_hash_and_salt_by_user_email(cursor, user_email):
-    '''Queries the password hash and salt from the users table for the specified user_email'''
-    command = 'SELECT pw_salt, pw_hash FROM users WHERE email_address = ?'
+    '''Queries the password hash, salt and hashing function from the users table
+    for the specified user_email
+    '''
+    command = 'SELECT pw_salt, pw_hash, hash_function FROM users WHERE email_address = ?'
     data = cursor.execute(command, [user_email])
     data = list(data)
     return list(data[0]) if data else []
@@ -138,13 +140,14 @@ def verify_session_id_by_user_email(cursor, session_id, user_email):
 def add_user(cursor, user_data, password, pepper='', iterations=100_000):
     '''Adds a user with the specified user data to the users table'''
     command = '''INSERT INTO users
-                (first_name, last_name, gender, dob, email_address, join_date, pw_salt, pw_hash)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?)'''
+                (first_name, last_name, gender, dob, email_address, join_date, pw_salt, pw_hash, hash_function)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)'''
 
     #hash password
     salt = crypto.generate_new_salt()
-    hashed_password = crypto.hash_string(password, salt + pepper, iterations)
-    user_data = list(user_data) + [salt, hashed_password]
+    hash_function = crypto.get_hash_function(iterations)
+    hashed_password = hash_function.hash(password, salt + pepper)
+    user_data = list(user_data) + [salt, hashed_password, str(hash_function)]
 
     cursor.execute(command, user_data)
 
@@ -166,7 +169,7 @@ def update_user(cursor, user_data, user_id):
 def update_user_password(cursor, password, user_email, pepper='', iterations=100_000):
     '''Updates the password hash in the users table for the user specified'''
     salt = crypto.generate_new_salt()
-    pw_hash = crypto.hash_string(password, salt + pepper, iterations)
+    pw_hash = crypto.get_hash_function(iterations).hash(password, salt + pepper)
     command = 'UPDATE users SET pw_hash = ?, pw_salt = ? WHERE email_address = ?'
     cursor.execute(command, [pw_hash, salt, user_email])
 
@@ -228,7 +231,8 @@ def create_user_table(cursor):
                     email_address TEXT NOT NULL UNIQUE,
                     join_date TEXT NOT NULL,
                     pw_salt NOT NULL,
-                    pw_hash NOT NULL
+                    pw_hash NOT NULL,
+                    hash_function NOT NULL
                     CHECK (email_address LIKE '%_@_%._%')
                     )''')
 

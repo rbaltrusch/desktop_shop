@@ -94,10 +94,14 @@ def login(cursor, user_email, password):
     a new session id is generated, stored in the sessions table and returned.
     '''
     data = database.query_pw_hash_and_salt_by_user_email(cursor, user_email)
-    if len(data) == 2:
+    if len(data) == 3:
         #pylint: disable=unbalanced-tuple-unpacking
-        pw_salt, pw_hash = data
-        hashed_password = crypto.hash_string(password, pw_salt + PEPPER)
+        pw_salt, pw_hash, hash_function_name = data
+        hash_function = crypto.get_hash_function_from_string(hash_function_name)
+        if hash_function is None:
+            return
+
+        hashed_password = hash_function.hash(password, pw_salt + PEPPER)
         if hmac.compare_digest(hashed_password, pw_hash):
             new_session_id = _add_new_session(cursor, user_email)
             return new_session_id
