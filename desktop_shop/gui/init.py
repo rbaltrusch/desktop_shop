@@ -6,7 +6,9 @@ Created on Mon Feb  1 10:00:48 2021
 """
 
 import tkinter as tk
-from gui import app, root, callbacks, config, components
+
+import user
+from gui import app, root, config, components
 from gui.views import login, main_menu, home, register, checkout, profile
 
 #pylint: disable=too-many-locals
@@ -71,5 +73,5 @@ def init():
     init_root()
     app.builder = init_builder()
     app.views_dict = init_views(root, app.builder)
-    callbacks.clear_user_data()
+    app.data = {'session_id': None, 'user_data': user.UserData(), 'pw_hash': '', 'cart': []}
     app['home'].init_product_data(root, app.builder)
