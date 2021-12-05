@@ -62,6 +62,10 @@ class View(components.View):
         builder.create('button2', text='Register', command=callbacks.register).place(row=9, col=1)
         return builder.view
 
+    def clear_entries(self):
+        for entry in self.filter('entry'):
+            entry.set_var('')
+
     def get_user_data(self):
         entry_names = ['first_name', 'last_name', 'gender', 'dob', 'email_address', 'password']
         return user.UserData(*(self[f'{name}_entry'].get_var() for name in entry_names))
