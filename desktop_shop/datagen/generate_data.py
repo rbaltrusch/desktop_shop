@@ -2,16 +2,20 @@
 """
 Created on Sat Nov 14 16:29:44 2020
 
+Call using parent level database.py using:
+
+    database generate
+
+or:
+    database generate --fast
+
 @author: Korean_Crimson
 """
-
-import sys
-sys.path.append('..')
 
 import random
 import sqlite3
 
-import data
+from datagen import data
 import database
 import crypto
 import util
@@ -24,7 +28,7 @@ class UserDataGenerator:
 
     def populate_user_table(self, cursor, number_of_users=10_000):
         '''Populates the user table in main.db (needs to already exist) with the 
-        amount of users specified in the input arg. Expects a DataBaseConnection 
+        amount of users specified in the input arg. Expects a database connection 
         object to be passed in as first arg
         '''
         first_names = data.fetch_first_names()
@@ -71,7 +75,7 @@ class ProductDataGenerator:
     def populate_products_table(self, cursor, number_of_products=20):
         '''Populates the products table in main.db (needs to already exist)
         with the amount of products specified in the input arg. Expects a
-        DataBaseConnection object to be passed in as first arg
+        database connection to be passed in as first arg
         '''
         for _ in range(number_of_products):
             product_data = self._generate_random_product_data()
@@ -92,18 +96,18 @@ class ProductDataGenerator:
 
 class TransactionDataGenerator:
     '''Used to generate data to fill the transactions table in main.db'''
-
-    def populate_transactions_table(self, cursor, number_of_transactions=100_000):
+    @classmethod
+    def populate_transactions_table(cls, cursor, number_of_transactions=100_000):
         '''Populates the transactions table in main.db (needs to already exist)
         with the amount of transactions specified in the input arg. Expects a
-        DataBaseConnection object to be passed in as first arg
+        database connection object to be passed in as first arg
         '''
         user_ids = database.query_user_ids_from_user_table(cursor)
         product_ids = database.query_product_ids_from_product_table(cursor)
 
         for _ in range(number_of_transactions):
-            chosen_product_ids = self._generate_random_chosen_product_ids(product_ids)
-            transaction_data = self._generate_random_transaction_data(user_ids)
+            chosen_product_ids = cls._generate_random_chosen_product_ids(product_ids)
+            transaction_data = cls._generate_random_transaction_data(user_ids)
             database.add_transaction(cursor, transaction_data, chosen_product_ids)
 
     @staticmethod
@@ -123,11 +127,11 @@ class TransactionDataGenerator:
 
 class SessionDataGenerator:
     '''Used to generate data to fill the sessions table in main.db'''
-
-    def populate_sessions_table(self, cursor, number_of_sessions=25):
+    @staticmethod
+    def populate_sessions_table(cursor, number_of_sessions=25):
         '''Populates the sessions table in main.db (needs to already exist)
         with the amount of sessions specified in the input arg. Expects a
-        DataBaseConnection object to be passed in as first arg
+        database connection object to be passed in as first arg
         '''
         user_ids = database.query_user_ids_from_user_table(cursor)
         chosen_user_ids = random.sample(user_ids, number_of_sessions)
@@ -139,16 +143,14 @@ class SessionDataGenerator:
             database.add_session(cursor, session_data)
 
 
-def _main():
-    #DataBaseConnection automatically saves changes on exit
-    number_of_transactions = 1 if '--fast' in sys.argv else 100_000
-
+def generate(number_of_transactions=100_000):
+    print(number_of_transactions)
     with sqlite3.connect('main.db') as cursor:
-#        create and populate user table
+        #create and populate user table
         database.create_user_table(cursor)
         UserDataGenerator().populate_user_table(cursor)
 
-#        create and populate products table
+        #create and populate products table
         database.create_products_table(cursor)
         ProductDataGenerator().populate_products_table(cursor)
 
@@ -157,11 +159,12 @@ def _main():
 
         #create and populate transactions table
         database.create_transactions_table(cursor)
-        TransactionDataGenerator().populate_transactions_table(cursor, number_of_transactions)
+        TransactionDataGenerator.populate_transactions_table(cursor, number_of_transactions)
 
         #create and populate sessions table
         database.create_sessions_table(cursor)
-        SessionDataGenerator().populate_sessions_table(cursor)
+        SessionDataGenerator.populate_sessions_table(cursor)
 
 if __name__ == '__main__':
-    _main()
+    generate()
+

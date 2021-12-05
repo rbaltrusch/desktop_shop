@@ -311,3 +311,15 @@ def create_sessions_table(cursor):
                         ON UPDATE CASCADE
                         ON DELETE CASCADE
                     )''')
+
+if __name__ == '__main__':
+    import argparse
+    from datagen import generate_data
+    parser = argparse.ArgumentParser(description='Database generation interface')
+    parser.add_argument('action', choices=['generate'], help='database action to be performed')
+    parser.add_argument('--fast', action='store_true', help='reduces number of password hashing operations')
+    args = parser.parse_args()
+
+    if args.action == 'generate':
+        number_of_transactions = 1 if args.fast else 100_000
+        generate_data.generate(number_of_transactions)
