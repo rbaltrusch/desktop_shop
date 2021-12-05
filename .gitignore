@@ -1,2 +1,5 @@
 **/__pycache__/
 .pylint.d/
+**/.coverage
+**/htmlcov
+tests/reports/

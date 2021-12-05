@@ -1,0 +1,8 @@
+# .coveragerc to control coverage.py (pytest-cov)
+
+[run]
+omit =
+    ../game/main.py,
+	../game/game/*
+	../game/init/*
+	

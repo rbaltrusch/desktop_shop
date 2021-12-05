@@ -25,6 +25,11 @@ Run the shop application by generating the random database (this can take a few 
     python database.py generate --fast
     python main.py
 
+To run tests, change into the tests directory and run run_tests:
+
+    cd tests
+    python run_tests.py --all
+
 ## Python
 
 Written in Python 3.8.3.
