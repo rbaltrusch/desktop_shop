@@ -144,7 +144,6 @@ class SessionDataGenerator:
 
 
 def generate(number_of_transactions=100_000):
-    print(number_of_transactions)
     with sqlite3.connect('main.db') as cursor:
         #create and populate user table
         database.create_user_table(cursor)
