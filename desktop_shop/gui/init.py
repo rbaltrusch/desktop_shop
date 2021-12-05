@@ -17,7 +17,6 @@ def init_root():
     '''Initialises and configures tk root'''
     root.title('OfflineShop')
     root.wm_attributes('-transparentcolor','purple')
-    root.bind_all("<Button-1>", callbacks.focus)
     root.config(bg=config.BG)
     for _ in range(21):
         root.add_row(30)

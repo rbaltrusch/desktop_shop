@@ -209,10 +209,6 @@ def show_password_change_frame():
     app['profile'].unhide_components('password_change_frame')
     app['profile'].hide_components('password_change_frame_button')
 
-def focus(event):
-    '''Callback for left-click: stores the currently clicked widget in the app'''
-    app.focused_widget_name = str(event.widget)
-
 def store_user_data(user_data):
     '''Stores the passed user data in the appropriate gui data fields'''
     if len(user_data) == 6:

@@ -36,7 +36,6 @@ class Gui:
         self.window = window
         self.views_dict = {}
         self.data = {}
-        self.focused_widget_name = None
 
     def __enter__(self):
         self.pack_all()
