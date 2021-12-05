@@ -135,7 +135,7 @@ def verify_session_id_by_user_email(cursor, session_id, user_email):
         verified = False
     return verified
 
-def add_user(cursor, user_data, password, pepper=''):
+def add_user(cursor, user_data, password, pepper='', iterations=100_000):
     '''Adds a user with the specified user data to the users table'''
     command = '''INSERT INTO users
                 (first_name, last_name, gender, dob, email_address, join_date, pw_salt, pw_hash)
@@ -143,7 +143,7 @@ def add_user(cursor, user_data, password, pepper=''):
 
     #hash password
     salt = crypto.generate_new_salt()
-    hashed_password = crypto.hash_string(password, salt + pepper)
+    hashed_password = crypto.hash_string(password, salt + pepper, iterations)
     user_data = list(user_data) + [salt, hashed_password]
 
     cursor.execute(command, user_data)
@@ -163,10 +163,10 @@ def update_user(cursor, user_data, user_id):
                 WHERE user_id = ?'''
     cursor.execute(command, user_data)
 
-def update_user_password(cursor, password, user_email, pepper=''):
+def update_user_password(cursor, password, user_email, pepper='', iterations=100_000):
     '''Updates the password hash in the users table for the user specified'''
     salt = crypto.generate_new_salt()
-    pw_hash = crypto.hash_string(password, salt + pepper)
+    pw_hash = crypto.hash_string(password, salt + pepper, iterations)
     command = 'UPDATE users SET pw_hash = ?, pw_salt = ? WHERE email_address = ?'
     cursor.execute(command, [pw_hash, salt, user_email])
 

@@ -29,7 +29,7 @@ class UserDataGenerator:
     def __init__(self):
         self._email_cache = []
 
-    def populate_user_table(self, cursor, number_of_users=10_000):
+    def populate_user_table(self, cursor, number_of_users=10_000, hash_iterations=100_000):
         '''Populates the user table in main.db (needs to already exist) with the 
         amount of users specified in the input arg. Expects a database connection 
         object to be passed in as first arg
@@ -40,7 +40,7 @@ class UserDataGenerator:
         for _ in range(number_of_users):
             user_data = self._generate_random_user_data(first_names, last_names)
             password = self._generate_new_password()
-            database.add_user(cursor, user_data, password, PEPPER)
+            database.add_user(cursor, user_data, password, PEPPER, iterations=hash_iterations)
 
     def _generate_random_user_data(self, first_names, last_names):
         first_name = random.choice(list(first_names.keys()))
@@ -137,7 +137,7 @@ class SessionDataGenerator:
         database connection object to be passed in as first arg
         '''
         user_ids = database.query_user_ids_from_user_table(cursor)
-        chosen_user_ids = random.sample(user_ids, number_of_sessions)
+        chosen_user_ids = random.sample(user_ids, min(number_of_sessions, len(user_ids)))
 
         for user_id in chosen_user_ids:
             session_id = crypto.generate_new_session_id()
@@ -146,11 +146,11 @@ class SessionDataGenerator:
             database.add_session(cursor, session_data)
 
 
-def generate(number_of_transactions=100_000):
+def generate(hash_iterations=100_000):
     with sqlite3.connect('main.db') as cursor:
         #create and populate user table
         database.create_user_table(cursor)
-        UserDataGenerator().populate_user_table(cursor)
+        UserDataGenerator().populate_user_table(cursor, hash_iterations=hash_iterations)
 
         #create and populate products table
         database.create_products_table(cursor)
@@ -161,7 +161,7 @@ def generate(number_of_transactions=100_000):
 
         #create and populate transactions table
         database.create_transactions_table(cursor)
-        TransactionDataGenerator.populate_transactions_table(cursor, number_of_transactions)
+        TransactionDataGenerator.populate_transactions_table(cursor)
 
         #create and populate sessions table
         database.create_sessions_table(cursor)

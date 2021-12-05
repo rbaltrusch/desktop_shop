@@ -10,13 +10,13 @@ import secrets
 
 BASE62 = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
-def hash_string(password, salt):
+def hash_string(password, salt, iterations=1):
     '''Hashes the specified password with the passed salt. Returns hash in hex format (str)'''
     encoded_password = bytes(password, encoding='utf-8')
     encoded_salt = bytes(salt, encoding='utf-8')
 
     #should be iterations=10000 for security, just changed to 1 for easy database generation
-    derived_key = hashlib.pbkdf2_hmac('sha256', encoded_password, encoded_salt, iterations=1)
+    derived_key = hashlib.pbkdf2_hmac('sha256', encoded_password, encoded_salt, iterations=iterations)
     return derived_key.hex()
 
 def generate_new_salt():
