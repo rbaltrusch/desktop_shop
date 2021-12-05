@@ -35,6 +35,7 @@ class View(components.View):
 
         data_packets = [(str(id_), name, price) for id_, name, price in product_datas if str(id_) in chosen_product_ids]
 
+        i = 0
         for i, (product_id, name, price) in enumerate(data_packets, 1):
             app.builder.root = root
             frame = app.builder.create('frame', name=product_id, relief=tk.RAISED, bd=3)
