@@ -5,9 +5,12 @@ Created on Mon Feb  1 09:52:44 2021
 @author: Korean_Crimson
 """
 
-from gui import init, app
+from gui import init, app, db_conn
 
-init.init()
-app.views_dict['main_menu'].pack()
-app.views_dict['home'].pack()
-app.mainloop()
+try:
+    init.init()
+    app.views_dict['main_menu'].pack()
+    app.views_dict['home'].pack()
+    app.mainloop()
+finally:
+    db_conn.close()
