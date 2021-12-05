@@ -69,8 +69,9 @@ def register():
     user_data = app['register'].get_user_data()
     valid_data = validate_user_data(user_data)
 
+    password = app['register']['pw_entry'].get_var()
     confirm_password = app['register']['confirm_pw_entry'].get_var()
-    valid_password = validate_password(user_data.password, confirm_password)
+    valid_password = validate_password(password, confirm_password)
 
     if valid_data and valid_password:
         join_date = util.get_current_date()
