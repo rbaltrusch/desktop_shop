@@ -149,34 +149,32 @@ def validate_user_data(user_data):
     alphabetic and not empty, validates that the gender is either m or f and
     validates that the date of birth is a valid date and is not empty
     '''
-    first_name, last_name, gender, _, dob, email_address, *_ = user_data
-
     #validate email
-    found_email = re.findall('.+?@.+\\..+', email_address)
+    found_email = re.findall('.+?@.+\\..+', user_data.email)
     if not found_email:
         show_error_message('Email needs to be of the format address@domain.')
         return False
 
     #validate first_name
-    found_first_name = re.findall('\\w+?', first_name)
+    found_first_name = re.findall('\\w+?', user_data.first_name)
     if not found_first_name:
         show_error_message('First name needs to be alphabetic.')
         return False
 
     #validate last_name
-    found_last_name = re.findall('\\w+?', last_name)
+    found_last_name = re.findall('\\w+?', user_data.last_name)
     if not found_last_name:
         show_error_message('Last name needs to be alphabetic.')
         return False
 
     #validate gender
-    found_gender = re.findall('[mf]', gender)
-    if gender and not found_gender:
+    found_gender = re.findall('[mf]', user_data.gender)
+    if user_data.gender and not found_gender:
         show_error_message('Gender needs to be m or f.')
         return False
 
     #validate dob
-    if dob and not util.validate_date_string(dob):
+    if user_data.dob and not util.validate_date_string(user_data.dob):
         show_error_message('Date of birth needs to be in the format YYYY-MM-DD.')
         return False
 
