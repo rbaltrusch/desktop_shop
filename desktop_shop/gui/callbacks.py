@@ -75,7 +75,7 @@ def register():
 
     if valid_data and valid_password:
         with db_conn as cursor:
-            session_id = server.add_user(cursor, user_data)
+            session_id = server.add_user(cursor, user_data, password)
 
         app.data['session_id'] = session_id
         if session_id is not None:

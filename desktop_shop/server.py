@@ -39,10 +39,10 @@ def query_user_data(cursor, user_email):
     '''
     return database.query_user_data_by_user_email(cursor, user_email)
 
-def add_user(cursor, user_data):
+def add_user(cursor, user_data, password):
     '''Adds a new user to the users table, with the user_data specified'''
     new_session_id = _add_new_session(cursor, user_data.email)
-    database.add_user(cursor, list(user_data))
+    database.add_user(cursor, list(user_data), password)
     return new_session_id
 
 @verify_database_call

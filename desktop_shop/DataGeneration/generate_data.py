@@ -39,7 +39,7 @@ class UserDataGenerator:
         email_address = self._generate_random_email_address(first_name, last_name, dob)
         password = self._generate_new_password()
 
-        user_data = [first_name, last_name, gender, join_date, dob, email_address, password]
+        user_data = [first_name, last_name, gender, dob, email_address, join_date, password]
         return user_data
 
     def _generate_random_email_address(self, first_name, last_name, dob):

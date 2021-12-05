@@ -65,9 +65,9 @@ def query_user_data_by_user_email(cursor, user_email):
                     first_name,
                     last_name,
                     gender,
-                    join_date,
+                    dob,
                     email_address,
-                    dob
+                    join_date
                 FROM users
                 WHERE email_address = ?'''
 
@@ -81,9 +81,9 @@ def query_user_data(cursor, user_id):
                     first_name,
                     last_name,
                     gender,
-                    join_date,
+                    dob,
                     email_address,
-                    dob
+                    join_date,
                 FROM users
                 WHERE user_id = ?'''
 
@@ -135,10 +135,10 @@ def verify_session_id_by_user_email(cursor, session_id, user_email):
         verified = False
     return verified
 
-def add_user(cursor, user_data):
+def add_user(cursor, user_data, password):
     '''Adds a user with the specified user data to the users table'''
     command = '''INSERT INTO users
-                (first_name, last_name, gender, join_date, dob, email_address, pw_salt, pw_hash)
+                (first_name, last_name, gender, dob, email_address, join_date, pw_salt, pw_hash)
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?)'''
 
     #hash password
@@ -224,10 +224,10 @@ def create_user_table(cursor):
                     first_name TEXT NOT NULL, 
                      last_name TEXT NOT NULL,
                      gender TEXT,
-                     join_date TEXT NOT NULL,
                      dob TEXT CHECK(CAST(strftime('%s', join_date)  AS  integer) > 
                                      CAST(strftime('%s', dob)  AS  integer)),
                      email_address TEXT NOT NULL UNIQUE,
+                     join_date TEXT NOT NULL,
                      pw_salt NOT NULL,
                      pw_hash NOT NULL
                      CHECK (email_address LIKE '%_@_%._%')
