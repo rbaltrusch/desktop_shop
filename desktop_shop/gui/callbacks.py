@@ -74,9 +74,8 @@ def register():
     valid_password = validate_password(password, confirm_password)
 
     if valid_data and valid_password:
-        join_date = util.get_current_date()
         with db_conn as cursor:
-            session_id = server.add_user(cursor, user_data, join_date)
+            session_id = server.add_user(cursor, user_data)
 
         app.data['session_id'] = session_id
         if session_id is not None:
