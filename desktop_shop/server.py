@@ -41,9 +41,8 @@ def query_user_data(cursor, user_email):
 
 def add_user(cursor, user_data):
     '''Adds a new user to the users table, with the user_data specified'''
-    *_, user_email, _ = user_data
-    new_session_id = _add_new_session(cursor, user_email)
-    database.add_user(cursor, user_data)
+    new_session_id = _add_new_session(cursor, user_data.email)
+    database.add_user(cursor, list(user_data))
     return new_session_id
 
 @verify_database_call
@@ -65,7 +64,7 @@ def update_user(cursor, user_data, user_email):
     As this is a verified database call, a valid session id needs to be passed
     in (see decorator def) in order for the database request to succeed.
     '''
-    return database.update_user_by_user_email(cursor, user_data, user_email)
+    return database.update_user_by_user_email(cursor, list(user_data), user_email)
 
 @verify_database_call
 def update_user_password(cursor, password, user_email):
