@@ -50,7 +50,7 @@ def sign_out():
     '''
     clear_user_data()
     clear_login_data()
-    clear_register_data()
+    app['register'].clear_entries()
     app['checkout'].clear()
     app['main_menu'].hide_components('logged_in_as_frame', 'message_frame', 'checkout_button')
     app['main_menu'].unhide_components('login_button', 'register_button')
@@ -80,7 +80,7 @@ def register():
         app.data['session_id'] = session_id
         if session_id is not None:
             login(user_data.password, user_data.email_address)
-            clear_register_data()
+            app['register'].clear_entries()
         else:
             show_error_message('Failed to register.')
 
@@ -235,16 +235,6 @@ def clear_login_data():
     '''Clears all data from the text entries in the login view'''
     app['login']['pw_entry'].set_var('')
     app['login']['email_entry'].set_var('')
-
-def clear_register_data():
-    '''Clears all data from the text entries in the register view'''
-    app['register']['email_entry'].set_var('')
-    app['register']['first_name_entry'].set_var('')
-    app['register']['last_name_entry'].set_var('')
-    app['register']['gender_entry'].set_var('')
-    app['register']['dob_entry'].set_var('')
-    app['register']['pw_entry'].set_var('')
-    app['register']['confirm_pw_entry'].set_var('')
 
 def switch_to_home():
     '''Switches to home view'''
