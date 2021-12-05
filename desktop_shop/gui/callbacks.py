@@ -220,18 +220,6 @@ def show_password_change_frame():
     app['profile'].unhide_components('password_change_frame')
     app['profile'].hide_components('password_change_frame_button')
 
-def add_to_cart():
-    '''Callback for dynamically generated add to cart button in home view. Gets the
-    product id directly from the button name (kind of hacky...) and appends the id
-    to the cart.
-    '''
-    button_name = app.focused_widget_name
-    if button_name is not None:
-        *_, product_id = button_name.split('_')
-        app.data['cart'].append(product_id)
-    if len(app.data['cart']) == 1:
-        app['main_menu'].unhide_components('checkout_button')
-
 def focus(event):
     '''Callback for left-click: stores the currently clicked widget in the app'''
     app.focused_widget_name = str(event.widget)
