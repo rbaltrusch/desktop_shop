@@ -73,5 +73,5 @@ def init():
     init_root()
     app.builder = init_builder()
     app.views_dict = init_views(root, app.builder)
-    app.data = {'session_id': None, 'user_data': user.UserData(), 'pw_hash': '', 'cart': []}
+    app.data = {'session_id': None, 'user_data': user.UserSignUpData(), 'pw_hash': '', 'cart': []}
     app['home'].init_product_data(root, app.builder)
