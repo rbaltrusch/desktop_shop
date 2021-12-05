@@ -142,10 +142,9 @@ def add_user(cursor, user_data, password):
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?)'''
 
     #hash password
-    *user_data, password = user_data
     salt = crypto.generate_new_salt()
     hashed_password = crypto.hash_string(password, salt)
-    user_data = user_data + [salt, hashed_password]
+    user_data = list(user_data) + [salt, hashed_password]
 
     cursor.execute(command, user_data)
 
