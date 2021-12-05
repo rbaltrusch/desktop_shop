@@ -91,24 +91,18 @@ def edit_user_data():
     a valid new session id, the changes failed and a corresponding error message
     is shown.
     '''
-    first_name = app['profile']['first_name_entry'].get_var()
-    last_name = app['profile']['last_name_entry'].get_var()
-    gender = app['profile']['gender_entry'].get_var()
-    join_date = app['profile']['date_joined_data_label'].get_var()
-    user_email = app['profile']['email_entry'].get_var()
-    dob = app['profile']['dob_entry'].get_var()
-
-    user_data = user.UserData(first_name, last_name, gender, dob, user_email)
+    user_data = app['profile'].get_user_data()
     valid_data = validate_user_data(user_data)
     if valid_data:
         session_id = app.data['session_id']
 
         with db_conn as cursor:
-            new_session_id, *_ = server.update_user(cursor, user_data, user_data.email,
+            user_data_ = user_data[:-1] #ignore join date
+            new_session_id, *_ = server.update_user(cursor, user_data_, user_data.email,
                                                     user_email=user_data.email, session_id=session_id)
 
         app.data['session_id'] = new_session_id
-        store_user_data([*user_data, join_date])
+        app.data['user_data'] = user_data
         populate_profile_with_user_data()
         if not new_session_id:
             show_error_message('Failed to edit data.')

@@ -7,6 +7,9 @@ Created on Sat Dec  4 17:02:53 2021
 
 import functools
 import tkinter as tk
+from typing import List
+
+import user
 from gui import callbacks, components
 
 #pylint: disable=line-too-long
@@ -72,13 +75,16 @@ class View(components.View):
         return builder.view
 
     def store_user_data(self, user_data):
-        self['first_name_entry'].set_var(user_data.first_name)
-        self['last_name_entry'].set_var(user_data.last_name)
-        self['gender_entry'].set_var(user_data.gender)
-        self['date_joined_data_label'].set_var(user_data.join_date)
-        self['email_entry'].set_var(user_data.email)
-        self['dob_entry'].set_var(user_data.dob)
+        for name, value in zip(self.user_data_entries, user_data):
+            self[name].set_var(value)
 
+    def get_user_data(self):
+        return user.UserSignUpData(*(self[e].get_var() for e in self.user_data_entries))
+
+    @property
+    def user_data_entries(self) -> List[str]:
+        entry_names = ['first_name', 'last_name', 'gender', 'dob', 'email']
+        return [f'{name}_entry' for name in entry_names] + ['date_joined_data_label']
 
 def _create_profile_data_entry(builder, text: str, name: str, row: int):
     """Creates a labelled entry + edit button"""

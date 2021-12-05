@@ -19,6 +19,9 @@ class UserData:
     def full_name(self) -> str:
         return f'{self.first_name} {self.last_name}'
 
+    def __getitem__(self, value):
+        return list(self)[value]
+
     def __iter__(self):
         yield self.first_name
         yield self.last_name
