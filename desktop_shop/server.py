@@ -78,7 +78,7 @@ def update_user_password(cursor, password, user_email):
     As this is a verified database call, a valid session id needs to be passed
     in (see decorator def) in order for the database request to succeed.
     '''
-    return database.update_user_password(cursor, password, user_email)
+    return database.update_user_password(cursor, password, user_email, PEPPER)
 
 def query_product_data_from_product_table(cursor):
     '''Queries all product data from products table'''
@@ -97,12 +97,11 @@ def login(cursor, user_email, password):
     if len(data) == 2:
         #pylint: disable=unbalanced-tuple-unpacking
         pw_salt, pw_hash = data
-        hashed_password = crypto.hash_string(password, pw_salt)
-        verified = hmac.compare_digest(hashed_password, pw_hash)
-        new_session_id = _add_new_session(cursor, user_email) if verified else None
-    else:
-        new_session_id = None
-    return new_session_id
+        hashed_password = crypto.hash_string(password, pw_salt + PEPPER)
+        if hmac.compare_digest(hashed_password, pw_hash):
+            new_session_id = _add_new_session(cursor, user_email)
+            return new_session_id
+    return None
 
 def _add_new_session(cursor, user_email):
     new_session_id = crypto.generate_new_session_id()

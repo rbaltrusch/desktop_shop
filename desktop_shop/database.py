@@ -142,8 +142,8 @@ def add_user(cursor, user_data, password, pepper=''):
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?)'''
 
     #hash password
-    salt = crypto.generate_new_salt() + pepper
-    hashed_password = crypto.hash_string(password, salt)
+    salt = crypto.generate_new_salt()
+    hashed_password = crypto.hash_string(password, salt + pepper)
     user_data = list(user_data) + [salt, hashed_password]
 
     cursor.execute(command, user_data)
@@ -163,10 +163,10 @@ def update_user(cursor, user_data, user_id):
                 WHERE user_id = ?'''
     cursor.execute(command, user_data)
 
-def update_user_password(cursor, password, user_email):
+def update_user_password(cursor, password, user_email, pepper=''):
     '''Updates the password hash in the users table for the user specified'''
     salt = crypto.generate_new_salt()
-    pw_hash = crypto.hash_string(password, salt)
+    pw_hash = crypto.hash_string(password, salt + pepper)
     command = 'UPDATE users SET pw_hash = ?, pw_salt = ? WHERE email_address = ?'
     cursor.execute(command, [pw_hash, salt, user_email])
 
