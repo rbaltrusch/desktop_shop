@@ -135,14 +135,14 @@ def verify_session_id_by_user_email(cursor, session_id, user_email):
         verified = False
     return verified
 
-def add_user(cursor, user_data, password):
+def add_user(cursor, user_data, password, pepper=''):
     '''Adds a user with the specified user data to the users table'''
     command = '''INSERT INTO users
                 (first_name, last_name, gender, dob, email_address, join_date, pw_salt, pw_hash)
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?)'''
 
     #hash password
-    salt = crypto.generate_new_salt()
+    salt = crypto.generate_new_salt() + pepper
     hashed_password = crypto.hash_string(password, salt)
     user_data = list(user_data) + [salt, hashed_password]
 

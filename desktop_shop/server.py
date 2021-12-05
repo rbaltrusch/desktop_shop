@@ -11,6 +11,9 @@ import database
 import crypto
 import util
 
+#combined with every salt for extra security in pw hashing
+PEPPER = 'secret'
+
 def verify_database_call(function):
     '''Function decorator for database requests that work on sensitive data.
     This decorator mandates sending all the normal arguments, as well as two
@@ -44,7 +47,7 @@ def query_user_data(cursor, user_email):
 def add_user(cursor, user_data, password):
     '''Adds a new user to the users table, with the user_data specified'''
     new_session_id = _add_new_session(cursor, user_data.email)
-    database.add_user(cursor, list(user_data), password)
+    database.add_user(cursor, list(user_data), password, PEPPER)
     return new_session_id
 
 @verify_database_call

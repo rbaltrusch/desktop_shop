@@ -20,6 +20,9 @@ import database
 import crypto
 import util
 
+#combined with every salt for extra security in pw hashing
+PEPPER = 'secret'
+
 class UserDataGenerator:
     '''Used to generate data to fill the users table in main.db'''
 
@@ -37,7 +40,7 @@ class UserDataGenerator:
         for _ in range(number_of_users):
             user_data = self._generate_random_user_data(first_names, last_names)
             password = self._generate_new_password()
-            database.add_user(cursor, user_data, password)
+            database.add_user(cursor, user_data, password, PEPPER)
 
     def _generate_random_user_data(self, first_names, last_names):
         first_name = random.choice(list(first_names.keys()))
