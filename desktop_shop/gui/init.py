@@ -61,7 +61,8 @@ def init_builder():
     factory = components.Factory(tk.Frame, components.Frame, kwargs=config.FRAME_THEME)
     builder.register('frame', factory)
 
-    factory = components.Factory(tk.Frame, components.Component, kwargs={'relief': tk.RAISED, 'bd': 3, 'bg': config.BG2})
+    kwargs = {'relief': tk.RAISED, 'bd': 3, 'bg': config.BG2}
+    factory = components.Factory(tk.Frame, components.Component, kwargs=kwargs)
     builder.register('menu_frame', factory)
 
     factory = components.EntryFactory(tk.Label, components.Component, kwargs=config.LABEL_THEME)
