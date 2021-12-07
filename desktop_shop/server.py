@@ -14,6 +14,11 @@ import util
 #combined with every salt for extra security in pw hashing
 PEPPER = 'secret'
 
+class ServerSideLogInDataError(Exception):
+    def __init__(self):
+        super().__init__("Login data invalid. Corrupted login data was retrieved from the server.")
+
+
 def verify_database_call(function):
     '''Function decorator for database requests that work on sensitive data.
     This decorator mandates sending all the normal arguments, as well as two
@@ -99,7 +104,7 @@ def login(cursor, user_email, password):
         pw_salt, pw_hash, hash_function_name = data
         hash_function = crypto.get_hash_function_from_string(hash_function_name)
         if hash_function is None:
-            return
+            raise ServerSideLogInDataError
 
         hashed_password = hash_function.hash(password, pw_salt + PEPPER)
         if hmac.compare_digest(hashed_password, pw_hash):
