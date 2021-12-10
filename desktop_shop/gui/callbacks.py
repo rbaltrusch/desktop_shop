@@ -93,9 +93,6 @@ def edit_user_data():
     '''
     user_data = app['profile'].get_user_data()
 
-    user_data.first_name = user_data.first_name[0].upper() + user_data.first_name[1:].lower()
-    user_data.last_name = user_data.last_name[0].upper() + user_data.last_name[1:].lower()
-
     valid_data = validate_user_data(user_data)
     if valid_data:
         session_id = app.data['session_id']
