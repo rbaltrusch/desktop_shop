@@ -38,6 +38,9 @@ def run_tests(args):
     if not args.include_slow and not args.include_all:
         excludes.append('slow')
 
+    if not args.include_generate:
+        excludes.append('generate')
+
     if not args.include_unreliable and not args.include_all:
         excludes.append('unreliable')
 
@@ -83,6 +86,13 @@ def get_parser():
                         help='Includes unreliable tests'
                         )
 
+    parser.add_argument('--db-generation',
+                        '-g',
+                        dest='include_generate',
+                        action='store_true',
+                        help='Includes database generation tests'
+                        )
+
     parser.add_argument('--debug',
                         '-d',
                         action='store_true',
@@ -107,6 +117,7 @@ def get_parser():
 def main():
     parser = get_parser()
     args = parser.parse_args()
+    sys.argv = [__file__]
     run_tests(args)
 
 if __name__ == '__main__':
