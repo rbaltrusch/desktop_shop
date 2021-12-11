@@ -92,6 +92,7 @@ def edit_user_data():
     is shown.
     '''
     user_data = app['profile'].get_user_data()
+
     valid_data = validate_user_data(user_data)
     if valid_data:
         session_id = app.data['session_id']
