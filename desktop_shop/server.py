@@ -89,8 +89,8 @@ def query_product_data_from_product_table_by_product_ids(cursor, product_ids):
 
 def add_user(cursor, user_data, password):
     '''Adds a new user to the users table, with the user_data specified'''
-    new_session_id = _add_new_session(cursor, user_data.email)
     database.add_user(cursor, list(user_data), password, PEPPER)
+    new_session_id = _add_new_session(cursor, user_data.email)
     return new_session_id
 
 def login(cursor, user_email, password):
