@@ -146,22 +146,23 @@ class SessionDataGenerator:
             database.add_session(cursor, session_data)
 
 
-def generate(hash_iterations=100_000):
+def generate(hash_iterations=100_000, transactions=100_000, users=10_000, products=20):
     with sqlite3.connect('main.db') as cursor:
         #create and populate user table
         database.create_user_table(cursor)
-        UserDataGenerator().populate_user_table(cursor, hash_iterations=hash_iterations)
+        UserDataGenerator().populate_user_table(cursor, hash_iterations=hash_iterations,
+                                                number_of_users=users)
 
         #create and populate products table
         database.create_products_table(cursor)
-        ProductDataGenerator().populate_products_table(cursor)
+        ProductDataGenerator().populate_products_table(cursor, number_of_products=products)
 
         #create detailed transactions table
         database.create_detailed_transactions_table(cursor)
 
         #create and populate transactions table
         database.create_transactions_table(cursor)
-        TransactionDataGenerator.populate_transactions_table(cursor)
+        TransactionDataGenerator.populate_transactions_table(cursor,number_of_transactions=transactions)
 
         #create and populate sessions table
         database.create_sessions_table(cursor)

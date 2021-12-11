@@ -321,9 +321,26 @@ if __name__ == '__main__':
     from datagen import generate_data
     parser = argparse.ArgumentParser(description='Database generation interface')
     parser.add_argument('action', choices=['generate'], help='database action to be performed')
-    parser.add_argument('--fast', action='store_true', help='reduces number of password hashing operations')
+    parser.add_argument('--fast', action='store_true',
+                        help='reduces number of password hashing operations')
+    parser.add_argument('--minimal', action='store_true',
+                        help='reduces size of all tables to 1')
+    parser.add_argument('--transactions', nargs=1, default=100_000, type=int,
+                        help='pass number of transactions to be added to database')
+    parser.add_argument('--users', nargs=1, default=10_000, type=int,
+                        help='pass number of users to be added to database')
+    parser.add_argument('--products', nargs=1, default=20, type=int,
+                        help='pass number of products to be added to database')
     args = parser.parse_args()
 
     if args.action == 'generate':
         number_of_hashes = 1 if args.fast else 100_000
-        generate_data.generate(number_of_hashes)
+        transactions, users, products = ((1, 1, 1)
+                                         if args.minimal
+                                         else (args.transactions, args.users, args.products)
+                                         )
+        generate_data.generate(number_of_hashes,
+                               transactions=transactions,
+                               users=users,
+                               products=products
+                               )
