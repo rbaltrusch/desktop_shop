@@ -3,4 +3,4 @@
 [run]
 omit =
     ../desktop_shop/main.py,
-	
+    ../desktop_shop/gui/*
