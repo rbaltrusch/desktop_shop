@@ -6,4 +6,5 @@ Created on Fri Jan 15 10:24:26 2021
 """
 
 #fixtures go in here (with format "unit.fixtures.name)
-pytest_plugins = []
+pytest_plugins = ["unit.fixtures.user_data",
+                  "unit.fixtures.database"]
