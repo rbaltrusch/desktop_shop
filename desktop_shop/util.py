@@ -5,17 +5,7 @@ Created on Sat Nov 14 16:31:46 2020
 @author: Korean_Crimson
 """
 
-import time
 import datetime
-
-def timeit(function):
-    '''Decorator that prints execution time of a function'''
-    def wrapper(*args, **kwargs):
-        time0 = time.time()
-        result = function(*args, **kwargs)
-        print(time.time() - time0)
-        return result
-    return wrapper
 
 def generate_timestamp():
     '''Generates date+timestamp of current time'''
