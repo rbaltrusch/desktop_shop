@@ -12,12 +12,8 @@ class UserData:
     first_name: str = ''
     last_name: str = ''
     gender: str = ''
-    dob: str = ''
+    dob: str = '' #date of birth
     email: str = ''
-
-    @property
-    def full_name(self) -> str:
-        return f'{self.first_name} {self.last_name}'
 
     def __getitem__(self, value):
         return list(self)[value]
@@ -29,13 +25,25 @@ class UserData:
         yield self.dob
         yield self.email
 
-    def __init__(self, first_name, last_name, gender, dob, email):
-        self.first_name = first_name.title()
-        self.last_name = last_name.title()
-        self.gender = gender
-        self.dob = dob
-        self.email = email
+    @property
+    def full_name(self) -> str:
+        return f'{self.first_name} {self.last_name}'
 
+    @property
+    def first_name(self) -> str:
+        return self._first_name.title()
+
+    @first_name.setter
+    def first_name(self, value):
+        self._first_name = value
+
+    @property
+    def last_name(self) -> str:
+        return self._last_name.title()
+
+    @last_name.setter
+    def last_name(self, value):
+        self._last_name = value
 
 @dataclass
 class UserSignUpData(UserData):
@@ -45,7 +53,3 @@ class UserSignUpData(UserData):
         for attr in super().__iter__():
             yield attr
         yield self.join_date
-
-    def __init__(self, first_name="", last_name="", gender="", dob="", email="", join_date=""):
-        super().__init__(first_name, last_name, gender, dob, email)
-        self.join_date = join_date
