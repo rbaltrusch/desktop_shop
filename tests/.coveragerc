@@ -2,7 +2,5 @@
 
 [run]
 omit =
-    ../game/main.py,
-	../game/game/*
-	../game/init/*
+    ../desktop_shop/main.py,
 	
