@@ -325,5 +325,5 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     if args.action == 'generate':
-        number_of_transactions = 1 if args.fast else 100_000
-        generate_data.generate(number_of_transactions)
+        number_of_hashes = 1 if args.fast else 100_000
+        generate_data.generate(number_of_hashes)
