@@ -164,7 +164,6 @@ def update_user(cursor, user_data, user_id):
                     dob = ?,
                     email_address = ?
                 WHERE user_id = ?'''
-
     cursor.execute(command, user_data)
 
 def update_user_password(cursor, password, user_email, pepper='', iterations=100_000):
@@ -187,7 +186,6 @@ def update_user_by_user_email(cursor, user_data, user_email):
                     dob = ?,
                     email_address = ?
                 WHERE email_address = ?'''
-
     cursor.execute(command, user_data)
 
 def add_transaction(cursor, transaction_data, chosen_product_ids):
