@@ -20,7 +20,7 @@ def test_user_data_list_conversion():
     user_data = user.UserData(first_name='john',
                               last_name='miller',
                               dob='1991',
-                              email='john@miller.com',
+                              email='john@example.com',
                               gender='m'
                               )
     user_data_list = list(user_data)
@@ -36,7 +36,7 @@ def test_sign_up_user_data():
     user_data = user.UserSignUpData(first_name='john',
                                     last_name='miller',
                                     dob='1991',
-                                    email='john@miller.com',
+                                    email='john@example.com',
                                     gender='m',
                                     join_date='2021'
                                     )
