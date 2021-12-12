@@ -22,11 +22,9 @@ jobs:
     - name: Install dependencies
       run: |
         conda env update --file environment.yml --name test-env
-        cd tests
-        conda env update --file environment.yml --name test-env
-        cd ..
     - name: Test with pytest
+      working-directory: ./tests
       run: |
+        conda env update --file environment.yml --name test-env
         conda install pytest
-        cd tests
         python run_tests.py --all
