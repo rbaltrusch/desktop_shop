@@ -99,6 +99,13 @@ def get_parser():
                         help='Enables debug mode'
                         )
 
+    parser.add_argument('--no-report',
+                        '-nr',
+                        dest='report',
+                        action='store_false',
+                        help='Does not generate test reports'
+                        )
+
     parser.add_argument('--no-keep',
                         '-nk',
                         dest='keep',
