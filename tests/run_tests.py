@@ -28,10 +28,13 @@ def run_tests(args):
     report_filename = f'{timestamp}_report.html'
     report_filepath = os.path.join(REPORTS_PATH, report_filename)
 
-    command_line_args = [f'--html={report_filepath}',
-                         '--self-contained-html',
-                         f'--cov={package_path}',
-                         '--cov-report=html']
+    if args.report:
+        command_line_args = [f'--html={report_filepath}',
+                             '--self-contained-html',
+                             f'--cov={package_path}',
+                             '--cov-report=html']
+    else:
+        command_line_args = []
 
     excludes = []
 
@@ -52,6 +55,9 @@ def run_tests(args):
 
     #pylint: disable=E1101
     py.test.cmdline.main(args=command_line_args)
+
+    if not args.report:
+        return
 
     if args.open_in_browser:
         subprocess.call(f'start {report_filepath}', shell=True) #open test report
