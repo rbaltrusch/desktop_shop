@@ -1,4 +1,4 @@
-[![Python Package using Conda](https://github.com/rbaltrusch/desktop_shop/actions/workflows/python-package-conda.yml/badge.svg)](https://github.com/rbaltrusch/desktop_shop/actions/workflows/python-package-conda.yml)
+[![Unit tests](https://github.com/rbaltrusch/desktop_shop/actions/workflows/pytest-unit-tests.yml/badge.svg)](https://github.com/rbaltrusch/desktop_shop/actions/workflows/pytest-unit-tests.yml)
 [![Pylint](https://github.com/rbaltrusch/desktop_shop/actions/workflows/pylint.yml/badge.svg)](https://github.com/rbaltrusch/desktop_shop/actions/workflows/pylint.yml)
 
 # Desktop Shop
