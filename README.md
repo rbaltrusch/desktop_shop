@@ -1,3 +1,6 @@
+[![Python Package using Conda](https://github.com/rbaltrusch/desktop_shop/actions/workflows/python-package-conda.yml/badge.svg)](https://github.com/rbaltrusch/desktop_shop/actions/workflows/python-package-conda.yml)
+[![Pylint](https://github.com/rbaltrusch/desktop_shop/actions/workflows/pylint.yml/badge.svg)](https://github.com/rbaltrusch/desktop_shop/actions/workflows/pylint.yml)
+
 # Desktop Shop
 
 This is a mock shop application, running completely offline on a desktop. The graphical interface connects with a generated, local database of customers, products and transactions (Python / SQLite3). As the application runs completely offline, it does away with any networking or server complexity and showcases a bare implementation of an application interfacing with a production database.
