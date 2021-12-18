@@ -4,13 +4,13 @@ Created on Thu Jan 14 23:39:42 2021
 
 @author: Korean_Crimson
 """
-
-import os
-import sys
-import time
 import argparse
 import datetime
+import os
 import subprocess
+import sys
+import time
+
 import py
 
 PACKAGE_NAME = 'desktop_shop'
@@ -54,19 +54,20 @@ def run_tests(args):
         command_line_args.append('--pdb')
 
     #pylint: disable=E1101
-    py.test.cmdline.main(args=command_line_args)
+    exit_code = py.test.cmdline.main(args=command_line_args)
 
-    if not args.report:
-        return
+    if args.report:
+        if args.open_in_browser:
+            subprocess.call(f'start {report_filepath}', shell=True) #open test report
+            subprocess.call('start htmlcov/index.html', shell=True) #open coverage report
 
-    if args.open_in_browser:
-        subprocess.call(f'start {report_filepath}', shell=True) #open test report
-        subprocess.call('start htmlcov/index.html', shell=True) #open coverage report
+        if not args.keep:
+            #wait 1 second until test report is open, then delete it
+            time.sleep(1)
+            os.remove(report_filepath)
 
-    if not args.keep:
-        #wait 1 second until test report is open, then delete it
-        time.sleep(1)
-        os.remove(report_filepath)
+    if int(exit_code) > 0:
+        sys.exit(int(exit_code))
 
 def get_parser():
     parser = argparse.ArgumentParser(description='Unit test interface')
