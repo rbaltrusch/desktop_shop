@@ -34,6 +34,10 @@ To run tests, change into the tests directory and run run_tests:
     cd tests
     python run_tests.py --all
 
+## Contributions
+
+To contribute to this repository, please read the [contribution guidelines](CONTRIBUTING.md).
+
 ## Python
 
 Written in Python 3.8.3.
