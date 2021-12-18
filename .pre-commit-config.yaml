@@ -16,7 +16,6 @@ repos:
     -   id: check-added-large-files
     -   id: debug-statements
     -   id: requirements-txt-fixer
-    -   id: name-tests-test
     -   id: fix-encoding-pragma
     -   id: debug-statements
         language_version: python3
