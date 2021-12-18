@@ -48,7 +48,8 @@ def run_tests(args):
         excludes.append('unreliable')
 
     if excludes:
-        command_line_args.append('-m not ({})'.format(' or '.join(excludes)))
+        joined = ' or '.join(excludes)
+        command_line_args.append(f'-m not ({joined})')
 
     if args.debug:
         command_line_args.append('--pdb')
@@ -70,6 +71,7 @@ def run_tests(args):
         sys.exit(int(exit_code))
 
 def get_parser():
+    """Constructs cli argument parser"""
     parser = argparse.ArgumentParser(description='Unit test interface')
 
     parser.add_argument('--all',
@@ -129,6 +131,7 @@ def get_parser():
     return parser
 
 def main():
+    """Main function"""
     parser = get_parser()
     args = parser.parse_args()
     sys.argv = [__file__]
