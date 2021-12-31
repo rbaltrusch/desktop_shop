@@ -101,6 +101,7 @@ class View(components.View):
             with db_conn as cursor:
                 #pylint: disable=redundant-keyword-arg
                 #pylint: disable=unexpected-keyword-arg
+                #pylint: disable=unpacking-non-sequence
                 new_session_id, _ = server.add_transaction(cursor, user_email, chosen_product_ids,
                                                            user_email=user_email,
                                                            session_id=session_id)
