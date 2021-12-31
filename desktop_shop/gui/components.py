@@ -4,14 +4,16 @@ Created on Mon Feb  1 09:53:11 2021
 
 @author: Korean_Crimson
 """
-
 from __future__ import annotations
 
 import re
-import uuid
 import tkinter as tk
-from typing import Any, Dict, List
-from dataclasses import dataclass, field
+import uuid
+from dataclasses import dataclass
+from dataclasses import field
+from typing import Any
+from typing import Dict
+from typing import List
 
 class Tk(tk.Tk):
     '''Wrapper around tk.Tk class with easier rowconfigure and columnconfigure functionality'''
@@ -116,6 +118,7 @@ class View():
         self._components[name] = component
 
     def add_entry_component(self, component, name):
+        """Adds the passed entry component under the specified name and stores it in the view"""
         self._components[f'{name}_entry'] = component
         self._entries[name] = component
 
@@ -188,6 +191,7 @@ class Component():
         self.hidden = False
 
     def add_to(self, view):
+        """Adds the component to the passed view"""
         view.add_component(self, self.name)
 
     def gridpack(self):
@@ -226,37 +230,55 @@ class Component():
         self.tk_component.config(*args, **kwargs)
 
 class Frame(Component):
+    """Frame compoenent"""
+
     def add_to(self, view):
+        """Adds the frame component to the view. Overrides Component.add_to"""
         view.add_frame_component(self, self.name)
 
 @dataclass
 class ComponentPlacer:
+    """Component placer class, returned from Factory.create"""
+
     component: Component
 
     def place(self, **kwargs):
+        """Places the component using the specified keyword arguments"""
         for key, value in kwargs.items():
             setattr(self.component, key, value)
 
 @dataclass
 class Factory:
+    """Factory object, contains a method and a respective component class,
+    as well as creation arguments and keyword arguments.
+    """
     method: callable
-    component: Component
+    component: type
     args: List[Any] = field(default_factory=list)
     kwargs: Dict[str, Any] = field(default_factory=dict)
 
-    def create(self, root, name=None, *args, **kwargs):
-        widget = self.method(root, *self.args, *args, **self.kwargs, **kwargs)
+    def create(self, root, name=None, **kwargs):
+        """Creates a new Component by calling the creation method. Returns a ComponentPlacer"""
+        widget = self.method(root, *self.args, **self.kwargs, **kwargs)
         component = self.component(widget, name=name)
         return ComponentPlacer(component)
 
+#pylint: disable=too-few-public-methods
 class EntryFactory(Factory):
+    """Entry factory"""
+
     def create(self, *args, **kwargs):
+        """Overrides Factory.create.
+        Adds an extra textvariable to the widget creation process.
+        """
         component_placer = super().create(*args, **kwargs)
         component_placer.component.var = kwargs.get('textvariable')
         return component_placer
 
 @dataclass
 class Builder:
+    """Component builder class"""
+
     factory_methods: Dict[str, Factory] = None
 
     def __post_init__(self):
@@ -266,14 +288,20 @@ class Builder:
             self.factory_methods = {}
 
     def register(self, method_name: str, factory: Factory):
+        """Register a factory under a specified name"""
         self.factory_methods[method_name] = factory
 
-    def create(self, method_name: str, name: str = None, *args, **kwargs):
+    def create(self, method_name: str, name: str = None, **kwargs):
+        """Creates a component (widget) by looking up the passed method_name
+        from the registered factories and calling create on it.
+        Passes received keyword arguments to the factory create method.
+        Returns the component's ComponentPlacer.
+        """
         factory = self.factory_methods[method_name]
 
         method_name_ = re.sub("[0-9]+", "", method_name)
         name = f'{name}_{method_name_}' if name is not None else str(uuid.uuid4())
 
-        component_placer = factory.create(self.root, name, *args, **kwargs)
+        component_placer = factory.create(self.root, name, **kwargs)
         component_placer.component.add_to(self.view)
         return component_placer

@@ -4,11 +4,12 @@ Created on Sat Dec  4 17:05:23 2021
 
 @author: richa
 """
-
 import functools
 
 import server
-from gui import components, db_conn, app
+from gui import app
+from gui import components
+from gui import db_conn
 
 class View(components.View):
     '''Home view'''
@@ -33,12 +34,17 @@ class View(components.View):
             frame.place(row=i, row_span=1, col=1, col_span=3, sticky='we')
             builder.root = frame.component.tk_component
 
-            #product name label + add to cart
-            builder.create('label', width=40, text=f'{name:>30} ${price:<7}').place(row=i, col=0, sticky='w')
-            callback = functools.partial(self.add_to_cart, product_id)
-            builder.create('button', text='Add to cart', command=callback, bd=3).place(row=i, col=2, sticky='e')
+            #product name label
+            label = builder.create('label', width=40, text=f'{name:>30} ${price:<7}')
+            label.place(row=i, col=0, sticky='w')
 
-    def add_to_cart(self, product_id):
+            #add to cart button
+            callback = functools.partial(self.add_to_cart, product_id)
+            button = builder.create('button', text='Add to cart', command=callback, bd=3)
+            button.place(row=i, col=2, sticky='e')
+
+    @staticmethod
+    def add_to_cart(product_id):
         '''Callback for Add to Cart button. Appends the product id to cart
         and shows checkout button
         '''

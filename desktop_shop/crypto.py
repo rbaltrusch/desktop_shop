@@ -4,21 +4,26 @@ Created on Mon Nov 16 20:19:46 2020
 
 @author: Korean_Crimson
 """
-
-import random
 import hashlib
+import random
 import secrets
-from enum import Enum, auto
 from dataclasses import dataclass
+from enum import auto
+from enum import Enum
 
 BASE62 = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
 @dataclass
 class HashFunction:
+    """Contains a hash function enum and its iterations keyword.
+    Encapsulates a hash operation.
+    """
+
     function: Enum
     iterations: int
 
     def hash(self, password: str, salt: str):
+        """Returns the result of the hash function hashing the provided password and salt"""
         function = get_function_from_hash_function_enum(self.function)
         return function(password, salt, iterations=self.iterations)
 
@@ -29,7 +34,8 @@ def hash_string(password, salt, iterations=100_000):
     '''Hashes the specified password with the passed salt. Returns hash in hex format (str)'''
     encoded_password = bytes(password, encoding='utf-8')
     encoded_salt = bytes(salt, encoding='utf-8')
-    derived_key = hashlib.pbkdf2_hmac('sha256', encoded_password, encoded_salt, iterations=iterations)
+    derived_key = hashlib.pbkdf2_hmac('sha256', encoded_password,
+                                      encoded_salt, iterations=iterations)
     return derived_key.hex()
 
 class HashFunctions(Enum):

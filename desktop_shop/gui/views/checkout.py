@@ -4,18 +4,24 @@ Created on Sat Dec  4 17:03:41 2021
 
 @author: richa
 """
-
 import functools
 import tkinter as tk
 
 import server
-from gui import callbacks, components, app, root, db_conn
+from gui import app
+from gui import callbacks
+from gui import components
+from gui import db_conn
+from gui import root
 
+#pylint: disable=no-member
 class View(components.View):
+    """Checkout view"""
+
     @classmethod
     def create(cls, *_):
         '''Initialises an empty checkout view.
-    
+
         Currently, all checkout view contents are dynamically generated in the function
         init_checkout_data_in_checkout_view
         '''
@@ -29,11 +35,14 @@ class View(components.View):
         for frame in self._frame_components.values():
             frame.hide()
         self._frame_components = {}
-    
-        with db_conn as cursor:
-            product_datas = server.query_product_data_from_product_table_by_product_ids(cursor, chosen_product_ids)
 
-        data_packets = [(str(id_), name, price) for id_, name, price in product_datas if str(id_) in chosen_product_ids]
+        with db_conn as cursor:
+            args = cursor, chosen_product_ids
+            product_datas = server.query_product_data_from_product_table_by_product_ids(*args)
+
+        data_packets = [(str(id_), name, price)
+                        for id_, name, price in product_datas
+                        if str(id_) in chosen_product_ids]
 
         i = 0
         for i, (product_id, name, price) in enumerate(data_packets, 1):
@@ -78,7 +87,8 @@ class View(components.View):
             app['main_menu'].hide_components('checkout_button')
             callbacks.switch_to_home()
 
-    def place_order(self):
+    @staticmethod
+    def place_order():
         '''Gets all product ids stored in the user cart and sends a transaction request to the
         server. If the server does not answer with a valid session id, the transaction failed
         and an error message is shown, else a confirmation message is shown to the user
@@ -87,12 +97,14 @@ class View(components.View):
         chosen_product_ids = app.data['cart']
         if user_email and chosen_product_ids:
             session_id = app.data['session_id']
-    
+
             with db_conn as cursor:
+                #pylint: disable=redundant-keyword-arg
+                #pylint: disable=unexpected-keyword-arg
                 new_session_id, _ = server.add_transaction(cursor, user_email, chosen_product_ids,
                                                            user_email=user_email,
                                                            session_id=session_id)
-    
+
             app.data['session_id'] = new_session_id
             if new_session_id is not None:
                 callbacks.show_message('We have placed your order.')

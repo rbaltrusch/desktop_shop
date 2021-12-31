@@ -11,18 +11,18 @@ or:
 
 @author: Korean_Crimson
 """
-
 import random
 import sqlite3
 
-from datagen import data
-import database
 import crypto
+import database
 import util
+from datagen import data
 
 #combined with every salt for extra security in pw hashing
 PEPPER = 'secret'
 
+#pylint: disable=too-few-public-methods
 class UserDataGenerator:
     '''Used to generate data to fill the users table in main.db'''
 
@@ -30,8 +30,8 @@ class UserDataGenerator:
         self._email_cache = []
 
     def populate_user_table(self, cursor, number_of_users=10_000, hash_iterations=100_000):
-        '''Populates the user table in main.db (needs to already exist) with the 
-        amount of users specified in the input arg. Expects a database connection 
+        '''Populates the user table in main.db (needs to already exist) with the
+        amount of users specified in the input arg. Expects a database connection
         object to be passed in as first arg
         '''
         first_names = data.fetch_first_names()
@@ -59,9 +59,11 @@ class UserDataGenerator:
         while not email_address or email_address in self._email_cache:
             domain = random.choice(domains)
             year, *_ = dob.split('-')
-            random_string = ''.join([chr(random.randint(65, 90)) for _ in range(random.randint(1, 5))])
+            random_string = ''.join([chr(random.randint(65, 90))
+                                     for _ in range(random.randint(1, 5))])
             random_num = str(random.randint(0, 999))
-            user = random.choices([first_name, last_name, year, random_string, random_num], k=random.randint(2, 4))
+            user = random.choices([first_name, last_name, year, random_string, random_num],
+                                  k=random.randint(2, 4))
             concatenator = random.choice(concatenators)
             email_address = f'{concatenator.join(user)}@{domain}'
         self._email_cache.append(email_address)
@@ -90,7 +92,10 @@ class ProductDataGenerator:
         series = ['A', 'M', 'S', 'X', 'Y', 'Z']
         versions = ['99', '10', '2', '33', '21']
 
-        product_name = f'{random.choice(product_names)} {random.choice(series)}{random.choice(versions)}'
+        name = random.choice(product_names)
+        series_ = random.choice(series)
+        version = random.choice(versions)
+        product_name = f'{name} {series_}{version}'
         product_price = random.randint(10,50) * 10 - 0.01 #Between 99.99 and 499.99
 
         product_data = [product_name, product_price]
@@ -147,6 +152,11 @@ class SessionDataGenerator:
 
 
 def generate(hash_iterations=100_000, transactions=100_000, users=10_000, products=20):
+    """Generates the database, including user, products, transactions,
+    detailed_transactions and sessions tables.
+    The tables are pre-populated with random data of the specified sizes.
+    """
+
     with sqlite3.connect('main.db') as cursor:
         #create and populate user table
         database.create_user_table(cursor)
@@ -162,7 +172,8 @@ def generate(hash_iterations=100_000, transactions=100_000, users=10_000, produc
 
         #create and populate transactions table
         database.create_transactions_table(cursor)
-        TransactionDataGenerator.populate_transactions_table(cursor,number_of_transactions=transactions)
+        TransactionDataGenerator.populate_transactions_table(cursor,
+                                                             number_of_transactions=transactions)
 
         #create and populate sessions table
         database.create_sessions_table(cursor)
@@ -170,4 +181,3 @@ def generate(hash_iterations=100_000, transactions=100_000, users=10_000, produc
 
 if __name__ == '__main__':
     generate()
-

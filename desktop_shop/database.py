@@ -4,7 +4,6 @@ Created on Sun Nov 22 14:31:48 2020
 
 @author: Korean_Crimson
 """
-
 import crypto
 
 def query_user_id_from_user_email(cursor, user_email):
@@ -223,10 +222,10 @@ def create_user_table(cursor):
     #create table
     cursor.execute('''CREATE TABLE users (
                     user_id INTEGER PRIMARY KEY,
-                    first_name TEXT NOT NULL, 
+                    first_name TEXT NOT NULL,
                     last_name TEXT NOT NULL,
                     gender TEXT,
-                    dob TEXT CHECK(CAST(strftime('%s', join_date)  AS  integer) > 
+                    dob TEXT CHECK(CAST(strftime('%s', join_date)  AS  integer) >
                                    CAST(strftime('%s', dob)  AS  integer)),
                     email_address TEXT NOT NULL UNIQUE COLLATE NOCASE,
                     join_date TEXT NOT NULL,
@@ -334,7 +333,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     if args.action == 'generate':
-        number_of_hashes = 1 if args.fast else 100_000
+        number_of_hashes = 1 if args.fast else 100_000 #pylint: disable=invalid-name
         transactions, users, products = ((1, 1, 1)
                                          if args.minimal
                                          else (args.transactions, args.users, args.products)

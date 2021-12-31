@@ -4,17 +4,18 @@ Created on Wed Nov 25 20:07:42 2020
 
 @author: Korean_Crimson
 """
-
 import hmac
 
-import database
 import crypto
+import database
 import util
 
 #combined with every salt for extra security in pw hashing
 PEPPER = 'secret'
 
 class ServerSideLogInDataError(Exception):
+    """Exception for login failures"""
+
     def __init__(self):
         super().__init__("Login data invalid. Corrupted login data was retrieved from the server.")
 

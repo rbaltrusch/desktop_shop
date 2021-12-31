@@ -6,10 +6,11 @@ Created on Mon Feb  1 09:53:07 2021
 """
 import re
 
+import server
 import user
 import util
-import server
-from gui import app, db_conn
+from gui import app
+from gui import db_conn
 
 #pylint: disable=E1123,E1124
 
@@ -99,7 +100,8 @@ def edit_user_data():
         with db_conn as cursor:
             user_data_ = user_data[:-1] #ignore join date
             new_session_id, *_ = server.update_user(cursor, user_data_, user_data.email,
-                                                    user_email=user_data.email, session_id=session_id)
+                                                    user_email=user_data.email,
+                                                    session_id=session_id)
 
         app.data['session_id'] = new_session_id
         app.data['user_data'] = user_data

@@ -4,12 +4,19 @@ Created on Mon Feb  1 10:00:48 2021
 
 @author: Korean_Crimson
 """
-
 import tkinter as tk
 
 import user
-from gui import app, root, config, components
-from gui.views import login, main_menu, home, register, checkout, profile
+from gui import app
+from gui import components
+from gui import config
+from gui import root
+from gui.views import checkout
+from gui.views import home
+from gui.views import login
+from gui.views import main_menu
+from gui.views import profile
+from gui.views import register
 
 #pylint: disable=too-many-locals
 #pylint: disable=too-many-statements
@@ -29,6 +36,7 @@ def init_root():
     root.add_col(150)
 
 def init_builder():
+    """Initialises the component builder and registers the widget factories"""
     builder = components.Builder()
 
     factory = components.Factory(tk.Frame, components.Frame, kwargs=config.FRAME_THEME)

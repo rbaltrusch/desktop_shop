@@ -26,6 +26,7 @@ THEME = {**FRAME_THEME, 'fg': FG}
 
 LABEL_THEME = {'fg': FG, 'bg': BG2, 'highlightbackground': BG2}
 BUTTON_THEME = {'fg': FG, 'bg': BG3, 'activebackground': BG4, 'activeforeground': FG}
-BUTTON_THEME2 = {'fg': FG, 'bg': PRIM, 'activebackground': BG4, 'activeforeground': FG, 'disabledforeground': DISABLED_FG}
+BUTTON_THEME2 = {'fg': FG, 'bg': PRIM, 'activebackground': BG4,
+                 'activeforeground': FG, 'disabledforeground': DISABLED_FG}
 DROPDOWN_THEME = {'fg': FG, 'bg': BG2, 'activebackground': BG2, 'activeforeground': FG}
 ERROR_THEME = {'fg': ERR, 'bg': BG2}
