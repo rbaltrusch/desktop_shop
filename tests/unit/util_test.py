@@ -21,8 +21,8 @@ def test_get_current_date():
     year, month, day = date.split('-')
     now = datetime.datetime.now()
     assert str(now.year) == year
-    assert str(now.month) == month
-    assert str(now.day) == day
+    assert str(now.month).zfill(2) == month
+    assert str(now.day).zfill(2) == day
 
 @pytest.mark.parametrize("string, expected", [("2021-01-01", True),
                                               ("20-01-01", False),
