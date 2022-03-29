@@ -24,25 +24,29 @@ def login(password=None, email=None):
     with db_conn as cursor:
         session_id = server.login(cursor, user_email, password)
 
-    if session_id is not None:
-        app.data['session_id'] = session_id
-        app['login'].hide_components('login_failed_label')
-        switch_to_home()
-
-        #pylint: disable=unbalanced-tuple-unpacking
-        with db_conn as cursor:
-            session_id, user_data = server.query_user_data(cursor, user_email,
-                                                           user_email=user_email,
-                                                           session_id=session_id)
-
-        app.data['session_id'] = session_id
-        store_user_data(user_data)
-        app['main_menu'].unhide_components('logged_in_as_frame')
-        app['main_menu'].hide_components('message_frame', 'login_button', 'register_button')
-        set_logged_in_as_user_text()
-        app['login'].clear_entries()
-    else:
+    if session_id is None:
         app.views_dict['login'].unhide_components('login_failed_label')
+        return
+
+    app.data['session_id'] = session_id
+    app['login'].hide_components('login_failed_label')
+    switch_to_home()
+
+    #pylint: disable=unbalanced-tuple-unpacking
+    with db_conn as cursor:
+        session_id, user_data = server.query_user_data(
+            cursor,
+            user_email,
+            user_email=user_email,
+            session_id=session_id
+        )
+
+    app.data['session_id'] = session_id
+    store_user_data(user_data)
+    app['main_menu'].unhide_components('logged_in_as_frame')
+    app['main_menu'].hide_components('message_frame', 'login_button', 'register_button')
+    set_logged_in_as_user_text()
+    app['login'].clear_entries()
 
 def sign_out():
     '''Signs out the currently logged in user. clears the user data, login data,
@@ -74,16 +78,18 @@ def register():
     confirm_password = app['register']['confirm_pw_entry'].get_var()
     valid_password = validate_password(password, confirm_password)
 
-    if valid_data and valid_password:
-        with db_conn as cursor:
-            session_id = server.add_user(cursor, user_data, password)
+    if not valid_data or not valid_password:
+        return
 
-        app.data['session_id'] = session_id
-        if session_id is not None:
-            login(password, user_data.email)
-            app['register'].clear_entries()
-        else:
-            show_error_message('Failed to register.')
+    with db_conn as cursor:
+        session_id = server.add_user(cursor, user_data, password)
+
+    app.data['session_id'] = session_id
+    if session_id is not None:
+        login(password, user_data.email)
+        app['register'].clear_entries()
+    else:
+        show_error_message('Failed to register.')
 
 def edit_user_data():
     '''Edits the user data (callback for edit in profile view). Gets all user
@@ -94,21 +100,23 @@ def edit_user_data():
     '''
     user_data = app['profile'].get_user_data()
     valid_data = validate_user_data(user_data)
-    if valid_data:
-        session_id = app.data['session_id']
+    if not valid_data:
+        return
 
-        with db_conn as cursor:
-            user_data_ = user_data[:-1] #ignore join date
-            #pylint: disable=unpacking-non-sequence
-            new_session_id, *_ = server.update_user(cursor, user_data_, user_data.email,
-                                                    user_email=user_data.email,
-                                                    session_id=session_id)
+    session_id = app.data['session_id']
 
-        app.data['session_id'] = new_session_id
-        app.data['user_data'] = user_data
-        populate_profile_with_user_data()
-        if not new_session_id:
-            show_error_message('Failed to edit data.')
+    with db_conn as cursor:
+        user_data_ = user_data[:-1] #ignore join date
+        #pylint: disable=unpacking-non-sequence
+        new_session_id, *_ = server.update_user(cursor, user_data_, user_data.email,
+                                                user_email=user_data.email,
+                                                session_id=session_id)
+
+    app.data['session_id'] = new_session_id
+    app.data['user_data'] = user_data
+    populate_profile_with_user_data()
+    if not new_session_id:
+        show_error_message('Failed to edit data.')
 
 def edit_user_password():
     '''Edits the user password (callback for edit in profile view). Gets the
@@ -120,25 +128,28 @@ def edit_user_password():
     password = app['profile']['pw_entry'].get_var()
     confirm_password = app['profile']['confirm_pw_entry'].get_var()
     valid_password = validate_password(password, confirm_password)
-    if valid_password:
-        session_id = app.data['session_id']
-        user_email = app.data['user_data'].email
+    if not valid_password:
+        return
 
-        with db_conn as cursor:
-            #pylint: disable=unpacking-non-sequence
-            new_session_id, *_ = server.update_user_password(cursor, password, user_email,
-                                                             user_email=user_email,
-                                                             session_id=session_id)
+    session_id = app.data['session_id']
+    user_email = app.data['user_data'].email
 
-        app.data['session_id'] = new_session_id
-        if not new_session_id:
-            show_error_message('Failed to edit password.')
-        else:
-            show_message('Set new password successfully.')
-            app['profile']['confirm_pw_entry'].set_var('')
-            app['profile']['pw_entry'].set_var('')
-            app['profile'].hide_components('password_change_frame')
-            app['profile'].unhide_components('password_change_frame_button')
+    with db_conn as cursor:
+        #pylint: disable=unpacking-non-sequence
+        new_session_id, *_ = server.update_user_password(cursor, password, user_email,
+                                                            user_email=user_email,
+                                                            session_id=session_id)
+
+    app.data['session_id'] = new_session_id
+    if not new_session_id:
+        show_error_message('Failed to edit password.')
+        return
+
+    show_message('Set new password successfully.')
+    app['profile']['confirm_pw_entry'].set_var('')
+    app['profile']['pw_entry'].set_var('')
+    app['profile'].hide_components('password_change_frame')
+    app['profile'].unhide_components('password_change_frame_button')
 
 def validate_user_data(user_data):
     '''Validates all the data entered in the register view. Validates that the
