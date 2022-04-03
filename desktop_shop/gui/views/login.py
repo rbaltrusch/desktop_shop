@@ -13,7 +13,7 @@ class View(components.View):
     """Login view"""
 
     @classmethod
-    def create(cls, window, builder):
+    def create(cls, window: components.Tk, builder: components.Builder):
         '''Initialises login view, including all its components'''
         builder.view = cls()
         builder.root = window

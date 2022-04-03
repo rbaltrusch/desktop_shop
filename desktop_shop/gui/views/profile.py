@@ -17,7 +17,7 @@ class View(components.View):
     """Profile view"""
 
     @classmethod
-    def create(cls, window, builder):
+    def create(cls, window: components.Tk, builder: components.Builder):
         '''Initialises profile view, including all its components'''
         builder.view = cls()
         builder.root = window
@@ -91,7 +91,13 @@ class View(components.View):
         entry_names = ['first_name', 'last_name', 'gender', 'dob', 'email']
         return [f'{name}_entry' for name in entry_names] + ['date_joined_data_label']
 
-def _create_profile_data_entry(builder, text: str, name: str, row: int):
+
+def _create_profile_data_entry(
+    builder: components.Builder,
+    text: str,
+    name: str,
+    row: int
+    ) -> None:
     """Creates a labelled entry + edit button"""
     builder.create('label', text=text).place(row=row, col=0, sticky='w')
 

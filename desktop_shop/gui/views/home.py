@@ -20,7 +20,7 @@ class View(components.View):
         '''
         return cls()
 
-    def init_product_data(self, window, builder):
+    def init_product_data(self, window: components.Tk, builder: components.Builder):
         '''Dynamically generates all contents of the home view'''
         builder.view = self
 

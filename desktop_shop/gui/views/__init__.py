@@ -5,6 +5,7 @@ Created on Sat Dec  4 16:47:28 2021
 @author: richa
 """
 from typing import Dict
+from typing import Type
 
 from desktop_shop.gui import components
 
@@ -15,7 +16,13 @@ from . import main_menu
 from . import profile
 from . import register
 
-views: Dict[str, components.View] = {
+
+class View(components.View):
+    @classmethod
+    def create(cls, window: components.Tk, builder: components.Builder) -> components.View:
+        ...
+
+views: Dict[str, Type[View]] = {
     "checkout": checkout.View,
     "home": home.View,
     "login": login.View,

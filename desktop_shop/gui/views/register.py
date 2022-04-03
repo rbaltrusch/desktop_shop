@@ -15,7 +15,7 @@ class View(components.View):
     """Register view"""
 
     @classmethod
-    def create(cls, window, builder):
+    def create(cls, window: components.Tk, builder: components.Builder):
         '''Initialises register view, including all its components'''
         builder.view = cls()
         builder.root = window

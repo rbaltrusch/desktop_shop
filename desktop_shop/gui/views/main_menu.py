@@ -15,7 +15,7 @@ class View(components.View):
     """Main menu view"""
 
     @classmethod
-    def create(cls, window, builder):
+    def create(cls, window: components.Tk, builder: components.Builder):
         '''Initialises main menu view, including all its components'''
         builder.view = cls()
         builder.root = window
