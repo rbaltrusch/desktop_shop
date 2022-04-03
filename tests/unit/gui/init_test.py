@@ -1,13 +1,19 @@
 # -*- coding: utf-8 -*-
 """Smoke tests for gui init function"""
-
+import tkinter as tk
 from collections import namedtuple
 
-import desktop_shop.server as server
 import desktop_shop.gui as gui
 import desktop_shop.gui.init as init
+import desktop_shop.server as server
 
 Product = namedtuple("Product", ["id", "name", "price"])
+
+
+def setup():
+    class FakeTk:
+        pass
+    tk.Tk = FakeTk
 
 
 def test_gui_init():
