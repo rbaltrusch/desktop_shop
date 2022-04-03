@@ -6,6 +6,8 @@ Created on Mon Feb  1 09:53:11 2021
 """
 from __future__ import annotations
 
+import os
+import sys
 import re
 import tkinter as tk
 import uuid
@@ -26,7 +28,10 @@ class Tk(tk.Tk):
     """Wrapper around tk.Tk class with easier rowconfigure and columnconfigure functionality"""
 
     def __init__(self):
-        super().__init__()
+        # tkinter cannot be initialised when no display is present (e.g. Linux server)
+        skip_init = sys.platform.startswith('linux') and os.environ.get('DISPLAY') is None
+        if not skip_init:
+            super().__init__()
         self.col_num: int = 0
         self.row_num: int = 0
 
