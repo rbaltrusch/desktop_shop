@@ -7,11 +7,17 @@ Created on Sat Nov 14 17:29:20 2020
 
 import random
 import datetime
+from typing import Dict, List, Tuple
+
 import requests
 from bs4 import BeautifulSoup
 import wikipedia
 
-def fetch_first_names():
+
+DateTuple = Tuple[int, int, int]
+
+
+def fetch_first_names() -> Dict[str, str]:
     '''fetches first names from the web and returns them as a dict in the
     format first_name: gender
     '''
@@ -25,7 +31,7 @@ def fetch_first_names():
         first_names[female] = 'f'
     return first_names
 
-def fetch_last_names():
+def fetch_last_names() -> List[str]:
     '''fetches last names from the web and returns them in a list'''
     wiki = wikipedia.page("List_of_most_common_surnames_in_Europe")
     soup = BeautifulSoup(wiki.html(), 'html.parser')
@@ -40,7 +46,7 @@ def fetch_last_names():
                     last_names.add(last_name)
     return list(last_names)
 
-def get_random_date(start, end):
+def get_random_date(start: DateTuple, end: DateTuple) -> str:
     '''start and end each need to be a list/tuple of length 3 (Y, M, D)'''
     start_date = datetime.date(*start)
     end_date = datetime.date(*end)
