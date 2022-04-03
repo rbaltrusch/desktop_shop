@@ -20,7 +20,7 @@ from . import register
 class View(components.View):
     @classmethod
     def create(cls, window: components.Tk, builder: components.Builder) -> components.View:
-        ...
+        """Creates the View"""
 
 views: Dict[str, Type[View]] = {
     "checkout": checkout.View,
