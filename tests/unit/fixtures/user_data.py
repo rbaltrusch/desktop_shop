@@ -4,11 +4,9 @@ Created on Sat Dec 11 21:34:17 2021
 
 @author: richa
 """
-
 import pytest
-
-import user
-import util
+from desktop_shop import user
+from desktop_shop import util
 
 @pytest.fixture
 def user_sign_up_data():

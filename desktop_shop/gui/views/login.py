@@ -6,8 +6,8 @@ Created on Sat Dec  4 17:04:48 2021
 """
 import tkinter as tk
 
-from gui import callbacks
-from gui import components
+from desktop_shop.gui import callbacks
+from desktop_shop.gui import components
 
 class View(components.View):
     """Login view"""

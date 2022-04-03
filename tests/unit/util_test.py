@@ -4,12 +4,11 @@ Created on Sat Dec 11 17:34:44 2021
 
 @author: richa
 """
-
-import time
 import datetime
-import pytest
+import time
 
-import util
+import pytest
+from desktop_shop import util
 
 def test_generate_timestamp():
     timestamp = util.generate_timestamp()

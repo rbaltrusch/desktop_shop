@@ -22,7 +22,6 @@ def run_tests(args):
     """
     script_dir = os.path.abspath(os.path.dirname(__file__))
     package_path = os.path.join(script_dir, '..', PACKAGE_NAME)
-    sys.path.append(package_path)
 
     timestamp = datetime.datetime.now().strftime('%Y%m%d_%H%M%S')
     report_filename = f'{timestamp}_report.html'

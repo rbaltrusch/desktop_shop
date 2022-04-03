@@ -6,10 +6,9 @@ Created on Sat Dec  4 17:05:23 2021
 """
 import functools
 
-import server
-from gui import app
-from gui import components
-from gui import db_conn
+from desktop_shop import gui
+from desktop_shop import server
+from desktop_shop.gui import components
 
 class View(components.View):
     '''Home view'''
@@ -25,7 +24,7 @@ class View(components.View):
         '''Dynamically generates all contents of the home view'''
         builder.view = self
 
-        with db_conn as cursor:
+        with gui.db_conn as cursor:
             product_datas = server.query_product_data_from_product_table(cursor)
 
         for i, (product_id, name, price) in enumerate(product_datas, 1):
@@ -48,6 +47,6 @@ class View(components.View):
         '''Callback for Add to Cart button. Appends the product id to cart
         and shows checkout button
         '''
-        app.data['cart'].append(str(product_id))
-        if app['main_menu']['checkout_button'].hidden:
-            app['main_menu'].unhide_components('checkout_button')
+        gui.app.data['cart'].append(str(product_id))
+        if gui.app['main_menu']['checkout_button'].hidden:
+            gui.app['main_menu'].unhide_components('checkout_button')

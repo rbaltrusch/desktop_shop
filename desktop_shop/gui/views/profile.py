@@ -8,9 +8,9 @@ import functools
 import tkinter as tk
 from typing import List
 
-import user
-from gui import callbacks
-from gui import components
+from desktop_shop import user
+from desktop_shop.gui import callbacks
+from desktop_shop.gui import components
 
 #pylint: disable=line-too-long
 class View(components.View):

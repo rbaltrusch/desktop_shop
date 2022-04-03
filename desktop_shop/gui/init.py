@@ -6,17 +6,11 @@ Created on Mon Feb  1 10:00:48 2021
 """
 import tkinter as tk
 
-import user
-from gui import app
-from gui import components
-from gui import config
-from gui import root
-from gui.views import checkout
-from gui.views import home
-from gui.views import login
-from gui.views import main_menu
-from gui.views import profile
-from gui.views import register
+import desktop_shop.gui as gui
+from desktop_shop import user
+from desktop_shop.gui import components
+from desktop_shop.gui import config
+from desktop_shop.gui.views import views
 
 #pylint: disable=too-many-locals
 #pylint: disable=too-many-statements
@@ -24,16 +18,16 @@ from gui.views import register
 
 def init_root():
     '''Initialises and configures tk root'''
-    root.title('OfflineShop')
-    root.wm_attributes('-transparentcolor','purple')
-    root.config(bg=config.BG)
+    gui.root.title('OfflineShop')
+    gui.root.wm_attributes('-transparentcolor','purple')
+    gui.root.config(bg=config.BG)
     for _ in range(21):
-        root.add_row(30)
-    root.add_col(150)
-    root.add_col(100)
-    root.add_col(100)
-    root.add_col(100)
-    root.add_col(150)
+        gui.root.add_row(30)
+    gui.root.add_col(150)
+    gui.root.add_col(100)
+    gui.root.add_col(100)
+    gui.root.add_col(100)
+    gui.root.add_col(150)
 
 def init_builder():
     """Initialises the component builder and registers the widget factories"""
@@ -65,21 +59,15 @@ def init_builder():
 
 def init_views(window, builder):
     '''Initialises all views'''
-    views = {'login': login.View.create(window, builder),
-             'main_menu': main_menu.View.create(window, builder),
-             'home': home.View.create(window, builder),
-             'register': register.View.create(window, builder),
-             'checkout': checkout.View.create(window, builder),
-             'profile': profile.View.create(window, builder),
-             }
-    views['home'].activate()
-    views['main_menu'].activate()
-    return views
+    views_ = {name: view.create(window, builder) for name, view in views.items()}
+    views_['home'].activate()
+    views_['main_menu'].activate()
+    return views_
 
 def init():
     '''Init function that needs to be called before gui is started'''
     init_root()
-    app.builder = init_builder()
-    app.views_dict = init_views(root, app.builder)
-    app.data = {'session_id': None, 'user_data': user.UserSignUpData(), 'pw_hash': '', 'cart': []}
-    app['home'].init_product_data(root, app.builder)
+    gui.app.builder = init_builder()
+    gui.app.views_dict = init_views(gui.root, gui.app.builder)
+    gui.app.data = {'session_id': None, 'user_data': user.UserSignUpData(), 'pw_hash': '', 'cart': []}
+    gui.app['home'].init_product_data(gui.root, gui.app.builder)

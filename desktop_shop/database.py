@@ -4,7 +4,7 @@ Created on Sun Nov 22 14:31:48 2020
 
 @author: Korean_Crimson
 """
-import crypto
+from desktop_shop import crypto
 
 def query_user_id_from_user_email(cursor, user_email):
     '''Queries for the user id of the user specified by the user_email passed (unique)'''
@@ -317,7 +317,7 @@ def create_sessions_table(cursor):
 
 if __name__ == '__main__':
     import argparse
-    from datagen import generate_data
+    from desktop_shop.datagen import generate_data
     parser = argparse.ArgumentParser(description='Database generation interface')
     parser.add_argument('action', choices=['generate'], help='database action to be performed')
     parser.add_argument('--fast', action='store_true',

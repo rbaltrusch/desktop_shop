@@ -4,10 +4,11 @@ Created on Sat Dec  4 16:57:41 2021
 
 @author: richa
 """
-
 import tkinter as tk
-from gui import config, callbacks, components
-from gui.components import Component
+
+from desktop_shop.gui import callbacks
+from desktop_shop.gui import components
+from desktop_shop.gui import config
 
 #pylint: disable=line-too-long
 class View(components.View):
@@ -34,7 +35,7 @@ class View(components.View):
 
         #logged in as frame
         logged_in_as_frame = tk.Frame(window, borderwidth=0, highlightthickness=0, bg=config.BG2)
-        component = Component(logged_in_as_frame, row=0, col=4, sticky='e')
+        component = components.Component(logged_in_as_frame, row=0, col=4, sticky='e')
         builder.view.add_frame_component(component, 'logged_in_as_frame')
         builder.view.hide_components('logged_in_as_frame')
 
@@ -45,7 +46,7 @@ class View(components.View):
         variable.trace('w', callbacks.on_dropdown_value_write_event)
         options_dropdown = tk.OptionMenu(logged_in_as_frame, variable, *options)
         options_dropdown['menu'].config(**config.DROPDOWN_THEME)
-        component = Component(options_dropdown, row=0, col=7, col_span=2, sticky='nsew', var=variable)
+        component = components.Component(options_dropdown, row=0, col=7, col_span=2, sticky='nsew', var=variable)
         component.config(**config.DROPDOWN_THEME)
         component.config(highlightthickness=0, bd=3)
         builder.view.add_component(component, 'options_dropdown')

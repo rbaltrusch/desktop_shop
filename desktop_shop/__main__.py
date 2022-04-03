@@ -4,8 +4,9 @@ Created on Mon Feb  1 09:52:44 2021
 
 @author: Korean_Crimson
 """
-
-from gui import init, app, db_conn
+from .gui import app
+from .gui import db_conn
+from .gui import init
 
 try:
     init.init()

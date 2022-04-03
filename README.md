@@ -23,11 +23,10 @@ To install all python dependencies, run the following in your command line:
 
     python -m pip install -r requirements.txt
 
-Run the shop application by generating the random database (this can take a few seconds) and calling the main.py file:
+Run the shop application by generating the random database (this can take a few seconds) and calling the desktop_shop package:
 
-    cd desktop_shop
-    python database.py generate --fast
-    python main.py
+    python "desktop_shop/database.py" generate --fast
+    python -m desktop_shop
 
 To run tests, change into the tests directory and run run_tests:
 

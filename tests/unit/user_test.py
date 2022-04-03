@@ -4,8 +4,7 @@ Created on Sat Dec 11 17:25:46 2021
 
 @author: richa
 """
-
-import user
+from desktop_shop import user
 
 def test_capitalized():
     user_data = user.UserData(first_name='john', last_name='miller')

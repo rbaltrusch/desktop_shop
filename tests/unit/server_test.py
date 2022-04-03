@@ -4,13 +4,12 @@ Created on Sat Dec 11 18:29:09 2021
 
 @author: richa
 """
-
 import os
 import sqlite3
-import pytest
 
-import server
-import database
+import pytest
+from desktop_shop import database
+from desktop_shop import server
 
 DATABASE = 'main2.db'
 cursor = None
