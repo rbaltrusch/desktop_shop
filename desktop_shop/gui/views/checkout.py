@@ -7,8 +7,8 @@ Created on Sat Dec  4 17:03:41 2021
 import functools
 import tkinter as tk
 
-import desktop_shop.gui as gui
-import desktop_shop.server as server
+from desktop_shop import gui
+from desktop_shop import server
 from desktop_shop.gui import callbacks
 from desktop_shop.gui import components
 

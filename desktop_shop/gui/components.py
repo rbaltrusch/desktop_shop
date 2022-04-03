@@ -236,7 +236,7 @@ class Component:
 
     def get(self) -> Any:
         """calls .get on the tk_component"""
-        return self.tk_component.get()
+        return self.tk_component.get() # pylint: disable=no-member
 
     def get_var(self) -> Any:
         """calls .get on the stored tk Var"""

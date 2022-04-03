@@ -19,6 +19,7 @@ BASE62 = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
 
 class InvalidHashFunctionException(ValueError):
+    """Exception thrown when an invalid hash function is specified"""
     pass
 
 

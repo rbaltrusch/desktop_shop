@@ -14,10 +14,10 @@ or:
 import random
 import sqlite3
 
-import crypto
-import database
-import util
-from datagen import data
+from desktop_shop import crypto
+from desktop_shop import database
+from desktop_shop import util
+from desktop_shop.datagen import data
 
 #combined with every salt for extra security in pw hashing
 PEPPER = 'secret'

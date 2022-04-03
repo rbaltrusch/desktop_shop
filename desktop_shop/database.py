@@ -47,9 +47,7 @@ def query_product_data_from_product_table_by_product_ids(cursor, product_ids):
     # This .format looks like an SQL injection vulnerability, but there is currently
     # no other way to execute Sqlite "WHERE something IN list" statements in Python.
     # As we make sure the passed list only contains numeric strings, this should be OK.
-    command = "SELECT * FROM products WHERE product_id IN {}".format(
-        joined_product_ids_str
-    )
+    command = "SELECT * FROM products WHERE product_id IN " + joined_product_ids_str
     data = [list(row) for row in cursor.execute(command)]
     return data
 
@@ -64,9 +62,7 @@ def query_product_price_from_product_table(cursor, product_ids):
     joined_product_ids = ",".join([str(product_id) for product_id in product_ids])
     joined_product_ids_str = f"({joined_product_ids})"
 
-    command = "SELECT price FROM products WHERE product_id IN {}".format(
-        joined_product_ids_str
-    )
+    command = "SELECT price FROM products WHERE product_id IN " + joined_product_ids_str
     product_prices = [product_price for product_price, *_ in cursor.execute(command)]
     return product_prices
 

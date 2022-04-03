@@ -7,7 +7,7 @@ Created on Mon Feb  1 10:00:48 2021
 import tkinter as tk
 from typing import Dict
 
-import desktop_shop.gui as gui
+from desktop_shop import gui
 from desktop_shop import user
 from desktop_shop.gui import components
 from desktop_shop.gui import config

@@ -18,6 +18,8 @@ from . import register
 
 
 class View(components.View):
+    """View Protocol interface"""
+
     @classmethod
     def create(cls, window: components.Tk, builder: components.Builder) -> components.View:
         """Creates the View"""
