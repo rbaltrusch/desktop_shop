@@ -2,7 +2,7 @@
 .pylint.d/
 **/.coverage
 **/htmlcov
-tests/reports/
+**/reports/
 **/main.db
 .vscode/
 **/*.egg-info/

@@ -28,10 +28,9 @@ Run the shop application by generating the random database (this can take a few 
     python "desktop_shop/database.py" generate --fast
     python -m desktop_shop
 
-To run tests, change into the tests directory and run run_tests:
+To run tests, run the run_tests script in the tests directory:
 
-    cd tests
-    python run_tests.py --all
+    python "tests/run_tests.py" --all
 
 ## Contributions
 
