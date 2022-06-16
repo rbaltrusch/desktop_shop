@@ -28,6 +28,7 @@ class Tk(tk.Tk):
     """Wrapper around tk.Tk class with easier rowconfigure and columnconfigure functionality"""
 
     def __init__(self):
+        super().__init__()
         self.col_num: int = 0
         self.row_num: int = 0
 
