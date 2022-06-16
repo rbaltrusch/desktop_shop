@@ -13,7 +13,8 @@ import pytest
 @pytest.mark.generate
 def test_generate():
     sys.argv.extend(('generate', '--fast', '--minimal'))
-    runpy.run_path('../desktop_shop/database.py', run_name='__main__')
+    path = os.path.join(os.path.dirname(__file__), '..', '..', 'desktop_shop', 'database.py')
+    runpy.run_path(path)
 
 def teardown():
     while len(sys.argv) > 1:
