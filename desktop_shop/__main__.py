@@ -4,9 +4,19 @@ Created on Mon Feb  1 09:52:44 2021
 
 @author: Korean_Crimson
 """
+import os
+
+from desktop_shop.datagen import generate_data
+
 from .gui import app
 from .gui import db_conn
 from .gui import init
+
+# fast db generation if not present
+if not os.path.isdir("main.db"):
+    generate_data.generate(
+        hash_iterations=1, transactions=100_000, users=10_000, products=20
+    )
 
 try:
     init.init()
