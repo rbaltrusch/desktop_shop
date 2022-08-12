@@ -6,3 +6,5 @@
 **/main.db
 .vscode/
 **/*.egg-info/
+venv/
+dist/
