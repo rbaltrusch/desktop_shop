@@ -10,7 +10,8 @@ import sqlite3
 import string
 
 import pytest
-from desktop_shop import database, server
+from desktop_shop import database
+from desktop_shop import server
 
 cursor = None
 
