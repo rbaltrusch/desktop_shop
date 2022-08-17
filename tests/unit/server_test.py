@@ -21,6 +21,7 @@ cursor = None
 def setup():
     global cursor, database_
     database_ = "".join(random.choices(string.ascii_lowercase, k=10)) + ".db"
+    _remove_db()
     cursor = sqlite3.connect(database_)
     database.create_user_table(cursor)
     database.create_sessions_table(cursor)
@@ -28,6 +29,10 @@ def setup():
 
 def teardown():
     cursor.close()
+    _remove_db()
+
+
+def _remove_db():
     try:
         if os.path.isfile(database_):
             os.remove(database_)
