@@ -21,6 +21,7 @@ cursor = None
 def setup():
     global cursor, database_
     database_ = "".join(random.choices(string.ascii_lowercase, k=10)) + ".db"
+    print(f"{database_=}")
     _remove_db()
     cursor = sqlite3.connect(database_)
     database.create_user_table(cursor)
@@ -64,7 +65,10 @@ def test_add_user(user_sign_up_data, password):
 @pytest.mark.usefixtures("password")
 @pytest.mark.usefixtures("pepper")
 def test_login(user_sign_up_data, password, pepper):
-    database.add_user(cursor, user_sign_up_data, password, pepper=pepper)
+    try:
+        database.add_user(cursor, user_sign_up_data, password, pepper=pepper)
+    except sqlite3.IntegrityError:
+        print("User already exists")
     session_id = server.login(cursor, user_sign_up_data.email, password)
     verified = database.verify_session_id_by_user_email(
         cursor, session_id, user_sign_up_data.email
@@ -78,6 +82,9 @@ def test_login(user_sign_up_data, password, pepper):
 @pytest.mark.usefixtures("wrong_password")
 @pytest.mark.usefixtures("pepper")
 def test_login_failed(user_sign_up_data, password, wrong_password, pepper):
-    database.add_user(cursor, user_sign_up_data, password, pepper=pepper)
+    try:
+        database.add_user(cursor, user_sign_up_data, password, pepper=pepper)
+    except sqlite3.IntegrityError:
+        print("User already exists")
     session_id = server.login(cursor, user_sign_up_data.email, wrong_password)
     assert session_id is None
