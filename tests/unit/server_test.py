@@ -5,26 +5,27 @@ Created on Sat Dec 11 18:29:09 2021
 @author: richa
 """
 import os
+import random
 import sqlite3
+import string
 
 import pytest
-from desktop_shop import database
-from desktop_shop import server
+from desktop_shop import database, server
 
-DATABASE = 'main2.db'
 cursor = None
 
 def setup():
-    global cursor
-    cursor = sqlite3.connect(DATABASE)
+    global cursor, database_
+    database_ = ''.join(random.choices(string.ascii_lowercase, k=10)) + ".db"
+    cursor = sqlite3.connect(database_)
     database.create_user_table(cursor)
     database.create_sessions_table(cursor)
 
 def teardown():
     cursor.close()
     try:
-        if os.path.isfile(DATABASE):
-            os.remove(DATABASE)
+        if os.path.isfile(database_):
+            os.remove(database_)
     except PermissionError:
         pass
 
