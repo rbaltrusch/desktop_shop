@@ -7,10 +7,8 @@ Created on Mon Feb  1 10:00:48 2021
 import tkinter as tk
 from typing import Dict
 
-from desktop_shop import gui
-from desktop_shop import user
-from desktop_shop.gui import components
-from desktop_shop.gui import config
+from desktop_shop import gui, user
+from desktop_shop.gui import components, config
 from desktop_shop.gui.views import views
 
 # pylint: disable=too-many-locals

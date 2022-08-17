@@ -6,9 +6,7 @@ Created on Wed Nov 25 20:07:42 2020
 """
 import hmac
 
-from . import crypto
-from . import database
-from . import util
+from . import crypto, database, util
 
 # combined with every salt for extra security in pw hashing
 PEPPER = "secret"

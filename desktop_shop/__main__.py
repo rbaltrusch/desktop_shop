@@ -8,9 +8,7 @@ import os
 
 from desktop_shop.datagen import generate_data
 
-from .gui import app
-from .gui import db_conn
-from .gui import init
+from .gui import app, db_conn, init
 
 # fast db generation if not present
 if not os.path.isdir("main.db"):
@@ -20,8 +18,8 @@ if not os.path.isdir("main.db"):
 
 try:
     init.init()
-    app.views_dict['main_menu'].pack()
-    app.views_dict['home'].pack()
+    app.views_dict["main_menu"].pack()
+    app.views_dict["home"].pack()
     app.mainloop()
 finally:
     db_conn.close()

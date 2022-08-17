@@ -9,10 +9,7 @@ import hashlib
 import random
 import secrets
 from dataclasses import dataclass
-from typing import Callable
-from typing import Dict
-from typing import Optional
-
+from typing import Callable, Dict, Optional
 
 HashFunctionCallable = Callable[[str, str, int], str]
 BASE62 = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -20,7 +17,6 @@ BASE62 = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
 class InvalidHashFunctionException(ValueError):
     """Exception thrown when an invalid hash function is specified"""
-    pass
 
 
 class HashFunctions(enum.Enum):
@@ -95,7 +91,7 @@ def generate_new_salt() -> str:
     secure random number, to hash strings.
     """
     rng = random.SystemRandom()
-    random_number = rng.randint(0, 2**64)
+    random_number = rng.randint(0, 2 ** 64)
     salt = _b62encode(random_number)
     return salt
 

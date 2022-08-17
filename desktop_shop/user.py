@@ -7,16 +7,17 @@ Created on Sat Dec  4 23:08:31 2021
 
 from dataclasses import dataclass
 
-#pylint: disable=function-redefined
+
+# pylint: disable=function-redefined
 @dataclass
 class UserData:
     """Stores user data"""
 
-    first_name: str = ''
-    last_name: str = ''
-    gender: str = ''
-    dob: str = '' #date of birth
-    email: str = ''
+    first_name: str = ""
+    last_name: str = ""
+    gender: str = ""
+    dob: str = ""  # date of birth
+    email: str = ""
 
     def __getitem__(self, value):
         return list(self)[value]
@@ -31,9 +32,9 @@ class UserData:
     @property
     def full_name(self) -> str:
         """Full name getter, returns first and last names joined together"""
-        return f'{self.first_name} {self.last_name}'
+        return f"{self.first_name} {self.last_name}"
 
-    @property
+    @property  # type: ignore
     def first_name(self) -> str:
         """First name getter, returns capitalized first name"""
         return self._first_name.title()
@@ -41,9 +42,9 @@ class UserData:
     @first_name.setter
     def first_name(self, value):
         """First name setter"""
-        self._first_name = value
+        self._first_name: str = value
 
-    @property
+    @property  # type: ignore
     def last_name(self) -> str:
         """Last name getter, returns capitalized last name"""
         return self._last_name.title()
@@ -51,13 +52,14 @@ class UserData:
     @last_name.setter
     def last_name(self, value):
         """Last name setter"""
-        self._last_name = value
+        self._last_name: str = value
+
 
 @dataclass
 class UserSignUpData(UserData):
     """Stores user data and join date"""
 
-    join_date: str = ''
+    join_date: str = ""
 
     def __iter__(self):
         for attr in super().__iter__():

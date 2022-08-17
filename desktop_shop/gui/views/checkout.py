@@ -7,10 +7,9 @@ Created on Sat Dec  4 17:03:41 2021
 import functools
 import tkinter as tk
 
-from desktop_shop import gui
-from desktop_shop import server
-from desktop_shop.gui import callbacks
-from desktop_shop.gui import components
+from desktop_shop import gui, server
+from desktop_shop.gui import callbacks, components
+
 
 # pylint: disable=no-member
 class View(components.View):

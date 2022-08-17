@@ -356,6 +356,7 @@ def create_sessions_table(cursor):
 
 if __name__ == "__main__":
     import argparse
+
     from desktop_shop.datagen import generate_data
 
     parser = argparse.ArgumentParser(description="Database generation interface")

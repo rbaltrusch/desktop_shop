@@ -6,20 +6,11 @@ Created on Mon Feb  1 09:53:11 2021
 """
 from __future__ import annotations
 
-import os
 import re
-import sys
 import tkinter as tk
 import uuid
-from dataclasses import dataclass
-from dataclasses import field
-from typing import Any
-from typing import Callable
-from typing import Dict
-from typing import List
-from typing import Optional
-from typing import Type
-from typing import Union
+from dataclasses import dataclass, field
+from typing import Any, Callable, Dict, Iterable, List, Optional, Type, Union
 
 Root = Union[tk.Tk, tk.Widget]
 
@@ -96,13 +87,13 @@ class View:
         self.active = False
         self._components: Dict[str, Component] = {}
         self._entries = {}
-        self._frame_components: Dict[str, Frame] = {}
+        self._frame_components: Dict[str, Component] = {}
 
     def __getitem__(self, component_name):
         """Returns the component identified by the passed name"""
         return self._all_components[component_name]
 
-    def get_frames(self) -> List[Frame]:
+    def get_frames(self) -> Iterable[Component]:
         """Returns all Components that are marked as frames"""
         return self._frame_components.values()
 
@@ -238,20 +229,20 @@ class Component:
 
     def get(self) -> Any:
         """calls .get on the tk_component"""
-        return self.tk_component.get() # pylint: disable=no-member
+        return self.tk_component.get()  # type: ignore # pylint: disable=no-member
 
     def get_var(self) -> Any:
         """calls .get on the stored tk Var"""
-        return self.var.get() if self.var else None
+        return self.var.get() if self.var else None  # type: ignore
 
     def set_var(self, value) -> None:
         """calls .set on the stored tk Var"""
         if self.var:
-            self.var.set(value)
+            self.var.set(value)  # type: ignore
 
     def config(self, *args, **kwargs) -> None:
         """calls .config on the tk_component"""
-        self.tk_component.config(*args, **kwargs)
+        self.tk_component.config(*args, **kwargs)  # type: ignore
 
 
 class Frame(Component):
@@ -285,9 +276,7 @@ class Factory:
     args: List[Any] = field(default_factory=list)
     kwargs: Dict[str, Any] = field(default_factory=dict)
 
-    def create(
-        self, root: Root, name: str = None, **kwargs: Any
-    ) -> ComponentPlacer:
+    def create(self, root: Root, name: str = None, **kwargs: Any) -> ComponentPlacer:
         """Creates a new Component by calling the creation method. Returns a ComponentPlacer"""
         widget = self.method(root, *self.args, **self.kwargs, **kwargs)
         component = self.component(widget, name=name)
@@ -298,9 +287,7 @@ class Factory:
 class EntryFactory(Factory):
     """Entry factory"""
 
-    def create(
-        self, root: Root, name: str = None, **kwargs: Any
-    ) -> ComponentPlacer:
+    def create(self, root: Root, name: str = None, **kwargs: Any) -> ComponentPlacer:
         """Overrides Factory.create.
         Adds an extra textvariable to the widget creation process.
         """

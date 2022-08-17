@@ -6,10 +6,7 @@ Created on Mon Feb  1 09:53:07 2021
 """
 import re
 
-from desktop_shop import gui
-from desktop_shop import server
-from desktop_shop import user
-from desktop_shop import util
+from desktop_shop import gui, server, user, util
 
 # pylint: disable=E1123,E1124
 
