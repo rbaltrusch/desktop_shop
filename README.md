@@ -6,7 +6,7 @@
 
 This is a mock shop application, running completely offline on a desktop. The graphical interface connects with a generated, local database of customers, products and transactions (Python / SQLite3). As the application runs completely offline, it does away with any networking or server complexity and showcases a bare implementation of an application interfacing with a production database.
 
-![Screenshot of the application GUI](desktop_shop/gui/media/gif.gif?raw=true "Screenshot of the application GUI")
+![Screenshot of the application GUI](https://github.com/rbaltrusch/desktop_shop/blob/master/desktop_shop/gui/media/gif.gif?raw=true "Screenshot of the application GUI")
 
 
 ## Disclaimer
@@ -35,7 +35,7 @@ To run tests, run the run_tests script in the tests directory:
 
 ## Contributions
 
-To contribute to this repository, please read the [contribution guidelines](CONTRIBUTING.md).
+To contribute to this repository, please read the [contribution guidelines](https://github.com/rbaltrusch/desktop_shop/blob/master/CONTRIBUTING.md).
 
 ## Python
 
