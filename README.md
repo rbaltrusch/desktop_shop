@@ -15,23 +15,12 @@ Any personal information shown in the gui or stored in the database is not relat
 
 ## Getting started
 
-To get a copy of this repository, simply open up git bash in an empty folder and use the command:
+Run the shop application by installing the package using pip, then calling it:
 
-    $ git clone https://github.com/rbaltrusch/desktop_shop
-
-To install all python dependencies, run the following in your command line:
-
-    python -m pip install -r requirements.txt
-
-Run the shop application by installing the desktop_shop package locally, generating the random database (this can take a few seconds) and calling the desktop_shop package:
-
-    python -m pip install -e .
-    python "desktop_shop/database.py" generate --fast
+    python -m pip install desktop_shop
     python -m desktop_shop
 
-To run tests, run the run_tests script in the tests directory:
-
-    python "tests/run_tests.py" --all
+Note that the first time the package is called, it automatically generates a fresh database filled with random data. This make take a few seconds.
 
 ## Contributions
 
