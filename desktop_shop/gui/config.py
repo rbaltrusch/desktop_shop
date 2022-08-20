@@ -7,8 +7,6 @@ Created on Mon Feb  1 10:01:35 2021
 
 import tkinter as tk
 
-TITLE = "Offline Shop"
-
 # colours
 FG = "#FFFFFF"
 DISABLED_FG = "#EEEEEE"
