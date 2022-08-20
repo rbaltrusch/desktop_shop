@@ -9,9 +9,9 @@ import datetime
 import random
 from typing import Dict, List, Tuple
 
+from bs4 import BeautifulSoup
 import requests  # type: ignore
 import wikipedia
-from bs4 import BeautifulSoup
 
 DateTuple = Tuple[int, int, int]
 
