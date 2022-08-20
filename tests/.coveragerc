@@ -1,0 +1,6 @@
+# .coveragerc to control coverage.py (pytest-cov)
+
+[run]
+omit =
+    ../desktop_shop/__main__.py,
+    ../desktop_shop/gui/components.py,
