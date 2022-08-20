@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """Tests for the desktop_shop.datagen package"""
 
 from typing import Union
