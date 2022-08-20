@@ -8,3 +8,5 @@
 **/*.egg-info/
 venv/
 dist/
+site/
+.tox
