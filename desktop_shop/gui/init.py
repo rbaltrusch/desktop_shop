@@ -20,11 +20,8 @@ def init_root():
     gui.root.config(bg=config.BG)
     for _ in range(21):
         gui.root.add_row(30)
-    gui.root.add_col(150)
-    gui.root.add_col(100)
-    gui.root.add_col(100)
-    gui.root.add_col(100)
-    gui.root.add_col(150)
+    for col in [150, 100, 100, 100, 150]:
+        gui.root.add_col(col)
 
 
 def init_builder():
