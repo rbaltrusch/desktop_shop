@@ -5,6 +5,8 @@ Created on Mon Feb  1 10:01:35 2021
 @author: Korean_Crimson
 """
 
+import tkinter as tk
+
 TITLE = "Offline Shop"
 
 # colours
@@ -40,3 +42,4 @@ BUTTON_THEME2 = {
 }
 DROPDOWN_THEME = {"fg": FG, "bg": BG2, "activebackground": BG2, "activeforeground": FG}
 ERROR_THEME = {"fg": ERR, "bg": BG2}
+MENU_THEME = {"relief": tk.RAISED, "bd": 3, "bg": BG2}
