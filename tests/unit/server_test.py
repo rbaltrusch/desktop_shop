@@ -13,6 +13,7 @@ import sqlite3
 import string
 
 import pytest
+
 from desktop_shop import database, server
 
 cursor = None

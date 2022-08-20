@@ -7,6 +7,7 @@ Created on Sat Dec 11 21:48:24 2021
 
 import pytest
 
+
 @pytest.fixture
 def pepper():
     return "secret"

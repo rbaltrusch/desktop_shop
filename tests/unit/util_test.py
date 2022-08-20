@@ -11,6 +11,7 @@ import datetime
 import time
 
 import pytest
+
 from desktop_shop import util
 
 

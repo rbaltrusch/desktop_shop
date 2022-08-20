@@ -26,9 +26,7 @@ class View(components.View):
 
         with gui.db_conn as cursor:
             args = cursor, chosen_product_ids
-            product_datas = server.query_product_data_from_product_table_by_product_ids(
-                *args
-            )
+            product_datas = server.query_product_data_from_product_table_by_product_ids(*args)
 
         data_packets = [
             (str(id_), name, price)
@@ -39,9 +37,7 @@ class View(components.View):
         i = 0
         for i, (product_id, name, price) in enumerate(data_packets, 1):
             gui.app.builder.root = gui.root
-            frame = gui.app.builder.create(
-                "frame", name=product_id, relief=tk.RAISED, bd=3
-            )
+            frame = gui.app.builder.create("frame", name=product_id, relief=tk.RAISED, bd=3)
             frame.place(row=i, row_span=1, col=1, col_span=3, sticky="we")
             gui.app.builder.root = frame.component.tk_component
 

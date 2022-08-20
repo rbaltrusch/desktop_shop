@@ -17,9 +17,7 @@ import pytest
 @pytest.mark.generate
 def test_generate():
     sys.argv.extend(("generate", "--fast", "--minimal"))
-    path = os.path.join(
-        os.path.dirname(__file__), "..", "..", "desktop_shop", "database.py"
-    )
+    path = os.path.join(os.path.dirname(__file__), "..", "..", "desktop_shop", "database.py")
     runpy.run_path(path)
 
 

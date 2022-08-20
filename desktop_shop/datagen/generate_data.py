@@ -20,6 +20,7 @@ from desktop_shop.datagen import data
 # combined with every salt for extra security in pw hashing
 PEPPER = "secret"
 
+
 # pylint: disable=too-few-public-methods
 class UserDataGenerator:
     """Used to generate data to fill the users table in main.db"""

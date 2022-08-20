@@ -152,7 +152,8 @@ def verify_session_id_by_user_email(cursor, session_id, user_email):
 def add_user(cursor, user_data, password, pepper="", iterations=100_000):
     """Adds a user with the specified user data to the users table"""
     command = """INSERT INTO users
-                (first_name, last_name, gender, dob, email_address, join_date, pw_salt, pw_hash, hash_function)
+                (first_name, last_name, gender, dob, email_address,
+                join_date, pw_salt, pw_hash, hash_function)
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"""
 
     # hash password
