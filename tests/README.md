@@ -1,9 +1,8 @@
 # Setup tests
 
-To install all dependencies, run:
+To install all dependencies, run the following from the repository root folder:
 
-    cd tests
-    python -m pip install -r requirements.txt
+    python -m pip install -r dev-requirements.txt
 
 # How to run tests
 
