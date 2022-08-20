@@ -11,10 +11,8 @@ from desktop_shop.datagen import generate_data
 from .gui import app, db_conn, init
 
 # fast db generation if not present
-if not os.path.isdir("main.db"):
-    generate_data.generate(
-        hash_iterations=1, transactions=100_000, users=10_000, products=20
-    )
+if not os.path.exists("main.db"):
+    generate_data.generate(hash_iterations=1, transactions=100_000, users=10_000, products=20)
 
 try:
     init.init()
