@@ -24,9 +24,9 @@ class View(components.View):
         builder.root = frame.component.tk_component
 
         # buttons
-        builder.create(
-            "button", name="home", command=callbacks.switch_to_home, text="Home"
-        ).place(row=0, col=0)
+        builder.create("button", name="home", command=callbacks.switch_to_home, text="Home").place(
+            row=0, col=0
+        )
         builder.create(
             "button",
             name="register",
@@ -47,9 +47,7 @@ class View(components.View):
         builder.view.hide_components("checkout_button")
 
         # logged in as frame
-        logged_in_as_frame = tk.Frame(
-            window, borderwidth=0, highlightthickness=0, bg=config.BG2
-        )
+        logged_in_as_frame = tk.Frame(window, borderwidth=0, highlightthickness=0, bg=config.BG2)
         component = components.Component(logged_in_as_frame, row=0, col=4, sticky="e")
         builder.view.add_frame_component(component, "logged_in_as_frame")
         builder.view.hide_components("logged_in_as_frame")
@@ -75,11 +73,9 @@ class View(components.View):
         builder.view.hide_components("message_frame")
         builder.root = frame.component.tk_component
 
-        builder.create("label", name="message", textvariable=tk.StringVar()).place(
+        builder.create("label", name="message", textvariable=tk.StringVar()).place(row=0, col=0)
+        builder.create("label2", name="error_message", textvariable=tk.StringVar()).place(
             row=0, col=0
         )
-        builder.create(
-            "label2", name="error_message", textvariable=tk.StringVar()
-        ).place(row=0, col=0)
 
         return builder.view

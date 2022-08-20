@@ -28,9 +28,7 @@ class View(components.View):
 
         # date joined
         builder.create("label", text="Date joined:").place(row=0, col=0)
-        label = builder.create(
-            "label", name="date_joined_data", textvariable=tk.StringVar()
-        )
+        label = builder.create("label", name="date_joined_data", textvariable=tk.StringVar())
         label.place(row=0, col=1, sticky="w")
 
         # profile data frame
@@ -40,9 +38,7 @@ class View(components.View):
         builder.root = frame.component.tk_component
 
         # profile data
-        _create_profile_data_entry(
-            builder, text="First name:", name="first_name", row=0
-        )
+        _create_profile_data_entry(builder, text="First name:", name="first_name", row=0)
         _create_profile_data_entry(builder, text="Last name:", name="last_name", row=1)
         _create_profile_data_entry(builder, text="Gender:", name="gender", row=2)
         _create_profile_data_entry(builder, text="Email address:", name="email", row=3)
@@ -84,9 +80,9 @@ class View(components.View):
 
         # confirm password
         builder.create("label", text="*Confirm").place(row=1, col=0)
-        builder.create(
-            "entry", name="confirm_pw", textvariable=tk.StringVar(), show="*"
-        ).place(row=1, col=1, sticky="we")
+        builder.create("entry", name="confirm_pw", textvariable=tk.StringVar(), show="*").place(
+            row=1, col=1, sticky="we"
+        )
 
         button = builder.create(
             "button2",

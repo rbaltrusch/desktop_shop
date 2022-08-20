@@ -35,9 +35,7 @@ class View(components.View):
         edit = builder.create("entry", name="pw", textvariable=tk.StringVar(), show="*")
         edit.place(row=2, col=1, sticky="nsew")
 
-        builder.create("button2", text="Log in", command=callbacks.login).place(
-            row=3, col=1
-        )
+        builder.create("button2", text="Log in", command=callbacks.login).place(row=3, col=1)
 
         # login unsuccessful
         message = "Logging in has failed. Please check your credentials."

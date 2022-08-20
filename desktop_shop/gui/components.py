@@ -93,6 +93,11 @@ class View:
         """Returns the component identified by the passed name"""
         return self._all_components[component_name]
 
+    @classmethod
+    def create(cls, window: Tk, builder: Builder):  # pylint: disable=unused-argument
+        """Initialises an empty view in the specified window using the specified builder"""
+        return cls()
+
     def get_frames(self) -> Iterable[Component]:
         """Returns all Components that are marked as frames"""
         return self._frame_components.values()
@@ -297,8 +302,8 @@ class Builder:
 
     def __init__(self, **factory_methods: Factory):
         self.factory_methods = factory_methods
-        self.view: View = None
-        self.root: Root = None
+        self.view: View = None  # type: ignore
+        self.root: Root = None  # type: ignore
 
     def register(self, method_name: str, factory: Factory) -> None:
         """Register a factory under a specified name"""

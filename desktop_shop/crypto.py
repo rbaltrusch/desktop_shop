@@ -4,11 +4,11 @@ Created on Mon Nov 16 20:19:46 2020
 
 @author: Korean_Crimson
 """
+from dataclasses import dataclass
 import enum
 import hashlib
 import random
 import secrets
-from dataclasses import dataclass
 from typing import Callable, Dict, Optional
 
 HashFunctionCallable = Callable[[str, str, int], str]
@@ -57,9 +57,7 @@ def hash_string(password: str, salt: str, iterations: int = 100_000) -> str:
 
 def get_hash_function(iterations: int) -> HashFunction:
     """Returns a HashFunction object"""
-    return HashFunction(
-        function=HashFunctions.HASHLIB_PBKDF2_HMAC_SHA256, iterations=iterations
-    )
+    return HashFunction(function=HashFunctions.HASHLIB_PBKDF2_HMAC_SHA256, iterations=iterations)
 
 
 def get_hash_function_from_string(hash_function_name: str) -> Optional[HashFunction]:
@@ -91,7 +89,7 @@ def generate_new_salt() -> str:
     secure random number, to hash strings.
     """
     rng = random.SystemRandom()
-    random_number = rng.randint(0, 2 ** 64)
+    random_number = rng.randint(0, 2**64)
     salt = _b62encode(random_number)
     return salt
 

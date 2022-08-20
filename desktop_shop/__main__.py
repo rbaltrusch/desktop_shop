@@ -7,8 +7,7 @@ Created on Mon Feb  1 09:52:44 2021
 import os
 
 from desktop_shop.datagen import generate_data
-
-from .gui import app, db_conn, init
+from desktop_shop.gui import app, db_conn, init
 
 # fast db generation if not present
 if not os.path.exists("main.db"):

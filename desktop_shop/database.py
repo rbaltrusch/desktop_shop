@@ -22,9 +22,7 @@ def query_user_ids_from_user_table(cursor):
 
 def query_product_ids_from_product_table(cursor):
     """Returns all product ids found in products table as a list"""
-    product_ids = [
-        prod_id for prod_id, *_ in cursor.execute("SELECT product_id FROM products")
-    ]
+    product_ids = [prod_id for prod_id, *_ in cursor.execute("SELECT product_id FROM products")]
     return product_ids
 
 
@@ -105,9 +103,7 @@ def query_pw_hash_and_salt_by_user_email(cursor, user_email):
     """Queries the password hash, salt and hashing function from the users table
     for the specified user_email
     """
-    command = (
-        "SELECT pw_salt, pw_hash, hash_function FROM users WHERE email_address = ?"
-    )
+    command = "SELECT pw_salt, pw_hash, hash_function FROM users WHERE email_address = ?"
     data = cursor.execute(command, [user_email])
     data = list(data)
     return list(data[0]) if data else []
@@ -115,9 +111,7 @@ def query_pw_hash_and_salt_by_user_email(cursor, user_email):
 
 def get_last_added_transaction_id_from_transactions_table(cursor):
     """Returns the id of the transaction last added to the transactions table"""
-    transaction_id, *_ = [
-        id_ for id_, *_ in cursor.execute("""SELECT last_insert_rowid()""")
-    ]
+    transaction_id, *_ = [id_ for id_, *_ in cursor.execute("""SELECT last_insert_rowid()""")]
     return transaction_id
 
 
@@ -223,9 +217,7 @@ def add_transaction(cursor, transaction_data, chosen_product_ids):
 
     transaction_id = get_last_added_transaction_id_from_transactions_table(cursor)
 
-    command = (
-        "INSERT INTO detailed_transactions (transaction_id, product_id) VALUES (?, ?)"
-    )
+    command = "INSERT INTO detailed_transactions (transaction_id, product_id) VALUES (?, ?)"
     for chosen_product_id in chosen_product_ids:
         cursor.execute(command, [transaction_id, chosen_product_id])
 
@@ -360,17 +352,13 @@ if __name__ == "__main__":
     from desktop_shop.datagen import generate_data
 
     parser = argparse.ArgumentParser(description="Database generation interface")
-    parser.add_argument(
-        "action", choices=["generate"], help="database action to be performed"
-    )
+    parser.add_argument("action", choices=["generate"], help="database action to be performed")
     parser.add_argument(
         "--fast",
         action="store_true",
         help="reduces number of password hashing operations",
     )
-    parser.add_argument(
-        "--minimal", action="store_true", help="reduces size of all tables to 1"
-    )
+    parser.add_argument("--minimal", action="store_true", help="reduces size of all tables to 1")
     parser.add_argument(
         "--transactions",
         nargs=1,
@@ -397,9 +385,7 @@ if __name__ == "__main__":
     if args.action == "generate":
         number_of_hashes = 1 if args.fast else 100_000  # pylint: disable=invalid-name
         transactions, users, products = (
-            (1, 1, 1)
-            if args.minimal
-            else (args.transactions, args.users, args.products)
+            (1, 1, 1) if args.minimal else (args.transactions, args.users, args.products)
         )
         generate_data.generate(
             number_of_hashes, transactions=transactions, users=users, products=products

@@ -13,13 +13,6 @@ from desktop_shop.gui import components
 class View(components.View):
     """Home view"""
 
-    @classmethod
-    def create(cls, *_):
-        """Initialises an empty home view. All other home view contents are generated
-        in init_product_data.
-        """
-        return cls()
-
     def init_product_data(self, window: components.Tk, builder: components.Builder):
         """Dynamically generates all contents of the home view"""
         builder.view = self
@@ -39,9 +32,7 @@ class View(components.View):
 
             # add to cart button
             callback = functools.partial(self.add_to_cart, product_id)
-            button = builder.create(
-                "button", text="Add to cart", command=callback, bd=3
-            )
+            button = builder.create("button", text="Add to cart", command=callback, bd=3)
             button.place(row=i, col=2, sticky="e")
 
     @staticmethod

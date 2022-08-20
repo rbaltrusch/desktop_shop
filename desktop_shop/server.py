@@ -6,7 +6,7 @@ Created on Wed Nov 25 20:07:42 2020
 """
 import hmac
 
-from . import crypto, database, util
+from desktop_shop import crypto, database, util
 
 # combined with every salt for extra security in pw hashing
 PEPPER = "secret"
@@ -16,9 +16,7 @@ class ServerSideLogInDataError(Exception):
     """Exception for login failures"""
 
     def __init__(self):
-        super().__init__(
-            "Login data invalid. Corrupted login data was retrieved from the server."
-        )
+        super().__init__("Login data invalid. Corrupted login data was retrieved from the server.")
 
 
 def verify_database_call(function):
@@ -31,9 +29,7 @@ def verify_database_call(function):
 
     def wrapper(*args, user_email="", session_id=""):
         cursor, *_ = args
-        verified = database.verify_session_id_by_user_email(
-            cursor, session_id, user_email
-        )
+        verified = database.verify_session_id_by_user_email(cursor, session_id, user_email)
         if verified:
             results = function(*args)
 
@@ -97,9 +93,7 @@ def query_product_data_from_product_table(cursor):
 
 def query_product_data_from_product_table_by_product_ids(cursor, product_ids):
     """Queries product data from the products table by ids"""
-    return database.query_product_data_from_product_table_by_product_ids(
-        cursor, product_ids
-    )
+    return database.query_product_data_from_product_table_by_product_ids(cursor, product_ids)
 
 
 def add_user(cursor, user_data, password):

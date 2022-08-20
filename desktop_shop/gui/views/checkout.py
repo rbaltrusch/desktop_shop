@@ -15,15 +15,6 @@ from desktop_shop.gui import callbacks, components
 class View(components.View):
     """Checkout view"""
 
-    @classmethod
-    def create(cls, *_):
-        """Initialises an empty checkout view.
-
-        Currently, all checkout view contents are dynamically generated in the function
-        init_checkout_data_in_checkout_view
-        """
-        return cls()
-
     def init_checkout(self):
         """Dynamically generates all contents of the checkout view"""
         chosen_product_ids = gui.app.data["cart"]

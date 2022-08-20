@@ -38,9 +38,7 @@ def login(password=None, email=None):
     gui.app.data["session_id"] = session_id
     store_user_data(user_data)
     gui.app["main_menu"].unhide_components("logged_in_as_frame")
-    gui.app["main_menu"].hide_components(
-        "message_frame", "login_button", "register_button"
-    )
+    gui.app["main_menu"].hide_components("message_frame", "login_button", "register_button")
     set_logged_in_as_user_text()
     gui.app["login"].clear_entries()
 
@@ -59,9 +57,7 @@ def sign_out():
     gui.app["login"].clear_entries()
     gui.app["register"].clear_entries()
     gui.app["checkout"].clear()
-    gui.app["main_menu"].hide_components(
-        "logged_in_as_frame", "message_frame", "checkout_button"
-    )
+    gui.app["main_menu"].hide_components("logged_in_as_frame", "message_frame", "checkout_button")
     gui.app["main_menu"].unhide_components("login_button", "register_button")
     switch_to_home()
 

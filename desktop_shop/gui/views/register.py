@@ -52,22 +52,16 @@ class View(components.View):
 
         # password
         builder.create("label", text="*Password").place(row=6, col=0)
-        entry = builder.create(
-            "entry", name="pw", textvariable=tk.StringVar(), show="*"
-        )
+        entry = builder.create("entry", name="pw", textvariable=tk.StringVar(), show="*")
         entry.place(row=6, col=1, sticky="nsew")
 
         # confirm pw
         builder.create("label", text="*Confirm Password").place(row=7, col=0)
-        entry = builder.create(
-            "entry", name="confirm_pw", textvariable=tk.StringVar(), show="*"
-        )
+        entry = builder.create("entry", name="confirm_pw", textvariable=tk.StringVar(), show="*")
         entry.place(row=7, col=1, sticky="nsew")
 
         builder.create("label", text="*required").place(row=8, col=1)
-        builder.create("button2", text="Register", command=callbacks.register).place(
-            row=9, col=1
-        )
+        builder.create("button2", text="Register", command=callbacks.register).place(row=9, col=1)
         return builder.view
 
     def clear_entries(self):
@@ -78,8 +72,6 @@ class View(components.View):
     def get_user_data(self):
         """Returns a UserSignUpData object containing data from register view entries"""
         entry_names = ["first_name", "last_name", "gender", "dob", "email"]
-        user_data = user.UserSignUpData(
-            *(self[f"{name}_entry"].get_var() for name in entry_names)
-        )
+        user_data = user.UserSignUpData(*(self[f"{name}_entry"].get_var() for name in entry_names))
         user_data.join_date = util.get_current_date()
         return user_data
