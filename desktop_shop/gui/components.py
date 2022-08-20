@@ -6,11 +6,11 @@ Created on Mon Feb  1 09:53:11 2021
 """
 from __future__ import annotations
 
+from dataclasses import dataclass, field
 import re
 import tkinter as tk
-import uuid
-from dataclasses import dataclass, field
 from typing import Any, Callable, Dict, Iterable, List, Optional, Type, Union
+import uuid
 
 Root = Union[tk.Tk, tk.Widget]
 
@@ -107,11 +107,7 @@ class View:
 
     def filter(self, value: str) -> List[Component]:
         """Returns components containing the passed string in their name"""
-        return [
-            c
-            for c in self._all_components.values()
-            if c.name is not None and value in c.name
-        ]
+        return [c for c in self._all_components.values() if c.name is not None and value in c.name]
 
     def activate(self) -> None:
         """Activates the current view (when the Gui object next calls pack on it,
@@ -296,13 +292,11 @@ class EntryFactory(Factory):
         return component_placer
 
 
-@dataclass
 class Builder:
     """Component builder class"""
 
-    factory_methods: Dict[str, Factory] = field(default_factory=dict)
-
-    def __post_init__(self):
+    def __init__(self, **factory_methods: Factory):
+        self.factory_methods = factory_methods
         self.view: View = None
         self.root: Root = None
 
@@ -310,9 +304,7 @@ class Builder:
         """Register a factory under a specified name"""
         self.factory_methods[method_name] = factory
 
-    def create(
-        self, method_name: str, name: str = None, **kwargs: Any
-    ) -> ComponentPlacer:
+    def create(self, method_name: str, name: str = None, **kwargs: Any) -> ComponentPlacer:
         """Creates a component (widget) by looking up the passed method_name
         from the registered factories and calling create on it.
         Passes received keyword arguments to the factory create method.
