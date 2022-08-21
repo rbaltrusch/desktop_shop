@@ -145,10 +145,9 @@ class TransactionDataGenerator:
         user_ids = database.query_user_ids_from_user_table(cursor)
         product_ids = database.query_product_ids_from_product_table(cursor)
 
-        for _ in range(amount):
-            chosen_product_ids = cls._generate_random_chosen_product_ids(product_ids)
-            transaction_data = cls._generate_random_transaction_data(user_ids)
-            database.add_transaction(cursor, transaction_data, chosen_product_ids)
+        transactions = [cls._generate_random_transaction_data(user_ids) for _ in range(amount)]
+        product_ids = [cls._generate_random_chosen_product_ids(product_ids) for _ in range(amount)]
+        database.add_transactions(cursor, transactions, product_ids)
 
     @staticmethod
     def _generate_random_transaction_data(user_ids):

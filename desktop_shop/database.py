@@ -4,6 +4,8 @@ Created on Sun Nov 22 14:31:48 2020
 
 @author: Korean_Crimson
 """
+from typing import Any, List
+
 from desktop_shop import crypto
 
 
@@ -205,7 +207,7 @@ def update_user_by_user_email(cursor, user_data, user_email):
     cursor.execute(command, user_data)
 
 
-def add_transaction(cursor, transaction_data, chosen_product_ids):
+def add_transaction(cursor, transaction_data: List[Any], chosen_product_ids: List[str]):
     """adds a transaction with the specified transaction data to the transactions
     table and the detailed transactions table.
     """
@@ -221,6 +223,30 @@ def add_transaction(cursor, transaction_data, chosen_product_ids):
     command = "INSERT INTO detailed_transactions (transaction_id, product_id) VALUES (?, ?)"
     for chosen_product_id in chosen_product_ids:
         cursor.execute(command, [transaction_id, chosen_product_id])
+
+
+def add_transactions(
+    cursor, transaction_datas: List[List[Any]], chosen_product_ids: List[List[str]]
+):
+    """Adds all specified transactions"""
+    product_data = {
+        str(id_): price for id_, _, price in query_product_data_from_product_table(cursor)
+    }
+    for transaction_data, chosen_product_ids_ in zip(transaction_datas, chosen_product_ids):
+        cost = sum(product_data[i] for i in chosen_product_ids_)
+        transaction_data.append(cost)
+
+    # note: cannot use cursor.executemany because we need the id of the inserted transaction
+    # after each insert.
+    for transaction_data, chosen_product_ids_ in zip(transaction_datas, chosen_product_ids):
+        command = "INSERT INTO transactions (user_id, date, cost) VALUES (?, ?, ?)"
+        cursor.execute(command, transaction_data)
+
+        transaction_id = get_last_added_transaction_id_from_transactions_table(cursor)
+
+        command = "INSERT INTO detailed_transactions (transaction_id, product_id) VALUES (?, ?)"
+        for chosen_product_id in chosen_product_ids_:
+            cursor.execute(command, [transaction_id, chosen_product_id])
 
 
 def add_session(cursor, session_data):
