@@ -90,11 +90,11 @@ def generate_new_salt() -> str:
     """
     rng = random.SystemRandom()
     random_number = rng.randint(0, 2**64)
-    salt = _b62encode(random_number)
+    salt = encode_in_base62(random_number)
     return salt
 
 
-def _b62encode(num: int, alphabet: str = BASE62) -> str:
+def encode_in_base62(num: int, alphabet: str = BASE62) -> str:
     """Encode a positive number into Base 62 and return the string."""
     char_array = [] if num else [alphabet[0]]
     base = len(alphabet)
