@@ -71,15 +71,17 @@ def query_product_price_from_product_table(cursor, product_ids):
 
 def query_user_data_by_user_email(cursor, user_email):
     """Queries the user data from the users table, by the user identified by the user_email"""
-    command = """SELECT
-                    first_name,
-                    last_name,
-                    gender,
-                    dob,
-                    email_address,
-                    join_date
-                FROM users
-                WHERE email_address = ?"""
+    command = """
+        SELECT
+            first_name,
+            last_name,
+            gender,
+            dob,
+            email_address,
+            join_date
+        FROM users
+        WHERE email_address = ?
+        """
 
     data = cursor.execute(command, [user_email])
     data = list(data)
@@ -88,15 +90,17 @@ def query_user_data_by_user_email(cursor, user_email):
 
 def query_user_data(cursor, user_id):
     """Queries the data for the user from the users table, by the user id passed"""
-    command = """'SELECT
-                    first_name,
-                    last_name,
-                    gender,
-                    dob,
-                    email_address,
-                    join_date,
-                FROM users
-                WHERE user_id = ?"""
+    command = """
+        SELECT
+            first_name,
+            last_name,
+            gender,
+            dob,
+            email_address,
+            join_date,
+        FROM users
+        WHERE user_id = ?
+        """
 
     data = cursor.execute(command, [str(user_id)])
     data = list(data)
@@ -121,10 +125,12 @@ def get_last_added_transaction_id_from_transactions_table(cursor):
 
 def verify_session_id(cursor, session_id, user_id):
     """Verifies that the passed session_id is held by a user identified by the passed user id"""
-    command = """SELECT session_id
-                FROM sessions
-                WHERE session_id = ?
-                AND user_id = ?"""
+    command = """
+        SELECT session_id
+            FROM sessions
+            WHERE session_id = ?
+            AND user_id = ?
+        """
 
     data = cursor.execute(command, [session_id, user_id])
     data = [d for d, *_ in data]
@@ -138,12 +144,15 @@ def verify_session_id(cursor, session_id, user_id):
 
 def verify_session_id_by_user_email(cursor, session_id, user_email):
     """Verifies that the passed session_id is held by a user identified by the passed user_email"""
-    command = """SELECT session_id FROM sessions
-                  WHERE session_id = ?
-                  AND user_id IN
-                  (
-                      SELECT user_id FROM users
-                      WHERE email_address = ?)"""
+    command = """
+        SELECT session_id FROM sessions
+        WHERE session_id = ?
+        AND user_id IN
+            (
+                SELECT user_id FROM users
+                WHERE email_address = ?
+            )
+        """
 
     data = cursor.execute(command, [session_id, user_email])
     data = [d for d, *_ in data]
@@ -155,10 +164,20 @@ def verify_session_id_by_user_email(cursor, session_id, user_email):
 
 def add_user(cursor, user_data, password, pepper="", iterations=100_000):
     """Adds a user with the specified user data to the users table"""
-    command = """INSERT INTO users
-                (first_name, last_name, gender, dob, email_address,
-                join_date, pw_salt, pw_hash, hash_function)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"""
+    command = """
+        INSERT INTO users (
+            first_name,
+            last_name,
+            gender,
+            dob,
+            email_address,
+            join_date,
+            pw_salt,
+            pw_hash,
+            hash_function
+        )
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+        """
 
     # hash password
     salt = crypto.generate_new_salt()
@@ -174,14 +193,15 @@ def update_user(cursor, user_data, user_id):
     which is passed separately
     """
     user_data.append(user_id)
-    command = """UPDATE users
-                SET
-                    first_name = ?,
-                    last_name = ?,
-                    gender = ?,
-                    dob = ?,
-                    email_address = ?
-                WHERE user_id = ?"""
+    command = """
+        UPDATE users
+        SET
+            first_name = ?,
+            last_name = ?,
+            gender = ?,
+            dob = ?,
+            email_address = ?
+        WHERE user_id = ?"""
     cursor.execute(command, user_data)
 
 
@@ -270,20 +290,23 @@ def create_user_table(cursor):
 
     # create table
     cursor.execute(
-        """CREATE TABLE users (
-                    user_id INTEGER PRIMARY KEY,
-                    first_name TEXT NOT NULL,
-                    last_name TEXT NOT NULL,
-                    gender TEXT,
-                    dob TEXT CHECK(CAST(strftime('%s', join_date)  AS  integer) >
-                                   CAST(strftime('%s', dob)  AS  integer)),
-                    email_address TEXT NOT NULL UNIQUE COLLATE NOCASE,
-                    join_date TEXT NOT NULL,
-                    pw_salt NOT NULL,
-                    pw_hash NOT NULL,
-                    hash_function NOT NULL
-                    CHECK (email_address LIKE '%_@_%._%')
-                    )"""
+        """
+        CREATE TABLE users (
+            user_id INTEGER PRIMARY KEY,
+            first_name TEXT NOT NULL,
+            last_name TEXT NOT NULL,
+            gender TEXT,
+            dob TEXT CHECK (
+                CAST(strftime('%s', join_date)  AS  integer)
+                > CAST(strftime('%s', dob)  AS  integer)
+            ),
+            email_address TEXT NOT NULL UNIQUE COLLATE NOCASE,
+            join_date TEXT NOT NULL,
+            pw_salt NOT NULL,
+            pw_hash NOT NULL,
+            hash_function NOT NULL CHECK (email_address LIKE '%_@_%._%')
+        )
+        """
     )
 
     # remove index based on user id
@@ -300,16 +323,17 @@ def create_transactions_table(cursor):
 
     # create table
     cursor.execute(
-        """CREATE TABLE transactions (
-                    transaction_id INTEGER PRIMARY KEY,
-                    user_id INTEGER,
-                    date TEXT,
-                    cost REAL NOT NULL,
-                    FOREIGN KEY (user_id)
-                        REFERENCES users (user_id)
-                        ON UPDATE CASCADE
-                        ON DELETE RESTRICT
-                    )"""
+        """
+        CREATE TABLE transactions (
+            transaction_id INTEGER PRIMARY KEY,
+            user_id INTEGER,
+            date TEXT,
+            cost REAL NOT NULL,
+            FOREIGN KEY (user_id)
+                REFERENCES users (user_id)
+                ON UPDATE CASCADE
+                ON DELETE RESTRICT
+        )"""
     )
 
     # drop index based on user_id
@@ -326,18 +350,19 @@ def create_detailed_transactions_table(cursor):
 
     # create table
     cursor.execute(
-        """CREATE TABLE detailed_transactions (
-                    transaction_id INTEGER,
-                    product_id INTEGER,
-                    FOREIGN KEY (transaction_id)
-                        REFERENCES transactions (transaction_id)
-                        ON UPDATE CASCADE
-                        ON DELETE RESTRICT,
-                    FOREIGN KEY (product_id)
-                        REFERENCES products (product_id)
-                        ON UPDATE CASCADE
-                        ON DELETE RESTRICT)
-                    """
+        """
+        CREATE TABLE detailed_transactions (
+            transaction_id INTEGER,
+            product_id INTEGER,
+            FOREIGN KEY (transaction_id)
+                REFERENCES transactions (transaction_id)
+                ON UPDATE CASCADE
+                ON DELETE RESTRICT,
+            FOREIGN KEY (product_id)
+                REFERENCES products (product_id)
+                ON UPDATE CASCADE
+                ON DELETE RESTRICT)
+        """
     )
 
 
@@ -348,11 +373,13 @@ def create_products_table(cursor):
 
     # create table
     cursor.execute(
-        """CREATE TABLE products (
-                    product_id INTEGER PRIMARY KEY,
-                    name TEXT,
-                    price REAL NOT NULL
-                    )"""
+        """
+        CREATE TABLE products (
+            product_id INTEGER PRIMARY KEY,
+            name TEXT,
+            price REAL NOT NULL
+        )
+        """
     )
 
 
@@ -363,15 +390,17 @@ def create_sessions_table(cursor):
 
     # create table
     cursor.execute(
-        """CREATE TABLE sessions(
-                    session_id TEXT PRIMARY KEY,
-                    user_id INTEGER,
-                    timestamp TEXT,
-                    FOREIGN KEY (user_id)
-                        REFERENCES users (user_id)
-                        ON UPDATE CASCADE
-                        ON DELETE CASCADE
-                    )"""
+        """
+        CREATE TABLE sessions (
+            session_id TEXT PRIMARY KEY,
+            user_id INTEGER,
+            timestamp TEXT,
+            FOREIGN KEY (user_id)
+                REFERENCES users (user_id)
+                ON UPDATE CASCADE
+                ON DELETE CASCADE
+        )
+        """
     )
 
 
