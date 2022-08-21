@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 """Tests for the desktop_shop.datagen.data module"""
 
+import os
+import shutil
 from typing import Union
 
 import pytest
@@ -42,6 +44,20 @@ class MockPage:
         return f"<html><body>{''.join(map(str, self.body_elements))}</body></html>"
 
 
+class MockWikipedia:
+    def __init__(self, page):
+        self._page = page
+
+    def page(self, _):
+        return self._page
+
+
+def _remove_cache():
+    folder = ".html_cache"
+    if os.path.isdir(folder):
+        shutil.rmtree(folder)
+
+
 @pytest.mark.parametrize(
     "page, expected",
     [
@@ -53,6 +69,7 @@ class MockPage:
     ],
 )
 def test_fetch_first_names(page, expected, monkeypatch):
+    _remove_cache()
     monkeypatch.setattr(data, "requests", page)
     assert data.fetch_first_names() == expected
 
@@ -77,12 +94,22 @@ def test_fetch_first_names(page, expected, monkeypatch):
     ],
 )
 def test_fetch_last_names(page, expected, monkeypatch):
-    class MockWikipedia:
-        @staticmethod
-        def page(_):
-            return page
+    _remove_cache()
+    monkeypatch.setattr(data, "wikipedia", MockWikipedia(page))
+    assert sorted(data.fetch_last_names()) == expected
 
-    monkeypatch.setattr(data, "wikipedia", MockWikipedia)
+
+def test_fetch_with_caching(monkeypatch):
+    """Expecting the same result in both cases due to caching"""
+    _remove_cache()  # remove initial cache
+    expected = ["def"]
+    page = MockPage(Table(Row("abc", "def", "gef")))
+    monkeypatch.setattr(data, "wikipedia", MockWikipedia(page))
+    assert sorted(data.fetch_last_names()) == expected
+
+    # expect same result with different page due to caching
+    MockPage(Table(Row("some", "thing", "different")))
+    monkeypatch.setattr(data, "wikipedia", MockWikipedia(page))
     assert sorted(data.fetch_last_names()) == expected
 
 

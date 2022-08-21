@@ -6,8 +6,10 @@ Created on Sat Nov 14 17:29:20 2020
 """
 
 import datetime
+import json
+import os
 import random
-from typing import Dict, List, Tuple
+from typing import Any, Callable, Dict, List, Tuple
 
 from bs4 import BeautifulSoup
 import requests  # type: ignore
@@ -16,6 +18,30 @@ import wikipedia
 DateTuple = Tuple[int, int, int]
 
 
+def jsoncache(filename: str, cache_folder: str = ".html_cache") -> Callable[..., Any]:
+    """Decorator to cache results of functions returning processed web contents.
+    Note: result needs to be json-writeable.
+    """
+    filepath = os.path.join(cache_folder, filename)
+
+    def outer(function: Callable[..., Any]) -> Callable[..., Any]:
+        def inner(*args, **kwargs):
+            if os.path.exists(filepath):
+                with open(filepath, "r", encoding="utf-8") as file:
+                    return json.load(file)
+
+            value = function(*args, **kwargs)
+            os.makedirs(cache_folder, exist_ok=True)
+            with open(filepath, "w", encoding="utf-8") as file:
+                json.dump(value, file)
+            return value
+
+        return inner
+
+    return outer
+
+
+@jsoncache(filename="firstnames.json")
 def fetch_first_names() -> Dict[str, str]:
     """fetches first names from the web and returns them as a dict in the
     format first_name: gender
@@ -31,6 +57,7 @@ def fetch_first_names() -> Dict[str, str]:
     return first_names
 
 
+@jsoncache(filename="lastnames.json")
 def fetch_last_names() -> List[str]:
     """fetches last names from the web and returns them in a list"""
     wiki = wikipedia.page("List_of_most_common_surnames_in_Europe")
