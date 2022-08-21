@@ -25,10 +25,10 @@ PEPPER = "secret"
 
 class TableDataGenerator(Protocol):  # pylint: disable=missing-class-docstring
     def create_table(self, cursor):  # pylint: disable=missing-function-docstring
-        ...
+        """Creates the DB table"""
 
     def populate_table(self, cursor, amount: int):  # pylint: disable=missing-function-docstring
-        ...
+        """Populates the DB table"""
 
 
 # pylint: disable=too-few-public-methods
