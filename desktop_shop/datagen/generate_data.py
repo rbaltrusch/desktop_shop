@@ -207,7 +207,3 @@ def generate(
             logging.info("Populating")
             generator.populate_table(cursor, amount)
             logging.info("Finished populating")
-
-
-if __name__ == "__main__":
-    generate()
