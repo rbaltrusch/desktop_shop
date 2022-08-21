@@ -14,7 +14,7 @@ or:
 import logging
 import random
 import sqlite3
-from typing import List, Protocol
+from typing import List, Protocol, Set
 
 from desktop_shop import crypto, database, util
 from desktop_shop.datagen import data
@@ -37,7 +37,7 @@ class UserDataGenerator:
 
     def __init__(self, hash_iterations: int = 100_000):
         self.hash_iterations = hash_iterations
-        self._email_cache: List[str] = []
+        self._email_cache: Set[str] = set()
 
     def create_table(self, cursor):
         """Creates the user table"""
@@ -88,7 +88,7 @@ class UserDataGenerator:
             )
             concatenator = random.choice(concatenators)
             email_address = f"{concatenator.join(user)}@{domain}"
-        self._email_cache.append(email_address)
+        self._email_cache.add(email_address)
         return email_address
 
     @staticmethod
