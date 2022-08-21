@@ -2,10 +2,12 @@
 """Tests for the desktop_shop.datagen.generate_data module"""
 import random
 import string
+import sys
 from typing import Dict, List
 
 import pytest
 
+from desktop_shop import database
 from desktop_shop.datagen import generate_data
 from desktop_shop.datagen.data import DateTuple, get_random_date
 
@@ -46,6 +48,7 @@ class MockDatabase:
         self.detailed_transactions = []
         self.products = []
         self.product_ids: List[str] = []
+        self.hash_iterations = []
 
     def create_user_table(self, cursor):
         self.users = []
@@ -66,6 +69,7 @@ class MockDatabase:
 
     def add_user(self, cursor, user_data, password, pepper, iterations):
         self.user_ids.append(len(self.users))
+        self.hash_iterations.append(iterations)
         self.users.append(user_data + [password, pepper, iterations])
 
     def add_product(self, cursor, product_data):
@@ -121,3 +125,30 @@ def test_generate(monkeypatch, hash_iterations, transactions, users, products, s
     assert len(mock_database.sessions) == min(
         users, sessions
     )  # cannot have more sessions than users
+
+
+@pytest.mark.parametrize(
+    "args, transactions, users, products, hashes",
+    [
+        ("generate --transactions 2 --users 3 --products 4", 2, 3, 4, 100_000),
+        ("generate --transactions 2 --users 3 --products 4 --fast", 2, 3, 4, 1),
+        ("generate --minimal", 1, 1, 1, 100_000),
+        ("generate --fast --minimal", 1, 1, 1, 1),
+    ],
+)
+def test_generate_database(args, transactions, users, products, hashes, monkeypatch):
+    mock_database = MockDatabase()
+    monkeypatch.setattr(sys, "argv", sys.argv[0:1] + args.split(" "))
+    monkeypatch.setattr(generate_data, "database", mock_database)
+    monkeypatch.setattr(generate_data, "data", MockData)
+    database.generate_database()
+
+    sessions = 25
+    assert len(mock_database.transactions) == transactions
+    assert (
+        len(mock_database.detailed_transactions) >= transactions
+    )  # at least one chosen product per transacion
+    assert len(mock_database.users) == users
+    assert len(mock_database.products) == products
+    assert len(mock_database.sessions) == min(users, sessions)
+    assert all(h == hashes for h in mock_database.hash_iterations)
