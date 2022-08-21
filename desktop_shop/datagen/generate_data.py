@@ -187,7 +187,9 @@ class SessionDataGenerator:
             database.add_session(cursor, session_data)
 
 
-def generate(hash_iterations=100_000, transactions=100_000, users=10_000, products=20):
+def generate(
+    hash_iterations=100_000, transactions=100_000, users=10_000, products=20, sessions=25
+):
     """Generates the database, including user, products, transactions,
     detailed_transactions and sessions tables.
     The tables are pre-populated with random data of the specified sizes.
@@ -198,7 +200,7 @@ def generate(hash_iterations=100_000, transactions=100_000, users=10_000, produc
         TransactionDataGenerator(),
         SessionDataGenerator(),
     ]
-    amounts = [users, products, transactions, 25]
+    amounts = [users, products, transactions, sessions]
     with sqlite3.connect("main.db") as cursor:
         for amount, generator in zip(amounts, generators):
             generator.create_table(cursor)
