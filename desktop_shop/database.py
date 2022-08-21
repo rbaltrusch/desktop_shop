@@ -4,6 +4,8 @@ Created on Sun Nov 22 14:31:48 2020
 
 @author: Korean_Crimson
 """
+
+import argparse
 from typing import Any, List
 
 from desktop_shop import crypto
@@ -373,10 +375,9 @@ def create_sessions_table(cursor):
     )
 
 
-if __name__ == "__main__":
-    import argparse
-
-    from desktop_shop.datagen import generate_data
+def generate_database():
+    """Generates a fresh database with the provided cli args"""
+    from desktop_shop.datagen import generate_data  # pylint: disable=import-outside-toplevel
 
     parser = argparse.ArgumentParser(description="Database generation interface")
     parser.add_argument("action", choices=["generate"], help="database action to be performed")
@@ -417,3 +418,7 @@ if __name__ == "__main__":
         generate_data.generate(
             number_of_hashes, transactions=transactions, users=users, products=products
         )
+
+
+if __name__ == "__main__":
+    generate_database()
