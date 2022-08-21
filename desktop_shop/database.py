@@ -410,6 +410,7 @@ def generate_database():
 
     parser = argparse.ArgumentParser(description="Database generation interface")
     parser.add_argument("action", choices=["generate"], help="database action to be performed")
+    parser.add_argument("--name", default="main.db", help="The name of the database")
     parser.add_argument(
         "--fast",
         action="store_true",
@@ -442,7 +443,7 @@ def generate_database():
             (1, 1, 1) if args.minimal else (args.transactions, args.users, args.products)
         )
         generate_data.generate(
-            number_of_hashes, transactions=transactions, users=users, products=products
+            args.name, number_of_hashes, transactions=transactions, users=users, products=products
         )
 
 

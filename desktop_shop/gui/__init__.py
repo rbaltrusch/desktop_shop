@@ -8,6 +8,7 @@ import sqlite3
 
 from desktop_shop.gui.components import Gui, Tk
 
+DATABASE_NAME = "main.db"
 root = Tk()
 app = Gui(root)
-db_conn = sqlite3.connect("main.db")
+db_conn = sqlite3.connect(DATABASE_NAME)

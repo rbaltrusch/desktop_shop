@@ -109,6 +109,7 @@ def test_generate(monkeypatch, hash_iterations, transactions, users, products, s
     monkeypatch.setattr(generate_data, "database", mock_database)
     monkeypatch.setattr(generate_data, "data", MockData)
     generate_data.generate(
+        database_name="test.db",
         hash_iterations=hash_iterations,
         transactions=transactions,
         users=users,
@@ -133,7 +134,7 @@ def test_generate(monkeypatch, hash_iterations, transactions, users, products, s
         ("generate --transactions 2 --users 3 --products 4", 2, 3, 4, 100_000),
         ("generate --transactions 2 --users 3 --products 4 --fast", 2, 3, 4, 1),
         ("generate --minimal", 1, 1, 1, 100_000),
-        ("generate --fast --minimal", 1, 1, 1, 1),
+        ("generate --fast --minimal --name=test.db", 1, 1, 1, 1),
     ],
 )
 def test_generate_database(args, transactions, users, products, hashes, monkeypatch):

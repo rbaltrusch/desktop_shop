@@ -33,7 +33,7 @@ class TableDataGenerator(Protocol):  # pylint: disable=missing-class-docstring
 
 # pylint: disable=too-few-public-methods
 class UserDataGenerator:
-    """Used to generate data to fill the users table in main.db"""
+    """Used to generate data to fill the users table in the database"""
 
     def __init__(self, hash_iterations: int = 100_000):
         self.hash_iterations = hash_iterations
@@ -44,7 +44,7 @@ class UserDataGenerator:
         database.create_user_table(cursor)
 
     def populate_table(self, cursor, amount=10_000):
-        """Populates the user table in main.db (needs to already exist) with the
+        """Populates the user table in the database (needs to already exist) with the
         amount of users specified in the input arg. Expects a database connection
         object to be passed in as first arg
         """
@@ -97,14 +97,14 @@ class UserDataGenerator:
 
 
 class ProductDataGenerator:
-    """Used to generate data to fill the products table in main.db"""
+    """Used to generate data to fill the products table in the database"""
 
     def create_table(self, cursor):
         """Creates the products table"""
         database.create_products_table(cursor)
 
     def populate_table(self, cursor, amount=20):
-        """Populates the products table in main.db (needs to already exist)
+        """Populates the products table in the database (needs to already exist)
         with the amount of products specified in the input arg. Expects a
         database connection to be passed in as first arg
         """
@@ -129,7 +129,7 @@ class ProductDataGenerator:
 
 
 class TransactionDataGenerator:
-    """Used to generate data to fill the transactions table in main.db"""
+    """Used to generate data to fill the transactions table in the database"""
 
     def create_table(self, cursor):
         """Creates the transactions table"""
@@ -138,7 +138,7 @@ class TransactionDataGenerator:
 
     @classmethod
     def populate_table(cls, cursor, amount=100_000):
-        """Populates the transactions table in main.db (needs to already exist)
+        """Populates the transactions table in the database (needs to already exist)
         with the amount of transactions specified in the input arg. Expects a
         database connection object to be passed in as first arg
         """
@@ -165,7 +165,7 @@ class TransactionDataGenerator:
 
 
 class SessionDataGenerator:
-    """Used to generate data to fill the sessions table in main.db"""
+    """Used to generate data to fill the sessions table in the database"""
 
     def create_table(self, cursor):
         """Creates the sessions table"""
@@ -173,7 +173,7 @@ class SessionDataGenerator:
 
     @staticmethod
     def populate_table(cursor, amount=25):
-        """Populates the sessions table in main.db (needs to already exist)
+        """Populates the sessions table in the database (needs to already exist)
         with the amount of sessions specified in the input arg. Expects a
         database connection object to be passed in as first arg
         """
@@ -187,8 +187,13 @@ class SessionDataGenerator:
             database.add_session(cursor, session_data)
 
 
-def generate(
-    hash_iterations=100_000, transactions=100_000, users=10_000, products=20, sessions=25
+def generate(  # pylint: disable=too-many-arguments
+    database_name: str,
+    hash_iterations=100_000,
+    transactions=100_000,
+    users=10_000,
+    products=20,
+    sessions=25,
 ):
     """Generates the database, including user, products, transactions,
     detailed_transactions and sessions tables.
@@ -201,7 +206,7 @@ def generate(
         SessionDataGenerator(),
     ]
     amounts = [users, products, transactions, sessions]
-    with sqlite3.connect("main.db") as cursor:
+    with sqlite3.connect(database_name) as cursor:
         for amount, generator in zip(amounts, generators):
             generator.create_table(cursor)
             logging.info("Populating")
