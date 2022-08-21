@@ -389,21 +389,18 @@ def generate_database():
     parser.add_argument("--minimal", action="store_true", help="reduces size of all tables to 1")
     parser.add_argument(
         "--transactions",
-        nargs=1,
         default=100_000,
         type=int,
         help="pass number of transactions to be added to database",
     )
     parser.add_argument(
         "--users",
-        nargs=1,
         default=10_000,
         type=int,
         help="pass number of users to be added to database",
     )
     parser.add_argument(
         "--products",
-        nargs=1,
         default=20,
         type=int,
         help="pass number of products to be added to database",
