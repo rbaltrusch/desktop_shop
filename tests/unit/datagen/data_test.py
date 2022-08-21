@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
-"""Tests for the desktop_shop.datagen package"""
+"""Tests for the desktop_shop.datagen.data module"""
 
 from typing import Union
 
 import pytest
 
-from desktop_shop.datagen import data, generate_data
+from desktop_shop.datagen import data
 
 
 class Row:
