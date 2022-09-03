@@ -184,7 +184,7 @@ tomli==2.0.1
     #   coverage
     #   mypy
     #   pytest
-tox==3.24.5
+tox==3.25.1
     # via -r dev-requirements.in
 typing-extensions==4.1.1
     # via mypy
