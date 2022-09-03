@@ -110,7 +110,7 @@ mkdocstrings-python==0.6.3
     # via mkdocstrings
 mkdocstrings-python-legacy==0.2.2
     # via mkdocstrings
-mypy==0.931
+mypy==0.971
     # via -r dev-requirements.in
 mypy-extensions==0.4.3
     # via
