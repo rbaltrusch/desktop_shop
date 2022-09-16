@@ -168,15 +168,14 @@ six==1.16.0
     #   virtualenv
 soupsieve==2.3.1
     # via beautifulsoup4
-toml==0.10.2
-    # via tox
 tomli==2.0.1
     # via
     #   black
     #   coverage
     #   mypy
     #   pytest
-tox==3.25.1
+    #   tox
+tox==3.26.0
     # via -r dev-requirements.in
 typing-extensions==4.1.1
     # via mypy
