@@ -39,7 +39,7 @@ flake8==4.0.1
     #   pep8-naming
 flake8-broken-line==0.5.0
     # via -r dev-requirements.in
-flake8-bugbear==22.8.23
+flake8-bugbear==22.9.11
     # via -r dev-requirements.in
 flake8-comprehensions==3.10.0
     # via -r dev-requirements.in
