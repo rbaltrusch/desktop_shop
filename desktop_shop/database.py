@@ -97,7 +97,7 @@ def query_user_data(cursor, user_id):
             gender,
             dob,
             email_address,
-            join_date,
+            join_date
         FROM users
         WHERE user_id = ?
         """
