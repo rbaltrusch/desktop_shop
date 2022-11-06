@@ -104,7 +104,7 @@ mkdocstrings[python]==0.19.0
     #   mkdocstrings-python
 mkdocstrings-python==0.6.3
     # via mkdocstrings
-mypy==0.971
+mypy==0.982
     # via -r dev-requirements.in
 mypy-extensions==0.4.3
     # via
