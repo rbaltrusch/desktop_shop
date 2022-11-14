@@ -170,12 +170,9 @@ soupsieve==2.3.1
     # via beautifulsoup4
 tomli==2.0.1
     # via
-    #   black
     #   coverage
-    #   mypy
     #   pytest
-    #   tox
-tox==3.26.0
+tox==3.27.1
     # via -r dev-requirements.in
 typing-extensions==4.1.1
     # via mypy
