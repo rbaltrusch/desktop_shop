@@ -36,7 +36,7 @@ def query_product_data_from_product_table(cursor):
     return data
 
 
-def query_product_data_from_product_table_by_product_ids(cursor, product_ids):
+def query_product_data_from_product_table_by_product_ids(cursor, product_ids: List[str]):
     """Queries product data from the products table, by the passed product ids"""
 
     # sanitize input and make sure all product ids are only numeric
@@ -117,13 +117,13 @@ def query_pw_hash_and_salt_by_user_email(cursor, user_email):
     return list(data[0]) if data else []
 
 
-def get_last_added_transaction_id_from_transactions_table(cursor):
+def _get_last_inserted_id(cursor):
     """Returns the id of the transaction last added to the transactions table"""
     transaction_id, *_ = [id_ for id_, *_ in cursor.execute("""SELECT last_insert_rowid()""")]
     return transaction_id
 
 
-def verify_session_id(cursor, session_id, user_id):
+def verify_session_id(cursor, session_id: str, user_id: int):
     """Verifies that the passed session_id is held by a user identified by the passed user id"""
     command = """
         SELECT session_id
@@ -142,7 +142,7 @@ def verify_session_id(cursor, session_id, user_id):
     return verified
 
 
-def verify_session_id_by_user_email(cursor, session_id, user_email):
+def verify_session_id_by_user_email(cursor, session_id: str, user_email: int):
     """Verifies that the passed session_id is held by a user identified by the passed user_email"""
     command = """
         SELECT session_id FROM sessions
@@ -240,7 +240,7 @@ def add_transaction(cursor, transaction_data: List[Any], chosen_product_ids: Lis
     command = "INSERT INTO transactions (user_id, date, cost) VALUES (?, ?, ?)"
     cursor.execute(command, transaction_data)
 
-    transaction_id = get_last_added_transaction_id_from_transactions_table(cursor)
+    transaction_id = _get_last_inserted_id(cursor)
 
     command = "INSERT INTO detailed_transactions (transaction_id, product_id) VALUES (?, ?)"
     for chosen_product_id in chosen_product_ids:
@@ -264,7 +264,7 @@ def add_transactions(
         command = "INSERT INTO transactions (user_id, date, cost) VALUES (?, ?, ?)"
         cursor.execute(command, transaction_data)
 
-        transaction_id = get_last_added_transaction_id_from_transactions_table(cursor)
+        transaction_id = _get_last_inserted_id(cursor)
 
         command = "INSERT INTO detailed_transactions (transaction_id, product_id) VALUES (?, ?)"
         for chosen_product_id in chosen_product_ids_:
