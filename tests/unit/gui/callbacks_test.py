@@ -39,9 +39,6 @@ def teardown():
 
 
 def init_gui(monkeypatch: pytest.MonkeyPatch):
-    if sys.platform.startswith("linux") and os.environ.get("DISPLAY") is None:
-        pytest.skip("Tkinter cannot be initialised on headless server")
-
     generate_data.generate(
         TEST_DB,
         hash_iterations=ITERATIONS,
