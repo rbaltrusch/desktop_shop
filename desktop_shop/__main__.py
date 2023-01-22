@@ -6,14 +6,17 @@ Created on Mon Feb  1 09:52:44 2021
 """
 import os
 
+from desktop_shop import DATABASE_NAME
 from desktop_shop.datagen import generate_data
-from desktop_shop.gui import DATABASE_NAME, app, db_conn, init
 
 # fast db generation if not present
 if not os.path.exists(DATABASE_NAME):
     generate_data.generate(
         DATABASE_NAME, hash_iterations=1, transactions=100_000, users=10_000, products=20
     )
+
+# pylint: disable=wrong-import-position
+from desktop_shop.gui import app, db_conn, init
 
 try:
     init.init()
