@@ -1,26 +1,34 @@
 # -*- coding: utf-8 -*-
 """Smoke tests for gui init function"""
+
+# pylint: disable=missing-function-docstring, missing-class-docstring
+
 from collections import namedtuple
 import os
 import sys
 
-import pytest
+# fix for headless machines
+display = None  # pylint: disable=invalid-name
+if sys.platform.startswith("linux") and os.environ.get("DISPLAY") is None:
+    from pyvirtualdisplay import Display
 
+    display = Display(visible=False, size=(100, 60))
+    display.start()
+
+# pylint: disable=wrong-import-position
 from desktop_shop import database, server
+from desktop_shop import gui
+from desktop_shop.gui import init
 
 Product = namedtuple("Product", ["id", "name", "price"])
 
 
+def teardown():
+    if display is not None:
+        display.stop()
+
+
 def test_gui_init(monkeypatch):
-    if sys.platform.startswith("linux") and os.environ.get("DISPLAY") is None:  # FIXME
-        pytest.skip("Tkinter cannot be initialised on headless server")
-
-    from desktop_shop import gui
-    from desktop_shop.gui import init
-    from desktop_shop.gui.views import views
-
-    Product = namedtuple("Product", ["id", "name", "price"])
-
     def fake_products_query(*_, **__):
         return [
             Product(0, "a", 1000),
@@ -35,11 +43,6 @@ def test_gui_init(monkeypatch):
 
 
 def test_checkout_view():
-    if sys.platform.startswith("linux") and os.environ.get("DISPLAY") is None:  # FIXME
-        pytest.skip("Tkinter cannot be initialised on headless server")
-
-    from desktop_shop import gui
-
     class MonkeyPatch:
         def __enter__(self):
             self.func = server.query_product_data_from_product_table_by_product_ids
