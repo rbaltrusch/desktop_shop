@@ -7,9 +7,21 @@ and look.
 
 # pylint: disable=missing-function-docstring
 
+import os
+import sys
+
 import sqlite3
 import pytest
 
+# fix for headless machines
+display = None  # pylint: disable=invalid-name
+if sys.platform.startswith("linux") and os.environ.get("DISPLAY") is None:
+    from pyvirtualdisplay import Display
+
+    display = Display(visible=False, size=(100, 60))
+    display.start()
+
+# pylint: disable=wrong-import-position
 from desktop_shop.gui import callbacks, init
 from desktop_shop import gui
 from desktop_shop.user import UserSignUpData
@@ -19,6 +31,11 @@ TEST_DB = "file:cachedb?mode=memory&cache=shared"
 PASSWORD = "password123"
 EMAIL = "a@b.c"
 ITERATIONS = 1
+
+
+def teardown():
+    if display is not None:
+        display.stop()
 
 
 def init_gui(monkeypatch: pytest.MonkeyPatch):
