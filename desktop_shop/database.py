@@ -134,11 +134,7 @@ def verify_session_id(cursor, session_id: str, user_id: int):
 
     data = cursor.execute(command, [session_id, user_id])
     data = [d for d, *_ in data]
-    verified = data and data[0] == session_id
-
-    # DONT REMOVE: for some reason, without this useless if, the function doesnt work....
-    if not verified:
-        verified = False
+    verified = bool(data and data[0] == session_id)
     return verified
 
 
@@ -156,9 +152,7 @@ def verify_session_id_by_user_email(cursor, session_id: str, user_email: int):
 
     data = cursor.execute(command, [session_id, user_email])
     data = [d for d, *_ in data]
-    verified = data and data[0] == session_id
-    if not verified:
-        verified = False
+    verified = bool(data and data[0] == session_id)
     return verified
 
 
