@@ -13,10 +13,18 @@ from desktop_shop.gui.components import Builder, Component, EntryFactory, Factor
 from desktop_shop.gui.views import views
 
 
+def _set_transparent_colour():
+    # this apparently fails on linux for no particular reason
+    try:
+        gui.root.wm_attributes("-transparentcolor", "purple")
+    except tk.TclError:
+        pass
+
+
 def init_root():
     """Initialises and configures tk root"""
     gui.root.title("OfflineShop")
-    gui.root.wm_attributes("-transparentcolor", "purple")
+    _set_transparent_colour()
     gui.root.config(bg=config.BG)
     for _ in range(21):
         gui.root.add_row(30)
