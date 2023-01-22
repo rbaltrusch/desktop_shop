@@ -13,6 +13,15 @@ import sys
 import sqlite3
 import pytest
 
+# fix for headless machines
+display = None  # pylint: disable=invalid-name
+if sys.platform.startswith("linux") and os.environ.get("DISPLAY") is None:
+    from pyvirtualdisplay import Display
+
+    display = Display(visible=False, size=(100, 60))
+    display.start()
+
+# pylint: disable=wrong-import-position
 from desktop_shop.gui import callbacks, init
 from desktop_shop import gui
 from desktop_shop.user import UserSignUpData
@@ -22,17 +31,6 @@ TEST_DB = "file:cachedb?mode=memory&cache=shared"
 PASSWORD = "password123"
 EMAIL = "a@b.c"
 ITERATIONS = 1
-display = None  # pylint: disable=invalid-name
-
-
-def setup():
-    if sys.platform.startswith("linux") and os.environ.get("DISPLAY") is None:
-        # fix for headless machines
-        from pyvirtualdisplay import Display  # pylint: disable=import-outside-toplevel
-
-        global display  # pylint: disable=global-statement
-        display = Display(visible=False, size=(100, 60))
-        display.start()
 
 
 def teardown():
