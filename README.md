@@ -22,6 +22,16 @@ Run the shop application by installing the package using pip, then calling it:
 
 Note that the first time the package is called, it automatically generates a fresh database filled with random data. This make take a few seconds.
 
+## ⚠️ State of the repository ⚠️
+
+This repository is unlikely to receive new features in the future, although maintenance and small fixes will still be done.
+
+This means that some features that are missing now will stay missing (but feel free to submit a pull request to add them!), and non-optimal aspects of the codebase or the application are unlikely to get fixed. Some of these include:
+- No admin panel
+- A user cannot see the transactions that he has placed in the past
+- The application asking for gender is a violation of the EU GDPR, as this user data is not required with the application as is (the same potentially applies to collecting date of birth).
+- The interface to the database is not ideal, as typing is missing for the most part, it is somewhat internally inconsistent, and is using lists or tuples instead of objects.
+
 ## Contributions
 
 To contribute to this repository, please read the [contribution guidelines](https://github.com/rbaltrusch/desktop_shop/blob/master/CONTRIBUTING.md).
