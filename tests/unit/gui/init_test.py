@@ -7,6 +7,8 @@ from collections import namedtuple
 import os
 import sys
 
+from desktop_shop.gui.views import checkout
+
 # fix for headless machines
 display = None  # pylint: disable=invalid-name
 if sys.platform.startswith("linux") and os.environ.get("DISPLAY") is None:
@@ -53,9 +55,10 @@ def test_checkout_view():
         def __exit__(self, *_):
             server.query_product_data_from_product_table_by_product_ids = self.func
 
+    checkout_view = checkout.View.create(gui.root, init.init_builder())
     with MonkeyPatch():
         gui.app.data["cart"] = ["0"]
-        gui.app["checkout"].init_checkout()
+        checkout_view.init_checkout()
 
         # call again to cover code for the case of an already-built checkout View
-        gui.app["checkout"].init_checkout()
+        checkout_view.init_checkout()
