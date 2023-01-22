@@ -36,6 +36,7 @@ ITERATIONS = 1
 def teardown():
     if display is not None:
         display.stop()
+        os.environ.pop("DISPLAY")
 
 
 def init_gui(monkeypatch: pytest.MonkeyPatch):

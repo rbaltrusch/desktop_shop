@@ -12,12 +12,12 @@ import pytest
 from desktop_shop.gui.views import checkout
 
 # fix for headless machines
-# display = None  # pylint: disable=invalid-name
-# if sys.platform.startswith("linux") and os.environ.get("DISPLAY") is None:
-#     from pyvirtualdisplay import Display
+display = None  # pylint: disable=invalid-name
+if sys.platform.startswith("linux") and os.environ.get("DISPLAY") is None:
+    from pyvirtualdisplay import Display
 
-#     display = Display(visible=False, size=(100, 60))
-#     display.start()
+    display = Display(visible=False, size=(100, 60))
+    display.start()
 
 # pylint: disable=wrong-import-position
 from desktop_shop import database, server
@@ -27,15 +27,12 @@ from desktop_shop.gui import init
 Product = namedtuple("Product", ["id", "name", "price"])
 
 
-# def teardown():
-#     if display is not None:
-#         display.stop()
+def teardown():
+    if display is not None:
+        display.stop()
 
 
 def test_gui_init(monkeypatch):
-    if sys.platform.startswith("linux") and os.environ.get("DISPLAY") is None:
-        pytest.skip()
-
     def fake_products_query(*_, **__):
         return [
             Product(0, "a", 1000),
@@ -50,9 +47,6 @@ def test_gui_init(monkeypatch):
 
 
 def test_checkout_view():
-    if sys.platform.startswith("linux") and os.environ.get("DISPLAY") is None:
-        pytest.skip()
-
     class MonkeyPatch:
         def __enter__(self):
             self.func = server.query_product_data_from_product_table_by_product_ids
