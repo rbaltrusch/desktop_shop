@@ -6,6 +6,7 @@ tox
 # Testing.
 pytest
 pytest-cov
+pyvirtualdisplay
 
 # Type checking.
 mypy

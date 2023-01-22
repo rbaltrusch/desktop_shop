@@ -7,6 +7,9 @@ and look.
 
 # pylint: disable=missing-function-docstring
 
+import os
+import sys
+
 import sqlite3
 import pytest
 
@@ -19,9 +22,28 @@ TEST_DB = "file:cachedb?mode=memory&cache=shared"
 PASSWORD = "password123"
 EMAIL = "a@b.c"
 ITERATIONS = 1
+display = None  # pylint: disable=invalid-name
+
+
+def setup():
+    if sys.platform.startswith("linux") and os.environ.get("DISPLAY") is None:
+        # fix for headless machines
+        from pyvirtualdisplay import Display  # pylint: disable=import-outside-toplevel
+
+        global display  # pylint: disable=global-statement
+        display = Display(visible=False, size=(100, 60))
+        display.start()
+
+
+def teardown():
+    if display is not None:
+        display.stop()
 
 
 def init_gui(monkeypatch: pytest.MonkeyPatch):
+    if sys.platform.startswith("linux") and os.environ.get("DISPLAY") is None:
+        pytest.skip("Tkinter cannot be initialised on headless server")
+
     generate_data.generate(
         TEST_DB,
         hash_iterations=ITERATIONS,
