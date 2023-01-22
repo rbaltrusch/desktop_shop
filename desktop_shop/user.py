@@ -37,7 +37,7 @@ class UserData:
     @property  # type: ignore
     def first_name(self) -> str:
         """First name getter, returns capitalized first name"""
-        return self._first_name.title()
+        return self._first_name.title().strip()
 
     @first_name.setter
     def first_name(self, value):
@@ -47,7 +47,7 @@ class UserData:
     @property  # type: ignore
     def last_name(self) -> str:
         """Last name getter, returns capitalized last name"""
-        return self._last_name.title()
+        return self._last_name.title().strip()
 
     @last_name.setter
     def last_name(self, value):
