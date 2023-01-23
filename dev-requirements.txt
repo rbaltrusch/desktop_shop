@@ -22,17 +22,10 @@ click==8.0.4
     # via
     #   black
     #   mkdocs
-colorama==0.4.6
-    # via
-    #   click
-    #   pytest
-    #   tox
 coverage[toml]==6.3.2
     # via pytest-cov
 distlib==0.3.4
     # via virtualenv
-exceptiongroup==1.1.0
-    # via pytest
 filelock==3.6.0
     # via
     #   tox
@@ -46,7 +39,7 @@ flake8==4.0.1
     #   pep8-naming
 flake8-broken-line==0.5.0
     # via -r dev-requirements.in
-flake8-bugbear==22.9.23
+flake8-bugbear==23.1.20
     # via -r dev-requirements.in
 flake8-comprehensions==3.10.0
     # via -r dev-requirements.in
@@ -57,9 +50,7 @@ griffe==0.12.6
 idna==3.3
     # via requests
 importlib-metadata==4.11.1
-    # via
-    #   markdown
-    #   mkdocs
+    # via mkdocs
 iniconfig==1.1.1
     # via pytest
 isort==5.10.1
@@ -106,12 +97,12 @@ mkdocs-literate-nav==0.5.0
 mkdocs-material==8.2.7
     # via -r dev-requirements.in
 mkdocs-material-extensions==1.0.3
+    # via mkdocs-material
+mkdocstrings[python]==0.19.0
     # via
     #   -r dev-requirements.in
     #   mkdocstrings-python
 mkdocstrings-python==0.6.3
-    # via mkdocs-material
-mkdocstrings[python]==0.19.0
     # via mkdocstrings
 mypy==0.982
     # via -r dev-requirements.in
@@ -178,18 +169,11 @@ six==1.16.0
 soupsieve==2.3.1
     # via beautifulsoup4
 tomli==2.0.1
-    # via
-    #   black
-    #   coverage
-    #   mypy
-    #   pytest
-    #   tox
+    # via coverage
 tox==3.27.1
     # via -r dev-requirements.in
 typing-extensions==4.1.1
-    # via
-    #   black
-    #   mypy
+    # via mypy
 urllib3==1.26.8
     # via requests
 virtualenv==20.13.1
