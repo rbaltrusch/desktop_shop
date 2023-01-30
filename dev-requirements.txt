@@ -14,8 +14,12 @@ beautifulsoup4==4.11.1
     #   mkdocs-htmlproofer-plugin
 black==22.10.0
     # via -r dev-requirements.in
+cachetools==5.3.0
+    # via tox
 certifi==2021.10.8
     # via requests
+chardet==5.1.0
+    # via tox
 charset-normalizer==2.0.12
     # via requests
 click==8.0.4
@@ -23,17 +27,12 @@ click==8.0.4
     #   black
     #   mkdocs
 colorama==0.4.6
-    # via
-    #   click
-    #   pytest
-    #   tox
+    # via tox
 coverage[toml]==6.3.2
     # via pytest-cov
-distlib==0.3.4
+distlib==0.3.6
     # via virtualenv
-exceptiongroup==1.1.0
-    # via pytest
-filelock==3.6.0
+filelock==3.9.0
     # via
     #   tox
     #   virtualenv
@@ -57,9 +56,7 @@ griffe==0.12.6
 idna==3.3
     # via requests
 importlib-metadata==4.11.1
-    # via
-    #   markdown
-    #   mkdocs
+    # via mkdocs
 iniconfig==1.1.1
     # via pytest
 isort==5.10.1
@@ -106,12 +103,12 @@ mkdocs-literate-nav==0.5.0
 mkdocs-material==8.2.7
     # via -r dev-requirements.in
 mkdocs-material-extensions==1.0.3
+    # via mkdocs-material
+mkdocstrings[python]==0.19.0
     # via
     #   -r dev-requirements.in
     #   mkdocstrings-python
 mkdocstrings-python==0.6.3
-    # via mkdocs-material
-mkdocstrings[python]==0.19.0
     # via mkdocstrings
 mypy==0.982
     # via -r dev-requirements.in
@@ -119,25 +116,25 @@ mypy-extensions==0.4.3
     # via
     #   black
     #   mypy
-packaging==21.3
+packaging==23.0
     # via
     #   mkdocs
+    #   pyproject-api
     #   pytest
     #   tox
 pathspec==0.9.0
     # via black
 pep8-naming==0.13.2
     # via -r dev-requirements.in
-platformdirs==2.5.1
+platformdirs==2.6.2
     # via
     #   black
+    #   tox
     #   virtualenv
 pluggy==1.0.0
     # via
     #   pytest
     #   tox
-py==1.11.0
-    # via tox
 pycodestyle==2.8.0
     # via flake8
 pyflakes==2.4.0
@@ -148,8 +145,8 @@ pymdown-extensions==9.2
     # via
     #   mkdocs-material
     #   mkdocstrings
-pyparsing==3.0.7
-    # via packaging
+pyproject-api==1.5.0
+    # via tox
 pytest==7.2.0
     # via
     #   -r dev-requirements.in
@@ -171,28 +168,18 @@ requests==2.28.1
     #   -c requirements.txt
     #   mkdocs-htmlproofer-plugin
 six==1.16.0
-    # via
-    #   python-dateutil
-    #   tox
-    #   virtualenv
+    # via python-dateutil
 soupsieve==2.3.1
     # via beautifulsoup4
 tomli==2.0.1
-    # via
-    #   black
-    #   coverage
-    #   mypy
-    #   pytest
-    #   tox
-tox==3.27.1
+    # via coverage
+tox==4.4.2
     # via -r dev-requirements.in
 typing-extensions==4.1.1
-    # via
-    #   black
-    #   mypy
+    # via mypy
 urllib3==1.26.8
     # via requests
-virtualenv==20.13.1
+virtualenv==20.17.1
     # via tox
 watchdog==2.1.6
     # via mkdocs
