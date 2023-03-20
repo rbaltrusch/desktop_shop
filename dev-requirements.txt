@@ -60,8 +60,6 @@ jinja2==3.0.3
     #   mkdocs
     #   mkdocs-material
     #   mkdocstrings
-lxml==4.8.0
-    # via mkdocs-htmlproofer-plugin
 markdown==3.3.6
     # via
     #   mkdocs
@@ -90,7 +88,7 @@ mkdocs-autorefs==0.3.1
     # via mkdocstrings
 mkdocs-gen-files==0.4.0
     # via -r dev-requirements.in
-mkdocs-htmlproofer-plugin==0.8.0
+mkdocs-htmlproofer-plugin==0.11.0
     # via -r dev-requirements.in
 mkdocs-literate-nav==0.5.0
     # via -r dev-requirements.in
