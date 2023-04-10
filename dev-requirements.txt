@@ -5,9 +5,7 @@
 #    pip-compile dev-requirements.in
 #
 attrs==21.4.0
-    # via
-    #   flake8-bugbear
-    #   pytest
+    # via flake8-bugbear
 beautifulsoup4==4.11.1
     # via
     #   -c requirements.txt
@@ -141,7 +139,7 @@ pymdown-extensions==9.9.2
     #   mkdocstrings
 pyparsing==3.0.7
     # via packaging
-pytest==7.2.0
+pytest==7.3.0
     # via
     #   -r dev-requirements.in
     #   pytest-cov
