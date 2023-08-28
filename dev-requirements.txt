@@ -6,10 +6,13 @@
 #
 attrs==21.4.0
     # via flake8-bugbear
+babel==2.12.1
+    # via mkdocs-material
 beautifulsoup4==4.12.2
     # via
     #   -c requirements.txt
     #   mkdocs-htmlproofer-plugin
+    #   readtime
 black==22.10.0
     # via -r dev-requirements.in
 certifi==2021.10.8
@@ -24,6 +27,8 @@ colorama==0.4.6
     # via mkdocs-material
 coverage[toml]==6.3.2
     # via pytest-cov
+cssselect==1.2.0
+    # via pyquery
 distlib==0.3.4
     # via virtualenv
 filelock==3.6.0
@@ -58,6 +63,10 @@ jinja2==3.0.3
     #   mkdocs
     #   mkdocs-material
     #   mkdocstrings
+lxml==4.9.3
+    # via
+    #   mkdocs-material
+    #   pyquery
 markdown==3.3.6
     # via
     #   mkdocs
@@ -66,15 +75,18 @@ markdown==3.3.6
     #   mkdocs-material
     #   mkdocstrings
     #   pymdown-extensions
+markdown2==2.4.10
+    # via readtime
 markupsafe==2.1.0
     # via
     #   jinja2
+    #   mkdocs
     #   mkdocstrings
 mccabe==0.6.1
     # via flake8
 mergedeep==1.3.4
     # via mkdocs
-mkdocs==1.4.2
+mkdocs==1.5.2
     # via
     #   mkdocs-autorefs
     #   mkdocs-gen-files
@@ -90,7 +102,7 @@ mkdocs-htmlproofer-plugin==0.13.1
     # via -r dev-requirements.in
 mkdocs-literate-nav==0.5.0
     # via -r dev-requirements.in
-mkdocs-material==9.0.8
+mkdocs-material==9.2.5
     # via -r dev-requirements.in
 mkdocs-material-extensions==1.1.1
     # via mkdocs-material
@@ -111,13 +123,18 @@ packaging==21.3
     #   mkdocs
     #   pytest
     #   tox
-pathspec==0.9.0
-    # via black
+paginate==0.5.6
+    # via mkdocs-material
+pathspec==0.11.2
+    # via
+    #   black
+    #   mkdocs
 pep8-naming==0.13.2
     # via -r dev-requirements.in
 platformdirs==2.5.1
     # via
     #   black
+    #   mkdocs
     #   virtualenv
 pluggy==1.0.0
     # via
@@ -137,6 +154,8 @@ pymdown-extensions==9.9.2
     #   mkdocstrings
 pyparsing==3.0.7
     # via packaging
+pyquery==2.0.0
+    # via readtime
 pytest==7.3.0
     # via
     #   -r dev-requirements.in
@@ -153,9 +172,11 @@ pyyaml==6.0
     #   pyyaml-env-tag
 pyyaml-env-tag==0.1
     # via mkdocs
+readtime==3.0.0
+    # via mkdocs-material
 regex==2022.10.31
     # via mkdocs-material
-requests==2.28.1
+requests==2.30.0
     # via
     #   -c requirements.txt
     #   mkdocs-htmlproofer-plugin
