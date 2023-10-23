@@ -10,7 +10,7 @@ beautifulsoup4==4.12.2
     # via
     #   -c requirements.txt
     #   mkdocs-htmlproofer-plugin
-black==23.9.1
+black==23.10.0
     # via -r dev-requirements.in
 certifi==2021.10.8
     # via requests
