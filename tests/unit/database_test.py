@@ -17,7 +17,7 @@ from desktop_shop.database import database
 from desktop_shop.user import UserSignUpData
 
 # in memory database to avoid errors when removing database file between tests
-TEST_DB = "file:cachedb?mode=memory&cache=shared"
+TEST_DB = ":memory:"
 PASSWORD = "password123"
 PEPPER = "2"
 ITERATIONS = 100_000

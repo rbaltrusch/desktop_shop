@@ -27,7 +27,8 @@ from desktop_shop import gui
 from desktop_shop.user import UserSignUpData
 from desktop_shop.datagen import generate_data
 
-TEST_DB = "file:cachedb?mode=memory&cache=shared"
+_DB_FILENAME = "__file"
+TEST_DB = f"{_DB_FILENAME}:cachedb?mode=memory&cache=shared"
 PASSWORD = "password123"
 EMAIL = "a@b.c"
 ITERATIONS = 1
@@ -36,6 +37,11 @@ ITERATIONS = 1
 def teardown():
     if display is not None:
         display.stop()
+
+    try:
+        os.unlink(_DB_FILENAME)
+    except OSError:
+        pass
 
 
 def init_gui(monkeypatch: pytest.MonkeyPatch):
