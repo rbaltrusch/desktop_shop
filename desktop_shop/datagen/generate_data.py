@@ -16,7 +16,8 @@ import random
 import sqlite3
 from typing import List, Protocol, Set
 
-from desktop_shop import crypto, database, util
+from desktop_shop import crypto, util
+from desktop_shop.database import database
 from desktop_shop.datagen import data
 
 # combined with every salt for extra security in pw hashing

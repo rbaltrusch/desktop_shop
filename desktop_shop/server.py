@@ -6,7 +6,8 @@ Created on Wed Nov 25 20:07:42 2020
 """
 import hmac
 
-from desktop_shop import crypto, database, util
+from desktop_shop import crypto, util
+from desktop_shop.database import database
 
 # combined with every salt for extra security in pw hashing
 PEPPER = "secret"

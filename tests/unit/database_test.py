@@ -12,7 +12,8 @@ from typing import List, Tuple
 
 import pytest
 
-from desktop_shop import crypto, database
+from desktop_shop import crypto
+from desktop_shop.database import database
 from desktop_shop.user import UserSignUpData
 
 # in memory database to avoid errors when removing database file between tests

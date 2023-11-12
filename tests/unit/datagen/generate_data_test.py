@@ -8,7 +8,7 @@ from typing import Dict, List
 
 import pytest
 
-from desktop_shop import database
+from desktop_shop.database import database
 from desktop_shop.datagen import generate_data
 from desktop_shop.datagen.data import DateTuple, get_random_date
 
