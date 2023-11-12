@@ -11,13 +11,10 @@ from dataclasses import dataclass
 # pylint: disable=function-redefined
 @dataclass
 class UserData:
-    """Stores user data
+    """Stores user data"""
 
-    FIXME: crashes when first_name or last_name are accessed without being set.
-    """
-
-    first_name: str = ""
-    last_name: str = ""
+    first_name: str
+    last_name: str
     gender: str = ""
     dob: str = ""  # date of birth
     email: str = ""
