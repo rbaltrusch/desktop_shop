@@ -66,4 +66,4 @@ def init():
         "pw_hash": "",
         "cart": [],
     }
-    gui.app["home"].init_product_data(gui.root, gui.app.builder)
+    gui.app["home"].init_product_data(gui.root, gui.app.builder)  # type: ignore

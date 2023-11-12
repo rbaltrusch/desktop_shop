@@ -4,6 +4,10 @@ Created on Mon Feb  1 09:53:07 2021
 
 @author: Korean_Crimson
 """
+
+# mypy: ignore-errors
+
+from typing import Collection, Optional
 import re
 
 from desktop_shop import gui, server, user, util
@@ -11,7 +15,7 @@ from desktop_shop import gui, server, user, util
 # pylint: disable=E1123,E1124
 
 
-def login(password=None, email=None):
+def login(password: Optional[str] = None, email: Optional[str] = None):
     """Tries to get a fresh session id from the server by sending password and
     user_email to it. If a new session is granted (password and user_email match),
     gui switches to logged-in home view (login/register button hide, logged-in-as shows)
@@ -19,7 +23,7 @@ def login(password=None, email=None):
     password = gui.app["login"]["pw_entry"].get() if password is None else password
     user_email = gui.app["login"]["email_entry"].get() if email is None else email
     with gui.db_conn as cursor:
-        session_id = server.login(cursor, user_email, password)
+        session_id = server.login(cursor, user_email, str(password))
 
     if session_id is None:
         gui.app.views_dict["login"].unhide_components("login_failed_label")
@@ -32,7 +36,7 @@ def login(password=None, email=None):
     # pylint: disable=unbalanced-tuple-unpacking
     with gui.db_conn as cursor:
         session_id, user_data = server.query_user_data(
-            cursor, user_email, user_email=user_email, session_id=session_id
+            cursor, user_email, session=server.Session(session_id, user_email)
         )
 
     gui.app.data["session_id"] = session_id
@@ -73,7 +77,7 @@ def register():
     send the data and the current date to the server and add it to a new user
     in the database, else show an error message
     """
-    user_data = gui.app["register"].get_user_data()
+    user_data: user.UserData = gui.app["register"].get_user_data()
     valid_data = validate_user_data(user_data)
 
     password = gui.app["register"]["pw_entry"].get_var()
@@ -105,7 +109,7 @@ def edit_user_data():
     a valid new session id, the changes failed and a corresponding error message
     is shown.
     """
-    user_data = gui.app["profile"].get_user_data()
+    user_data: user.UserData = gui.app["profile"].get_user_data()
     valid_data = validate_user_data(user_data)
     if not valid_data:
         return
@@ -119,8 +123,7 @@ def edit_user_data():
             cursor,
             user_data_,
             user_data.email,
-            user_email=user_data.email,
-            session_id=session_id,
+            session=server.Session(session_id, user_data.email),
         )
 
     gui.app.data["session_id"] = new_session_id
@@ -149,7 +152,7 @@ def edit_user_password():
     with gui.db_conn as cursor:
         # pylint: disable=unpacking-non-sequence
         new_session_id, *_ = server.update_user_password(
-            cursor, password, user_email, user_email=user_email, session_id=session_id
+            cursor, password, user_email, session=server.Session(session_id, user_email)
         )
 
     gui.app.data["session_id"] = new_session_id
@@ -164,7 +167,7 @@ def edit_user_password():
     gui.app["profile"].unhide_components("password_change_frame_button")
 
 
-def validate_user_data(user_data):
+def validate_user_data(user_data: user.UserData):
     """Validates all the data entered in the register view. Validates that the
     email is in the correct format, validates that the first and last name are
     alphabetic and not empty, validates that the gender is either m or f and
@@ -202,7 +205,7 @@ def validate_user_data(user_data):
     return True
 
 
-def validate_password(password, confirm_password):
+def validate_password(password: str, confirm_password: str):
     """Validates that the passwords match and are longer than 8 characters (returns bool)"""
     if len(password) < 8:
         show_error_message("Password needs to be at least 8 characters long.")
@@ -215,14 +218,14 @@ def validate_password(password, confirm_password):
     return True
 
 
-def show_message(message):
+def show_message(message: str):
     """Shows the specified message in the main menu view"""
     gui.app["main_menu"]["message_label"].set_var(message)
     gui.app["main_menu"].hide_components("error_message_label")
     gui.app["main_menu"].unhide_components("message_label", "message_frame")
 
 
-def show_error_message(message):
+def show_error_message(message: str):
     """Shows the specified error message in the main menu view"""
     gui.app["main_menu"]["error_message_label"].set_var(message)
     gui.app["main_menu"].hide_components("message_frame")
@@ -235,10 +238,10 @@ def show_password_change_frame():
     gui.app["profile"].hide_components("password_change_frame_button")
 
 
-def store_user_data(user_data):
+def store_user_data(user_data: Optional[Collection[str]]):
     """Stores the passed user data in the appropriate gui data fields"""
-    if len(user_data) == 6:
-        gui.app.data["user_data"] = user.UserSignUpData(*user_data)
+    if user_data and len(user_data) == 6:
+        gui.app.data["user_data"] = user.UserSignUpData(*user_data)  # type: ignore
     else:
         sign_out()
         show_error_message("Something went wrong while logging in. 2")
@@ -273,7 +276,7 @@ def switch_to_profile():
     gui.app.switch_to("profile", "main_menu")
 
 
-def activate_profile_entry(entry_name):
+def activate_profile_entry(entry_name: str):
     """Callback for edit button for the respective field in the user data profile view"""
     gui.app["profile"][entry_name].config(state="normal")
     gui.app["profile"]["edit_user_data_button"].config(state="normal")

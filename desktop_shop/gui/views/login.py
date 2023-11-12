@@ -36,7 +36,7 @@ class View(components.View):
         edit.place(row=2, col=1, sticky="nsew")
 
         builder.create("button2", text="Log in", command=callbacks.login).place(row=3, col=1)
-        frame.component.tk_component.bind_all("<Return>", lambda *_: callbacks.login())
+        frame.component.tk_component.bind("<Return>", lambda *_: callbacks.login())
 
         # login unsuccessful
         message = "Logging in has failed. Please check your credentials."

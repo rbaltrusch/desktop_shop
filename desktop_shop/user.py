@@ -13,8 +13,8 @@ from dataclasses import dataclass
 class UserData:
     """Stores user data"""
 
-    first_name: str
-    last_name: str
+    first_name: str  # type: ignore
+    last_name: str  # type: ignore
     gender: str = ""
     dob: str = ""  # date of birth
     email: str = ""

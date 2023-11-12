@@ -5,12 +5,36 @@ Created on Sun Nov 22 14:31:48 2020
 @author: Korean_Crimson
 """
 
+from __future__ import annotations
+
 import argparse
 import sqlite3
-from typing import Any, List
+from typing import Any, List, Optional, Protocol, Collection, Union
 
 from desktop_shop import crypto
-from desktop_shop.database import _statements
+from desktop_shop.database import _statements  # type: ignore
+from desktop_shop.user import UserData
+
+_UserData = Union[UserData, List[str]]
+
+
+class Connection(Protocol):
+    """Interface of the expected database connection handler"""
+
+    def execute(self, sql: str, args: Optional[Collection[Any]] = None) -> Any:
+        ...
+
+    def executescript(self, sql: str) -> Any:
+        ...
+
+    def __enter__(self) -> Connection:
+        ...
+
+    def __exit__(self, *_, **__) -> None:
+        ...
+
+    def close(self) -> None:
+        ...
 
 
 class DuplicateUserError(Exception):
@@ -20,32 +44,34 @@ class DuplicateUserError(Exception):
         super().__init__("User email is already in use.")
 
 
-def query_user_id_from_user_email(cursor, user_email):
+def query_user_id_from_user_email(cursor: Connection, user_email: str):
     """Queries for the user id of the user specified by the user_email passed (unique)"""
     command = _statements.QUERY_USER_ID_BY_EMAIL
     user_ids = [user_id for user_id, *_ in cursor.execute(command, [user_email])]
     return user_ids[0] if user_ids else None
 
 
-def query_user_ids_from_user_table(cursor):
+def query_user_ids_from_user_table(cursor: Connection):
     """Returns all user_ids found in users table as a list"""
     user_ids = [user_id for user_id, *_ in cursor.execute(_statements.QUERY_USER_IDS)]
     return user_ids
 
 
-def query_product_ids_from_product_table(cursor):
+def query_product_ids_from_product_table(cursor: Connection):
     """Returns all product ids found in products table as a list"""
     product_ids = [prod_id for prod_id, *_ in cursor.execute(_statements.QUERY_PRODUCT_IDS)]
     return product_ids
 
 
-def query_product_data_from_product_table(cursor):
+def query_product_data_from_product_table(cursor: Connection):
     """Queries all produt data from the products table"""
     data = [list(row) for row in cursor.execute(_statements.QUERY_PRODUCTS)]
     return data
 
 
-def query_product_data_from_product_table_by_product_ids(cursor, product_ids: List[str]):
+def query_product_data_from_product_table_by_product_ids(
+    cursor: Connection, product_ids: Collection[str]
+):
     """Queries product data from the products table, by the passed product ids"""
 
     # sanitize input and make sure all product ids are only numeric
@@ -62,7 +88,7 @@ def query_product_data_from_product_table_by_product_ids(cursor, product_ids: Li
     return data
 
 
-def query_product_price_from_product_table(cursor, product_ids):
+def query_product_price_from_product_table(cursor: Connection, product_ids: Collection[str]):
     """Returns all prices found for the specified product ids as a list"""
 
     # sanitize input and make sure all product ids are only numeric
@@ -75,21 +101,21 @@ def query_product_price_from_product_table(cursor, product_ids):
     return product_prices
 
 
-def query_user_data_by_user_email(cursor, user_email):
+def query_user_data_by_user_email(cursor: Connection, user_email: str):
     """Queries the user data from the users table, by the user identified by the user_email"""
     command = _statements.QUERY_USER_BY_EMAIL
     data = list(cursor.execute(command, [user_email]))
     return list(data[0]) if data else []
 
 
-def query_user_data(cursor, user_id):
+def query_user_data(cursor: Connection, user_id: Union[str, int]):
     """Queries the data for the user from the users table, by the user id passed"""
     command = _statements.QUERY_USER_BY_ID
     data = list(cursor.execute(command, [str(user_id)]))
     return list(data[0]) if data else []
 
 
-def query_pw_hash_and_salt_by_user_email(cursor, user_email):
+def query_pw_hash_and_salt_by_user_email(cursor: Connection, user_email: str):
     """Queries the password hash, salt and hashing function from the users table
     for the specified user_email
     """
@@ -98,13 +124,13 @@ def query_pw_hash_and_salt_by_user_email(cursor, user_email):
     return list(data[0]) if data else []
 
 
-def _get_last_inserted_id(cursor):
+def _get_last_inserted_id(cursor: Connection):
     """Returns the id of the transaction last added to the transactions table"""
     transaction_id, *_ = [id_ for id_, *_ in cursor.execute(_statements.QUERY_LAST_INSERTED_ID)]
     return transaction_id
 
 
-def verify_session_id(cursor, session_id: str, user_id: int):
+def verify_session_id(cursor: Connection, session_id: str, user_id: int):
     """Verifies that the passed session_id is held by a user identified by the passed user id"""
     command = _statements.QUERY_SESSION_BY_ID_AND_USER
     data = cursor.execute(command, [session_id, user_id])
@@ -113,7 +139,7 @@ def verify_session_id(cursor, session_id: str, user_id: int):
     return verified
 
 
-def verify_session_id_by_user_email(cursor, session_id: str, user_email: int):
+def verify_session_id_by_user_email(cursor: Connection, session_id: str, user_email: str):
     """Verifies that the passed session_id is held by a user identified by the passed user_email"""
     command = _statements.QUERY_SESSION_BY_ID_AND_EMAIL
     data = cursor.execute(command, [session_id, user_email])
@@ -122,7 +148,13 @@ def verify_session_id_by_user_email(cursor, session_id: str, user_email: int):
     return verified
 
 
-def add_user(cursor, user_data, password, pepper="", iterations=100_000):
+def add_user(
+    cursor: Connection,
+    user_data: _UserData,
+    password: str,
+    pepper: str = "",
+    iterations: int = 100_000,
+):
     """Adds a user with the specified user data to the users table"""
     # hash password
     salt = crypto.generate_new_salt()
@@ -136,7 +168,7 @@ def add_user(cursor, user_data, password, pepper="", iterations=100_000):
         raise DuplicateUserError() from None
 
 
-def update_user(cursor, user_data, user_id):
+def update_user(cursor: Connection, user_data: List[str], user_id: str):
     """user_data needs to be a full set of user_data, without the user_id,
     which is passed separately
     """
@@ -144,7 +176,9 @@ def update_user(cursor, user_data, user_id):
     cursor.execute(_statements.UPDATE_USER_BY_ID, user_data)
 
 
-def update_user_password(cursor, password, user_email, pepper="", iterations=100_000):
+def update_user_password(
+    cursor: Connection, password: str, user_email: str, pepper: str = "", iterations: int = 100_000
+):
     """Updates the password hash in the users table for the user specified"""
     salt = crypto.generate_new_salt()
     pw_hash = crypto.get_hash_function(iterations).hash(password, salt + pepper)
@@ -152,7 +186,7 @@ def update_user_password(cursor, password, user_email, pepper="", iterations=100
     cursor.execute(command, [pw_hash, salt, user_email])
 
 
-def update_user_by_user_email(cursor, user_data, user_email):
+def update_user_by_user_email(cursor: Connection, user_data: List[str], user_email: str):
     """user_data needs to be a full set of user_data, without the user_id,
     which is passed separately
     """
@@ -160,7 +194,9 @@ def update_user_by_user_email(cursor, user_data, user_email):
     cursor.execute(_statements.UPDATE_USER_BY_EMAIL, user_data)
 
 
-def add_transaction(cursor, transaction_data: List[Any], chosen_product_ids: List[str]):
+def add_transaction(
+    cursor: Connection, transaction_data: List[Any], chosen_product_ids: Collection[str]
+):
     """adds a transaction with the specified transaction data to the transactions
     table and the detailed transactions table.
     """
@@ -177,7 +213,7 @@ def add_transaction(cursor, transaction_data: List[Any], chosen_product_ids: Lis
 
 
 def add_transactions(
-    cursor, transaction_datas: List[List[Any]], chosen_product_ids: List[List[str]]
+    cursor: Connection, transaction_datas: List[List[Any]], chosen_product_ids: List[List[str]]
 ):
     """Adds all specified transactions"""
     product_data = {
@@ -199,37 +235,37 @@ def add_transactions(
             )
 
 
-def add_session(cursor, session_data):
+def add_session(cursor: Connection, session_data: Collection[str]):
     """adds a session with the specified session data to the session table"""
     cursor.execute(_statements.INSERT_SESSION, session_data)
 
 
-def add_product(cursor, product_data):
+def add_product(cursor: Connection, product_data: Collection[str]):
     """adds a product with the specified product data to the products table"""
     cursor.execute(_statements.INSERT_PRODUCT, product_data)
 
 
-def create_user_table(cursor):
+def create_user_table(cursor: Connection):
     """Creates user table. Only called in generate_database"""
     cursor.executescript(_statements.CREATE_OR_REPLACE_USERS_TABLE)
 
 
-def create_transactions_table(cursor):
+def create_transactions_table(cursor: Connection):
     """Creates transactions table. Only called in generate_database"""
     cursor.executescript(_statements.CREATE_OR_REPLACE_TRANSACTIONS_TABLE)
 
 
-def create_detailed_transactions_table(cursor):
+def create_detailed_transactions_table(cursor: Connection):
     """Creates detailed transactions table. Only called in generate_database"""
     cursor.executescript(_statements.CREATE_OR_REPLACE_DETAILED_TRANSACTIONS_TABLE)
 
 
-def create_products_table(cursor):
+def create_products_table(cursor: Connection):
     """Creates products table. Only called in generate_database"""
     cursor.executescript(_statements.CREATE_OR_REPLACE_PRODUCTS_TABLE)
 
 
-def create_sessions_table(cursor):
+def create_sessions_table(cursor: Connection):
     """Creates sessions table. Only called in generate_database"""
     cursor.executescript(_statements.CREATE_OR_REPLACE_SESSIONS_TABLE)
 
