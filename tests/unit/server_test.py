@@ -14,7 +14,8 @@ import string
 
 import pytest
 
-from desktop_shop import database, server
+from desktop_shop import server
+from desktop_shop.database import database
 
 cursor = None
 

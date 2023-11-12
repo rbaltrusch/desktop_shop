@@ -13,7 +13,8 @@ from desktop_shop.gui.views import checkout
 
 
 # pylint: disable=wrong-import-position
-from desktop_shop import database, server
+from desktop_shop import server
+from desktop_shop.database import database
 from desktop_shop import gui
 from desktop_shop.gui import init
 
