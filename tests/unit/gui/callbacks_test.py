@@ -111,6 +111,18 @@ def test_register(monkeypatch: pytest.MonkeyPatch):
 
 
 @pytest.mark.slow
+def test_register_twice(monkeypatch: pytest.MonkeyPatch):
+    init_gui(monkeypatch)
+    with sqlite3.connect(TEST_DB) as cursor:
+        monkeypatch.setattr(gui, "db_conn", cursor)
+        _mock_register_gui(monkeypatch)
+        callbacks.switch_to_register()
+        callbacks.register()
+        callbacks.register()
+        assert "supplied email" in get_error_message()
+
+
+@pytest.mark.slow
 def test_sign_out(monkeypatch: pytest.MonkeyPatch):
     init_gui(monkeypatch)
     assert_logged_out()
