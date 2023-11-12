@@ -168,11 +168,14 @@ def test_edit_user_password(monkeypatch: pytest.MonkeyPatch):
     assert_logged_in()
 
 
-def test_store_user_data_error():
+@pytest.mark.slow
+def test_store_user_data_error(monkeypatch: pytest.MonkeyPatch):
+    init_gui(monkeypatch)
     callbacks.store_user_data(user_data=[])
     assert get_error_message().startswith("Something went wrong")
 
 
+@pytest.mark.slow
 @pytest.mark.parametrize(
     "user_data, expected_message_start, expected",
     [
@@ -206,12 +209,16 @@ def test_store_user_data_error():
         ),
     ],
 )
-def test_validate_user_data(user_data, expected_message_start, expected):
+def test_validate_user_data(
+    monkeypatch: pytest.MonkeyPatch, user_data, expected_message_start, expected
+):
+    init_gui(monkeypatch)
     assert callbacks.validate_user_data(user_data) == expected
     if expected_message_start:
         assert get_error_message().startswith(expected_message_start)
 
 
+@pytest.mark.slow
 @pytest.mark.parametrize(
     "password, confirm_password, expected_message, expected",
     [
@@ -220,7 +227,10 @@ def test_validate_user_data(user_data, expected_message_start, expected):
         ("123456789", "123456789", "", True),
     ],
 )
-def test_validate_password(password, confirm_password, expected_message, expected):
+def test_validate_password(
+    monkeypatch: pytest.MonkeyPatch, password, confirm_password, expected_message, expected
+):
+    init_gui(monkeypatch)
     assert callbacks.validate_password(password, confirm_password) == expected
     if expected_message:
         assert get_error_message() == expected_message
