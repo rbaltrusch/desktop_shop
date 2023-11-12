@@ -7,7 +7,7 @@ Created on Mon Feb  1 10:00:48 2021
 import tkinter as tk
 from typing import Dict
 
-from desktop_shop import gui, user
+from desktop_shop import gui
 from desktop_shop.gui import components, config
 from desktop_shop.gui.components import Builder, Component, EntryFactory, Factory, Frame
 from desktop_shop.gui.views import views
@@ -62,7 +62,7 @@ def init():
     gui.app.views_dict = init_views(gui.root, gui.app.builder)
     gui.app.data = {
         "session_id": None,
-        "user_data": user.UserSignUpData(),
+        "user_data": None,
         "pw_hash": "",
         "cart": [],
     }

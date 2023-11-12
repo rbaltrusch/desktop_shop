@@ -50,7 +50,7 @@ def sign_out():
     """
     gui.app.data = {
         "session_id": None,
-        "user_data": user.UserSignUpData(),
+        "user_data": None,
         "pw_hash": "",
         "cart": [],
     }
