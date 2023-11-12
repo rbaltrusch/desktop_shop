@@ -173,13 +173,13 @@ def validate_user_data(user_data):
         return False
 
     # validate first_name
-    found_first_name = re.match("[a-zA-Z]+$", user_data.first_name)
+    found_first_name = re.match(r"[^\W_]+$", user_data.first_name)
     if not found_first_name:
         show_error_message("First name needs to be alphabetic.")
         return False
 
     # validate last_name
-    found_last_name = re.match("[a-zA-Z]+$", user_data.last_name)
+    found_last_name = re.match(r"[^\W_]+$", user_data.last_name)
     if not found_last_name:
         show_error_message("Last name needs to be alphabetic.")
         return False
