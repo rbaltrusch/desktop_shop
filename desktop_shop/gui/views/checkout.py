@@ -105,8 +105,7 @@ class View(components.View):
                     cursor,
                     user_email,
                     chosen_product_ids,
-                    user_email=user_email,
-                    session_id=session_id,
+                    session=server.Session(session_id, user_email),
                 )
 
             gui.app.data["session_id"] = new_session_id
