@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 """Tests for the desktop_shop.datagen.generate_data module"""
+import os
 import random
 import string
 import sys
@@ -10,6 +11,8 @@ import pytest
 from desktop_shop import database
 from desktop_shop.datagen import generate_data
 from desktop_shop.datagen.data import DateTuple, get_random_date
+
+DB_NAME = "test.db"
 
 
 class MockData:
@@ -96,6 +99,13 @@ class MockDatabase:
         return self.product_ids
 
 
+def teardown():
+    try:
+        os.unlink(DB_NAME)
+    except OSError:
+        pass
+
+
 @pytest.mark.parametrize(
     "hash_iterations, transactions, users, products, sessions",
     [
@@ -109,7 +119,7 @@ def test_generate(monkeypatch, hash_iterations, transactions, users, products, s
     monkeypatch.setattr(generate_data, "database", mock_database)
     monkeypatch.setattr(generate_data, "data", MockData)
     generate_data.generate(
-        database_name="test.db",
+        database_name=DB_NAME,
         hash_iterations=hash_iterations,
         transactions=transactions,
         users=users,
@@ -134,7 +144,7 @@ def test_generate(monkeypatch, hash_iterations, transactions, users, products, s
         ("generate --transactions 2 --users 3 --products 4", 2, 3, 4, 100_000),
         ("generate --transactions 2 --users 3 --products 4 --fast", 2, 3, 4, 1),
         ("generate --minimal", 1, 1, 1, 100_000),
-        ("generate --fast --minimal --name=test.db", 1, 1, 1, 1),
+        (f"generate --fast --minimal --name={DB_NAME}", 1, 1, 1, 1),
     ],
 )
 def test_generate_database(args, transactions, users, products, hashes, monkeypatch):
