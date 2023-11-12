@@ -23,7 +23,7 @@ if sys.platform.startswith("linux") and os.environ.get("DISPLAY") is None:
 
 # pylint: disable=wrong-import-position
 from desktop_shop.gui import callbacks, init
-from desktop_shop import gui
+from desktop_shop import gui, server
 from desktop_shop.user import UserSignUpData
 from desktop_shop.datagen import generate_data
 
@@ -102,6 +102,13 @@ def test_register(monkeypatch: pytest.MonkeyPatch):
 
     assert_logged_in()
     assert_no_error_message()
+
+
+@pytest.mark.slow
+def test_register_twice(monkeypatch: pytest.MonkeyPatch):
+    test_register(monkeypatch)
+    with pytest.raises(server.DuplicateUserError):
+        test_register(monkeypatch)
 
 
 @pytest.mark.slow

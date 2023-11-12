@@ -6,10 +6,18 @@ Created on Sun Nov 22 14:31:48 2020
 """
 
 import argparse
+import sqlite3
 from typing import Any, List
 
 from desktop_shop import crypto
 from desktop_shop.database import _statements
+
+
+class DuplicateUserError(Exception):
+    """Exception for duplicate user"""
+
+    def __init__(self):
+        super().__init__("User email is already in use.")
 
 
 def query_user_id_from_user_email(cursor, user_email):
@@ -122,7 +130,10 @@ def add_user(cursor, user_data, password, pepper="", iterations=100_000):
     hashed_password = hash_function.hash(password, salt + pepper)
     user_data = list(user_data) + [salt, hashed_password, str(hash_function)]
 
-    cursor.execute(_statements.INSERT_USER, user_data)
+    try:
+        cursor.execute(_statements.INSERT_USER, user_data)
+    except sqlite3.IntegrityError:
+        raise DuplicateUserError() from None
 
 
 def update_user(cursor, user_data, user_id):
