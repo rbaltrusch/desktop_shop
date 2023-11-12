@@ -23,7 +23,7 @@ if sys.platform.startswith("linux") and os.environ.get("DISPLAY") is None:
 
 # pylint: disable=wrong-import-position
 from desktop_shop.gui import callbacks, init
-from desktop_shop import gui, server
+from desktop_shop import gui
 from desktop_shop.user import UserSignUpData
 from desktop_shop.datagen import generate_data
 
@@ -106,9 +106,14 @@ def test_register(monkeypatch: pytest.MonkeyPatch):
 
 @pytest.mark.slow
 def test_register_twice(monkeypatch: pytest.MonkeyPatch):
-    test_register(monkeypatch)
-    with pytest.raises(server.DuplicateUserError):
-        test_register(monkeypatch)
+    init_gui(monkeypatch)
+    with sqlite3.connect(TEST_DB) as cursor:
+        monkeypatch.setattr(gui, "db_conn", cursor)
+        _mock_register_gui(monkeypatch)
+        callbacks.switch_to_register()
+        callbacks.register()
+        callbacks.register()
+        assert "supplied email" in get_error_message()
 
 
 @pytest.mark.slow
