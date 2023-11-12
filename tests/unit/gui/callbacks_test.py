@@ -183,6 +183,7 @@ def test_store_user_data_error(monkeypatch: pytest.MonkeyPatch):
         (UserSignUpData(email="a@b.c", first_name="1eer3", last_name="2aa4"), "First", False),
         (UserSignUpData(email="a@b.c", first_name="john", last_name="2bbere4 "), "Last", False),
         (UserSignUpData(email="a@b.c", first_name="john", last_name="doe"), "", True),
+        (UserSignUpData(email="a@b.c", first_name="我是", last_name="马"), "", True),
         (
             UserSignUpData(email="a@b.c", first_name="john", last_name="doe", gender="e"),
             "Gender",
