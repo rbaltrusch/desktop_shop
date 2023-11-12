@@ -14,6 +14,7 @@ from desktop_shop.user import UserData
 
 # pylint: disable=unused-argument
 # pylint: disable=line-too-long
+from desktop_shop.database.database import DuplicateUserError  # pylint: disable=unused-import
 
 # combined with every salt for extra security in pw hashing
 PEPPER = "secret"
@@ -108,7 +109,8 @@ def query_product_data_from_product_table_by_product_ids(
 
 
 def add_user(cursor: Connection, user_data: UserData, password: str) -> SessionId:
-    """Adds a new user to the users table, with the user_data specified"""
+    """Adds a new user to the users table, with the user_data specified.
+    Raises a DuplicateUserError if the specified email has already been used."""
     database.add_user(cursor, list(user_data), password, PEPPER)
     new_session_id = _add_new_session(cursor, user_data.email)
     return new_session_id

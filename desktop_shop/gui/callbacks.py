@@ -88,7 +88,11 @@ def register():
         return
 
     with gui.db_conn as cursor:
-        session_id = server.add_user(cursor, user_data, password)
+        try:
+            session_id = server.add_user(cursor, user_data, password)
+        except server.DuplicateUserError:
+            show_error_message("You cannot use the supplied email.")
+            return
 
     gui.app.data["session_id"] = session_id
     if session_id is not None:

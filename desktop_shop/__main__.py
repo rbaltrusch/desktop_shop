@@ -11,13 +11,16 @@ from desktop_shop.datagen import generate_data
 
 # fast db generation if not present
 if not os.path.exists(DATABASE_NAME):
+    print("Generating database...")
     generate_data.generate(
         DATABASE_NAME, hash_iterations=1, transactions=100_000, users=10_000, products=20
     )
+    print("Done generating.")
 
 # pylint: disable=wrong-import-position
 from desktop_shop.gui import app, db_conn, init
 
+print("Starting GUI...")
 try:
     init.init()
     app.views_dict["main_menu"].pack()
@@ -25,3 +28,4 @@ try:
     app.mainloop()
 finally:
     db_conn.close()
+print("Shutdown.")

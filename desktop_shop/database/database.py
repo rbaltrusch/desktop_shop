@@ -8,6 +8,7 @@ Created on Sun Nov 22 14:31:48 2020
 from __future__ import annotations
 
 import argparse
+import sqlite3
 from typing import Any, List, Optional, Protocol, Collection, Union
 
 from desktop_shop import crypto
@@ -36,7 +37,14 @@ class Connection(Protocol):
         ...
 
 
-def query_user_id_from_user_email(cursor: Connection, user_email):
+class DuplicateUserError(Exception):
+    """Exception for duplicate user"""
+
+    def __init__(self):
+        super().__init__("User email is already in use.")
+
+
+def query_user_id_from_user_email(cursor: Connection, user_email: str):
     """Queries for the user id of the user specified by the user_email passed (unique)"""
     command = _statements.QUERY_USER_ID_BY_EMAIL
     user_ids = [user_id for user_id, *_ in cursor.execute(command, [user_email])]
@@ -154,7 +162,10 @@ def add_user(
     hashed_password = hash_function.hash(password, salt + pepper)
     user_data = list(user_data) + [salt, hashed_password, str(hash_function)]
 
-    cursor.execute(_statements.INSERT_USER, user_data)
+    try:
+        cursor.execute(_statements.INSERT_USER, user_data)
+    except sqlite3.IntegrityError:
+        raise DuplicateUserError() from None
 
 
 def update_user(cursor: Connection, user_data: List[str], user_id: str):
