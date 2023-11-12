@@ -62,7 +62,7 @@ class View(components.View):
 
         builder.create("label", text="*required").place(row=8, col=1)
         builder.create("button2", text="Register", command=callbacks.register).place(row=9, col=1)
-        frame.component.tk_component.bind_all("<Return>", lambda *_: callbacks.register())
+        frame.component.tk_component.bind("<Return>", lambda *_: callbacks.register())
         return builder.view
 
     def clear_entries(self):

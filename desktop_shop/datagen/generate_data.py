@@ -61,8 +61,8 @@ class UserDataGenerator:
         first_name = random.choice(list(first_names.keys()))
         last_name = random.choice(last_names)
         gender = first_names[first_name]
-        join_date = data.get_random_date(start=[2014, 6, 1], end=[2020, 11, 1])
-        dob = data.get_random_date(start=[1920, 1, 1], end=[2004, 6, 1])
+        join_date = data.get_random_date(start=(2014, 6, 1), end=(2020, 11, 1))
+        dob = data.get_random_date(start=(1920, 1, 1), end=(2004, 6, 1))
         email_address = self._generate_random_email_address(first_name, last_name, dob)
         return [first_name, last_name, gender, dob, email_address, join_date]
 
@@ -153,7 +153,7 @@ class TransactionDataGenerator:
     @staticmethod
     def _generate_random_transaction_data(user_ids):
         user_id = random.choice(user_ids)
-        date = data.get_random_date(start=[2004, 6, 1], end=[2020, 11, 1])
+        date = data.get_random_date(start=(2004, 6, 1), end=(2020, 11, 1))
 
         transaction_data = [user_id, date]
         return transaction_data

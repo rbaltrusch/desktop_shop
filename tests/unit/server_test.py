@@ -56,8 +56,7 @@ def test_add_user(user_sign_up_data, password):
     _, user_data_stored = server.query_user_data(
         cursor,
         user_sign_up_data.email,
-        user_email=user_sign_up_data.email,
-        session_id=session_id,
+        session=server.Session(session_id, user_sign_up_data.email),
     )
     assert user_data_stored == list(user_sign_up_data)
 
