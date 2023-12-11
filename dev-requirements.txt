@@ -6,6 +6,8 @@
 #
 attrs==21.4.0
     # via flake8-bugbear
+babel==2.13.1
+    # via mkdocs-material
 beautifulsoup4==4.12.2
     # via
     #   -c requirements.txt
@@ -77,12 +79,13 @@ markdown==3.3.6
 markupsafe==2.1.0
     # via
     #   jinja2
+    #   mkdocs
     #   mkdocstrings
 mccabe==0.6.1
     # via flake8
 mergedeep==1.3.4
     # via mkdocs
-mkdocs==1.4.2
+mkdocs==1.5.3
     # via
     #   mkdocs-autorefs
     #   mkdocs-gen-files
@@ -98,9 +101,9 @@ mkdocs-htmlproofer-plugin==0.13.1
     # via -r dev-requirements.in
 mkdocs-literate-nav==0.5.0
     # via -r dev-requirements.in
-mkdocs-material==9.1.20
+mkdocs-material==9.5.1
     # via -r dev-requirements.in
-mkdocs-material-extensions==1.1.1
+mkdocs-material-extensions==1.3.1
     # via mkdocs-material
 mkdocstrings[python]==0.19.0
     # via
@@ -120,13 +123,18 @@ packaging==23.2
     #   mkdocs
     #   pytest
     #   tox
-pathspec==0.9.0
-    # via black
+paginate==0.5.6
+    # via mkdocs-material
+pathspec==0.12.1
+    # via
+    #   black
+    #   mkdocs
 pep8-naming==0.13.2
     # via -r dev-requirements.in
 platformdirs==2.5.1
     # via
     #   black
+    #   mkdocs
     #   virtualenv
 pluggy==1.0.0
     # via
@@ -138,9 +146,9 @@ pycodestyle==2.8.0
     # via flake8
 pyflakes==2.4.0
     # via flake8
-pygments==2.14.0
+pygments==2.17.2
     # via mkdocs-material
-pymdown-extensions==9.9.2
+pymdown-extensions==10.4
     # via
     #   mkdocs-material
     #   mkdocstrings
@@ -152,11 +160,14 @@ pytest-cov==4.0.0
     # via -r dev-requirements.in
 python-dateutil==2.8.2
     # via ghp-import
+pytz==2023.3.post1
+    # via babel
 pyvirtualdisplay==3.0
     # via -r dev-requirements.in
 pyyaml==6.0
     # via
     #   mkdocs
+    #   pymdown-extensions
     #   pyyaml-env-tag
 pyyaml-env-tag==0.1
     # via mkdocs
