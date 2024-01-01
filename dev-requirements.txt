@@ -144,7 +144,7 @@ pymdown-extensions==9.9.2
     # via
     #   mkdocs-material
     #   mkdocstrings
-pytest==7.4.2
+pytest==7.4.4
     # via
     #   -r dev-requirements.in
     #   pytest-cov
