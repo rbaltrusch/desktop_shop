@@ -128,7 +128,7 @@ platformdirs==2.5.1
     # via
     #   black
     #   virtualenv
-pluggy==1.0.0
+pluggy==1.4.0
     # via
     #   pytest
     #   tox
@@ -144,7 +144,7 @@ pymdown-extensions==9.9.2
     # via
     #   mkdocs-material
     #   mkdocstrings
-pytest==7.4.2
+pytest==8.0.0
     # via
     #   -r dev-requirements.in
     #   pytest-cov
