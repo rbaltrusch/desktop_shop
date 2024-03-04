@@ -20,6 +20,7 @@ click==8.0.4
     # via
     #   black
     #   mkdocs
+    #   mkdocstrings
 colorama==0.4.6
     # via mkdocs-material
 coverage[toml]==6.3.2
@@ -57,6 +58,7 @@ importlib-metadata==6.8.0
     # via
     #   markdown
     #   mkdocs
+    #   mkdocstrings
 iniconfig==1.1.1
     # via pytest
 isort==5.10.1
@@ -102,9 +104,10 @@ mkdocs-material==9.1.20
     # via -r dev-requirements.in
 mkdocs-material-extensions==1.1.1
     # via mkdocs-material
-mkdocstrings[python]==0.19.0
+mkdocstrings[python]==0.24.1
     # via
     #   -r dev-requirements.in
+    #   mkdocstrings
     #   mkdocstrings-python
 mkdocstrings-python==0.6.3
     # via mkdocstrings
@@ -127,6 +130,7 @@ pep8-naming==0.13.2
 platformdirs==2.5.1
     # via
     #   black
+    #   mkdocstrings
     #   virtualenv
 pluggy==1.4.0
     # via
@@ -186,6 +190,7 @@ tox==3.27.1
 typing-extensions==4.1.1
     # via
     #   black
+    #   mkdocstrings
     #   mypy
 urllib3==1.26.8
     # via requests
