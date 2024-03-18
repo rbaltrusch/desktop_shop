@@ -10,7 +10,7 @@ beautifulsoup4==4.12.2
     # via
     #   -c requirements.txt
     #   mkdocs-htmlproofer-plugin
-black==24.1.1
+black==24.3.0
     # via -r dev-requirements.in
 certifi==2021.10.8
     # via requests
@@ -23,9 +23,7 @@ click==8.0.4
 colorama==0.4.6
     # via mkdocs-material
 coverage[toml]==6.3.2
-    # via
-    #   coverage
-    #   pytest-cov
+    # via pytest-cov
 distlib==0.3.4
     # via virtualenv
 exceptiongroup==1.1.3
