@@ -23,9 +23,7 @@ click==8.0.4
 colorama==0.4.6
     # via mkdocs-material
 coverage[toml]==6.3.2
-    # via
-    #   coverage
-    #   pytest-cov
+    # via pytest-cov
 distlib==0.3.4
     # via virtualenv
 exceptiongroup==1.1.3
@@ -128,7 +126,7 @@ platformdirs==2.5.1
     # via
     #   black
     #   virtualenv
-pluggy==1.4.0
+pluggy==1.5.0
     # via
     #   pytest
     #   tox
@@ -144,7 +142,7 @@ pymdown-extensions==9.9.2
     # via
     #   mkdocs-material
     #   mkdocstrings
-pytest==8.0.0
+pytest==8.2.0
     # via
     #   -r dev-requirements.in
     #   pytest-cov
