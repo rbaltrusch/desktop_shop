@@ -17,15 +17,10 @@ mypy
 #      https://github.com/python/typeshed/tree/master/stubs
 
 # Linting.
-flake8
-flake8-bugbear
-flake8-broken-line
-flake8-comprehensions
-pep8-naming
+pylint
 
 # Formatting.
 black
-isort
 
 # Documentation.
 mkdocs-material
