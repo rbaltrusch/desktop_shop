@@ -21,9 +21,9 @@ cursor = None
 
 
 def setup():
+    global cursor, database_
     if cursor:
         return cursor
-    global cursor, database_
     database_ = "".join(random.choices(string.ascii_lowercase, k=10)) + ".db"
     print(f"{database_=}")
     _remove_db()
