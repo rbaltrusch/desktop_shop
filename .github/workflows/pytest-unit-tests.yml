@@ -22,7 +22,6 @@ jobs:
     - name: Install test dependencies
     # sudo apt-get install xvfb x11-utils gnumeric required for gui tests running in headless mode
       run: |
-        conda install pip
         pip install -r dev-requirements.txt
         sudo apt-get install xvfb x11-utils gnumeric
     - name: Test with pytest
