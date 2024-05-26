@@ -21,6 +21,8 @@ cursor = None
 
 
 def setup():
+    if cursor:
+        return cursor
     global cursor, database_
     database_ = "".join(random.choices(string.ascii_lowercase, k=10)) + ".db"
     print(f"{database_=}")
