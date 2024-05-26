@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ["3.8", "3.9", "3.10"]
+        python-version: ["3.8", "3.9", "3.10", "3.11", "3.12"]
     steps:
     - uses: actions/checkout@v4
     - name: Set up Python ${{ matrix.python-version }}
@@ -17,9 +17,9 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
+        pip install setuptools
         pip install pylint
         pip install -e .
-        pip install -r requirements.txt
     - name: Analysing the code with pylint
       run: |
         pylint desktop_shop -d=consider-using-f-string,duplicate-code --fail-under=9.75

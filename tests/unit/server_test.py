@@ -22,12 +22,15 @@ cursor = None
 
 def setup():
     global cursor, database_
+    if cursor:
+        return cursor
     database_ = "".join(random.choices(string.ascii_lowercase, k=10)) + ".db"
     print(f"{database_=}")
     _remove_db()
     cursor = sqlite3.connect(database_)
     database.create_user_table(cursor)
     database.create_sessions_table(cursor)
+    return cursor
 
 
 def teardown():
@@ -47,6 +50,7 @@ def _remove_db():
 @pytest.mark.usefixtures("user_sign_up_data")
 @pytest.mark.usefixtures("password")
 def test_add_user(user_sign_up_data, password):
+    cursor = setup()
     session_id = server.add_user(cursor, user_sign_up_data, password)
     verified = database.verify_session_id_by_user_email(
         cursor, session_id, user_sign_up_data.email
@@ -66,6 +70,7 @@ def test_add_user(user_sign_up_data, password):
 @pytest.mark.usefixtures("password")
 @pytest.mark.usefixtures("pepper")
 def test_login(user_sign_up_data, password, pepper):
+    cursor = setup()
     try:
         database.add_user(cursor, user_sign_up_data, password, pepper=pepper)
     except database.DuplicateUserError:
@@ -83,6 +88,7 @@ def test_login(user_sign_up_data, password, pepper):
 @pytest.mark.usefixtures("wrong_password")
 @pytest.mark.usefixtures("pepper")
 def test_login_failed(user_sign_up_data, password, wrong_password, pepper):
+    cursor = setup()
     try:
         database.add_user(cursor, user_sign_up_data, password, pepper=pepper)
     except database.DuplicateUserError:

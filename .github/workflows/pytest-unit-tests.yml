@@ -3,36 +3,28 @@ name: Unit tests
 on: [push]
 
 jobs:
-  build-linux:
+  build:
     runs-on: ubuntu-latest
     strategy:
-      max-parallel: 5
       matrix:
-        python-version: ["3.8", "3.9", "3.10"]
+        python-version: ["3.8", "3.9", "3.10", "3.11", "3.12"]
     steps:
     - uses: actions/checkout@v4
-    - name: Set up Python 3.10
+    - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v5
       with:
         python-version: ${{ matrix.python-version }}
-    - name: Add conda to system path
-      run: |
-        # $CONDA is an environment variable pointing to the root of the miniconda directory
-        echo $CONDA/bin >> $GITHUB_PATH
     - name: Install dependencies
       run: |
-        conda env update --file environment.yml --name test-env
-    - name: Install desktop_shop
-      run: |
-        conda install pip
+        python -m pip install --upgrade pip
+        pip install setuptools
         pip install -e .
     - name: Install test dependencies
     # sudo apt-get install xvfb x11-utils gnumeric required for gui tests running in headless mode
       run: |
-        conda install pip
         pip install -r dev-requirements.txt
         sudo apt-get install xvfb x11-utils gnumeric
     - name: Test with pytest
       working-directory: tests
       run: |
-        python run_tests.py --all --no-report
+        pytest .
