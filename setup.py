@@ -8,7 +8,7 @@ project_dir = Path(__file__).parent
 
 setuptools.setup(
     name="desktop_shop",
-    version="1.1.0",
+    version="1.1.1",
     description="Desktop shop application",
     long_description=project_dir.joinpath("README.md").read_text(encoding="utf-8"),
     long_description_content_type="text/markdown",
@@ -39,7 +39,8 @@ setuptools.setup(
         "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
-        "Programming Language :: Python :: 3.12",
+        # 3.12 doesn't work with setup.py, see: https://stackoverflow.com/questions/73533994/sub-package-not-importable-after-installation  pylint: disable=line-too-long
+        # "Programming Language :: Python :: 3.12",
         "Topic :: Desktop Environment",
         "Topic :: Education",
         "Topic :: Education :: Testing",
