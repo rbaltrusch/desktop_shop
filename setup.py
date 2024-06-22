@@ -8,7 +8,7 @@ project_dir = Path(__file__).parent
 
 setuptools.setup(
     name="desktop_shop",
-    version="1.1.2",
+    version="1.1.3",
     description="Desktop shop application",
     long_description=project_dir.joinpath("README.md").read_text(encoding="utf-8"),
     long_description_content_type="text/markdown",
@@ -19,7 +19,7 @@ setuptools.setup(
     package_dir={"": "."},
     python_requires=">=3.8",
     include_package_data=True,
-    package_data={"desktop_shop": ["py.typed"]},  # for mypy
+    package_data={"desktop_shop": ["py.typed", "database/sql/*.sql"]},  # for mypy
     # This is a trick to avoid duplicating dependencies between both setup.py and requirements.txt.
     # requirements.txt must be included in MANIFEST.in for this to work.
     install_requires=project_dir.joinpath("requirements.txt")
