@@ -22,6 +22,31 @@ Run the shop application by installing the package using pip, then calling it:
 
 Note that the first time the package is called, it automatically generates a fresh database filled with random data. This make take a few seconds.
 
+### Custom database generation
+
+The database generation can be customized with the `python -m desktop.database.database generate` CLI:
+
+```
+usage: database.py [-h] [--name NAME] [--fast] [--minimal] [--transactions TRANSACTIONS] [--users USERS] [--products PRODUCTS] {generate}
+
+Database generation interface
+
+positional arguments:
+  {generate}            database action to be performed
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --name NAME           The name of the database
+  --fast                reduces number of password hashing operations
+  --minimal             reduces size of all tables to 1
+  --transactions TRANSACTIONS
+                        pass number of transactions to be added to database
+  --users USERS         pass number of users to be added to database
+  --products PRODUCTS   pass number of products to be added to database
+```
+
+To display the CLI doc above, run `python -m desktop.database.database -h`.
+
 ## ⚠️ State of the repository ⚠️
 
 This repository is unlikely to receive new features in the future, although maintenance and small fixes will still be done.
