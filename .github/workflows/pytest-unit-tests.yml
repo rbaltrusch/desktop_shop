@@ -23,6 +23,7 @@ jobs:
     # sudo apt-get install xvfb x11-utils gnumeric required for gui tests running in headless mode
       run: |
         pip install -r dev-requirements.txt
+        sudo apt-get update
         sudo apt-get install xvfb x11-utils gnumeric
     - name: Test with pytest
       working-directory: tests
